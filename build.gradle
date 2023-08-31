@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'fun.lewisdev'
-version = '3.10.0'
+version = '3.10.1'
 description = 'XLTournaments'
 
 repositories {
@@ -26,7 +26,6 @@ dependencies {
     implementation 'com.zaxxer:HikariCP:5.0.1'
     implementation 'me.mattstudios.utils:matt-framework:1.4.6'
     implementation 'dev.triumphteam:triumph-gui:3.1.5'
-    implementation "net.kyori:adventure-text-minimessage:4.14.0"
 
     compileOnly 'org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT'
     compileOnly 'com.mojang:authlib:1.5.21'
@@ -43,7 +42,6 @@ dependencies {
     compileOnly 'net.essentialsx:EssentialsX:2.19.7'
     compileOnly "com.badbones69.crazycrates:crazycrates-paper-api:1.14"
     compileOnly "com.badbones69.crazyenvoys:crazyenvoys-paper-api:1.5"
-    compileOnly 'com.github.Drawethree.X-Prison:X-Prison:67c53f5810'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
 }
 
