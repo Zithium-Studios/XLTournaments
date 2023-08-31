@@ -1,0 +1,93 @@
+#########################
+## TOURNAMENT SETTINGS ##
+#########################
+
+# Should this tournament be enabled and loaded?
+enabled: true
+
+# Worlds listed in here will not have the tournament active.
+disabled_worlds: [example_world, another_world]
+
+# Gamemodes that should not contribute to the tournament
+disabled_gamemodes:
+  - CREATIVE
+  - SPECTATOR
+  # - SURVIVAL
+  # - ADVENTURE
+# Tournament objective
+# Full Objectives List: https://docs.zithium.net/xl-series/xltournaments/objective-types
+objective: PLAYER_KILLS
+
+# How long should we wait to refresh the leaderboard (in seconds)?
+# Min: 10
+leaderboard_refresh: 60
+
+# Available Timeline Types:
+# - SPECIFIC (see times below)
+# - DAILY
+# - WEEKLY
+# - MONTHLY
+# If SPECIFIC is selected, configure the times below
+timeline: SPECIFIC
+
+# Options for the timezone
+timezone_options:
+  # This will automatically detect the timezone on your machine
+  automatically_detect: true
+  # Force specific timezone if option above is set to false
+  # Java TimeZone List: https://pastebin.com/raw/EFYWxTRe
+  # GMT will be used if the given ID below is invalid.
+  force_timezone: "GMT"
+
+# Only applicable for 'SPECIFIC' timeline tournament.
+start_date: 2021/01/16 00:00:00
+end_date: 2021/01/16 23:59:00
+
+# Should this be a challenge tournament?
+# Challenge type tournaments are based on reaching
+# a certain goal rather than having as much score
+# when the tournament ends.
+challenge:
+  enabled: false
+  goal: 50
+
+# Participation Settings
+participation:
+  # Set this to true to automatically enter players into the tournament when they join the server (ignores participation cost)
+  automatic: true
+
+  # Require a permission in order to join the tournament
+  # (Uncomment to enable)
+  #permission: tournament.playerkills
+
+  # Set the participation cost (0 = no cost, requires Vault + Economy plugin to work)
+  cost: 50
+  # A list of actions to be executed when anyone joins the tournament.
+  # Set join_actions: [] to disable join actions
+  join_actions:
+    - "[MESSAGE] &7You have joined the &3Player Kills Tournament&7."
+
+# Valid Actions
+# - [BROADCAST] <message> | Send a broadcast message
+# - [CONSOLE] <command> | Execute a command as console
+#
+# A list of global actions to be executed when a tournament begins.
+# These are NOT specific to each player.
+start_actions:
+  - "[BROADCAST] &b&lTOURNAMENT: &fA Player Kills &7/tournament &fhas just begun, good luck!"
+# A list of actions to be executed when a tournament ends.
+end_actions:
+  - "[BROADCAST] &b&lTOURNAMENT: &fThe Player Kills &7/tournament &fhas just ended."
+
+# Rewards to be given when tournament has ended
+# or player has completed the challenge goal (if enabled)
+rewards:
+  '1': # 1st place
+    - "[MESSAGE] &7You have placed &a1st &7in the &3Player Kills &7Tournament!"
+    - "[CONSOLE] give {PLAYER} diamond 1"
+  '2': # 2nd place
+    - "[MESSAGE] &7You have placed &b2nd &7in the &3Player Kills &7Tournament!"
+    - "[CONSOLE] give {PLAYER} gold_ingot 1"
+  '3': # 3rd place
+    - "[MESSAGE] &7You have placed &e3rd &7in the &3Player Kills &7Tournament!"
+    - "[CONSOLE] give {PLAYER} iron_ingot 1"

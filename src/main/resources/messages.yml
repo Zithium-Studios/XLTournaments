@@ -1,0 +1,30 @@
+# XLTournaments Messages
+
+general:
+  prefix: "&8[&b&lTournaments&r&8]"
+  reload: "{PREFIX} &aThe plugin has reloaded successfully."
+  no_permission: "&cYou do not have permission to execute this command."
+  help:
+    - ""
+    - "&b&lXLTournaments &fv{VERSION}"
+    - "&7&oBy Zithium Studios"
+    - ""
+    - "&f/tournament help &8- &7&oDisplay the help message"
+    - "&f/tournament reload &8- &7&oReload the configuration"
+    - "&f/tournament update &8- &7&oForce all tournaments to update"
+    - "&f/tournament list &8- &7&oList all enabled tournaments"
+    - "&f/tournament info <tournament> &8- &7&oDisplay information about the tournament"
+    - "&f/tournament clear <tournament> &8- &7&oClear all users in a tournament"
+    - "&f/tournament clearplayer <player> <tournament> &8- &7&oClear specific user from a tournament"
+    - ""
+
+tournament:
+  force_updated_tournaments: "{PREFIX} &aYou have forcefully updated all active tournaments."
+  already_participating: "{PREFIX} &cYou are already participating in this tournament."
+  not_enough_funds: "{PREFIX} &cYou do not have enough funds to enter this tournament. You need &a$&f{AMOUNT}&c."
+  tournament_no_permission: "{PREFIX} &cYou do not have permission to enter this tournament."
+  waiting: "{PREFIX} &cThis tournament is currently waiting to start."
+  ended: "{PREFIX} &cThis tournament has already ended."
+  cleared: "{PREFIX} &7You have removed all users in the {TOURNAMENT} tournament."
+  cleared_player: ""
+  list: "{PREFIX} &7Enabled tournaments: &a{LIST}"

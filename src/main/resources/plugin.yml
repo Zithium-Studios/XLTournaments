@@ -1,0 +1,6 @@
+name: XLTournaments
+version: '${version}'
+authors: [ItsLewizzz, ItzSave]
+main: fun.lewisdev.tournaments.XLTournamentsPlugin
+api-version: 1.13
+softdepend: [Vault, PlaceholderAPI]

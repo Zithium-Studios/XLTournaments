@@ -1,0 +1,2 @@
+XLTournaments Plugin
+Copyright (c) 2020 - 2023 Lewis D (ItsLewizzz). All rights reserved.

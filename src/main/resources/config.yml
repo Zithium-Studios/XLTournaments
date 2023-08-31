@@ -1,0 +1,37 @@
+# XLTournaments
+# Author: ItsLewizzz, Zithium Studios
+# Copyright (c) Lewis D 2021-2022, Zithium Studios 2023. All Rights Reserved.
+
+storage:
+  # Valid types are SQLITE or MYSQL.
+  # It is not currently possible to automatically migrate from one to another.
+  type: SQLITE
+
+  # Only applicable if MYSQL storage type is selected
+  mysql:
+    host: "localhost"
+    port: 3306
+    username: "root"
+    password: ""
+    database: ""
+    use_ssl: true
+
+# Command aliases to the main /tournament command
+# ** You will need to restart your server if you edit this list **
+command_aliases:
+  - xlt
+  - tournaments
+
+# Should we hook into TokenEnchant explosive event for BLOCK_BREAK objective?
+tokenenchant_explode_event: false
+
+# Only applicable for PLACEHOLDERAPI objective type
+# How many ticks until we fetch new data?
+placeholderapi_objective_task_update: 60
+
+# Only applicable for PLAYTIME objective type
+# How many ticks until we fetch new playtime data?
+playtime_objective_task_update: 200 # 10 seconds
+
+# Should we exclude placed blocks from counting towards the BLOCK_BREAK objective?
+exclude_placed_blocks: true

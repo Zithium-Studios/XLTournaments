@@ -1,0 +1,65 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'fun.lewisdev'
+version = '3.10.0'
+description = 'XLTournaments'
+
+repositories {
+    mavenCentral()
+    maven { url = uri('https://oss.sonatype.org/content/groups/public') }
+    maven { url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/') }
+    maven { url = uri('https://jitpack.io') }
+    maven { url = uri('https://raw.githubusercontent.com/TeamVK/maven-repository/master/release/') }
+    maven { url = uri('https://repo.codemc.io/repository/maven-public/') }
+    maven { url = uri('https://mvn.lumine.io/repository/maven-public/') }
+    maven { url = uri('https://repo.extendedclip.com/content/repositories/placeholderapi/') }
+    maven { url = uri('https://repo.andrei1058.dev/releases/') }
+    maven { url = uri('https://repo.essentialsx.net/releases/') }
+    maven { url = uri('https://libraries.minecraft.net/') }
+    maven { url = uri('https://repo.crazycrew.us/releases') }
+}
+
+dependencies {
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+    implementation 'me.mattstudios.utils:matt-framework:1.4.6'
+    implementation 'dev.triumphteam:triumph-gui:3.1.5'
+    implementation "net.kyori:adventure-text-minimessage:4.14.0"
+
+    compileOnly 'org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT'
+    compileOnly 'com.mojang:authlib:1.5.21'
+
+    // EXTERNAL OBJECTIVES
+    compileOnly 'com.github.electro2560:ClueScrollsAPI:c5f0b7aa3a'
+    compileOnly 'com.github.Realizedd.Duels:duels-api:3.4.0'
+    compileOnly 'com.andrei1058.bedwars:bedwars-api:22.3.4'
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
+    compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
+    compileOnly 'me.clip:placeholderapi:2.11.3'
+    compileOnly 'com.github.NuVotifier:NuVotifier:2.6.0'
+    compileOnly 'io.lumine.xikage:MythicMobs:4.12.0'
+    compileOnly 'net.essentialsx:EssentialsX:2.19.7'
+    compileOnly "com.badbones69.crazycrates:crazycrates-paper-api:1.14"
+    compileOnly "com.badbones69.crazyenvoys:crazyenvoys-paper-api:1.5"
+    compileOnly fileTree(dir: 'libs', include: '*.jar')
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+shadowJar {
+    minimize()
+    archiveFileName = "XLTournaments-${project.version}.jar"
+    relocate 'dev.triumphteam.gui', 'fun.lewisdev.tournaments.libs.gui'
+    relocate 'me.mattstudios.mf', 'fun.lewisdev.tournaments.libs.command'
+    relocate 'org.codemc.worldguardwrapper', 'fun.lewisdev.tournaments.libs.worldguardwrapper'
+    relocate 'com.zaxxer.hikari', 'fun.lewisdev.tournaments.libs.hikari'
+}

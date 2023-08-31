@@ -1,0 +1,220 @@
+# XLTournaments Menu
+
+# Title of the menu
+title: "&lTOURNAMENTS"
+# Min rows: 1, Max rows: 6
+rows: 3
+
+# These are static items and serve no click purpose
+filler_items:
+  glass:
+    material: GRAY_STAINED_GLASS_PANE
+    amount: 1
+    display_name: "&r"
+    slots: [0-10, 12, 14, 16-26]
+
+# These are the next & previous page items in the gui.
+page_items:
+  next_page:
+    material: ARROW
+    display_name: "&aNEXT PAGE ->"
+    slot: 23
+  previous_page:
+    material: ARROW
+    display_name: "&c<- PREVIOUS PAGE"
+    slot: 21
+
+# This is where you list all your tournaments
+# Placeholders:
+#   {START_DAY} - Tournament start day
+#   {END_DAY} - Tournament end day
+#   {START_MONTH} - Tournament start month
+#   {START_MONTH_NUMBER} - Tournament start month number
+#   {END_MONTH} - Tournament end month
+#   {END_MONTH_NUMBER} - Tournament end month number
+#   {TIME_REMAINING} - Tournament time remaining
+#   {PLAYER_POSITION} - Player position number
+#   {PLAYER_POSITION_FORMATTED} - Player position number (with comma separation)
+#   {PLAYER_SCORE} - Raw player score
+#   {PLAYER_SCORE_FORMATTED} - Player score with comma separation
+#   {PLAYER_SCORE_TIME_FORMATTED} - Player score formatted to a time (for time related objectives)
+#   {LEADER_NAME_<position>} - Player name at position
+#   {LEADER_SCORE_<position>} - Raw score at position
+#   {LEADER_SCORE_FORMATTED_<position>} - Score at position formatted with comma separation
+#   {LEADER_SCORE_TIME_FORMATTED_<position>} - Score at position formatted to a time (for time related objectives)
+#
+# Tournaments are placed in the gui in the first open slot. To control what slot the items are in
+# use the filler items located above.
+#
+# Tournaments are sorted in the gui based on placement below.
+tournament_items:
+  block_break_tournament: # ID of the tournament
+    active: # Active: when the tournament is running
+      material: DIAMOND_PICKAXE
+      glow: true
+      item_flags:
+        - HIDE_ATTRIBUTES
+      display_name: "&b&lBREAK TOURNAMENT"
+      lore:
+        - "&8{START_DAY} {START_MONTH} - {END_DAY} {END_MONTH}"
+        - ""
+        - "&b&lYOUR STATS"
+        - "  &7Blocks Broken: &f{PLAYER_SCORE}"
+        - "  &7Position: &f#{PLAYER_POSITION}"
+        - ""
+        - "&b&lTIME REMAINING"
+        - "  &f{TIME_REMAINING}"
+        - ""
+        - "&4&l#1: &f{LEADER_NAME_1} &7({LEADER_SCORE_FORMATTED_1})"
+        - "&c&l#2: &f{LEADER_NAME_2} &7({LEADER_SCORE_FORMATTED_2})"
+        - "&6&l#3: &f{LEADER_NAME_3} &7({LEADER_SCORE_FORMATTED_3})"
+        - "&e&l#4: &f{LEADER_NAME_4} &7({LEADER_SCORE_FORMATTED_4})"
+        - "&7&l#5: &f{LEADER_NAME_5} &7({LEADER_SCORE_FORMATTED_5})"
+        - ""
+        - "&7&o(( Top 5 updates every 60 seconds ))"
+    waiting: # Waiting for the tournament to start
+      material: ORANGE_STAINED_GLASS_PANE
+      display_name: "&cBreak Tournament"
+      lore:
+        - "&8{START_DAY} {START_MONTH} - {END_DAY} {END_MONTH}"
+        - ""
+        - "&b&lREWARDS"
+        - "  &fExample Reward #1"
+        - "  &fExample Reward #2"
+        - "  &fExample Reward #3"
+        - ""
+        - "&b&lSTARTING IN"
+        - "  &f{TIME_REMAINING}"
+    ended: # Ended: when the tournament has ended
+      material: BARRIER
+      display_name: "&c&lBREAK TOURNAMENT"
+      lore:
+        - "&8{START_DAY} {START_MONTH} - {END_DAY} {END_MONTH}"
+        - ""
+        - "&b&lYOUR STATS"
+        - "  &7Blocks Broken: &f{PLAYER_SCORE}"
+        - "  &7Position: &f#{PLAYER_POSITION}"
+        - ""
+        - "&6&lWINNING PLAYERS"
+        - "&4&l#1: &f{LEADER_NAME_1} &7({LEADER_SCORE_FORMATTED_1})"
+        - "&c&l#2: &f{LEADER_NAME_2} &7({LEADER_SCORE_FORMATTED_2})"
+        - "&6&l#3: &f{LEADER_NAME_3} &7({LEADER_SCORE_FORMATTED_3})"
+        - "&e&l#4: &f{LEADER_NAME_4} &7({LEADER_SCORE_FORMATTED_4})"
+        - "&7&l#5: &f{LEADER_NAME_5} &7({LEADER_SCORE_FORMATTED_5})"
+        - ""
+        - "&cThis tournament has ended!"
+  item_craft_challenge_tournament:
+    active:
+      material: CRAFTING_TABLE
+      display_name: "&e&lCRAFTING TOURNAMENT"
+      lore:
+        - "&8Challenge Tournament"
+        - "&8{START_DAY} {START_MONTH} - {END_DAY} {END_MONTH}"
+        - ""
+        - "&7Craft 20 &b&lBEACONS &7to finish!"
+        - ""
+        - "&e&lYOUR STATS"
+        - "  &7Beacons Crafted: &f{PLAYER_SCORE}"
+        - "  &7Position: &f#{PLAYER_POSITION}"
+        - ""
+        - "&e&lTIME REMAINING"
+        - "  &f{TIME_REMAINING}"
+        - ""
+        - "&4&l#1: &f{LEADER_NAME_1} &7({LEADER_SCORE_FORMATTED_1})"
+        - "&c&l#2: &f{LEADER_NAME_2} &7({LEADER_SCORE_FORMATTED_2})"
+        - "&6&l#3: &f{LEADER_NAME_3} &7({LEADER_SCORE_FORMATTED_3})"
+        - "&e&l#4: &f{LEADER_NAME_4} &7({LEADER_SCORE_FORMATTED_4})"
+        - "&7&l#5: &f{LEADER_NAME_5} &7({LEADER_SCORE_FORMATTED_5})"
+        - ""
+        - "&7&o(( Top 5 updates every 60 seconds ))"
+    waiting:
+      material: ORANGE_STAINED_GLASS_PANE
+      display_name: "&e&lCRAFTING TOURNAMENT"
+      lore:
+        - "&8Challenge Tournament"
+        - "&8{START_DAY} {START_MONTH} - {END_DAY} {END_MONTH}"
+        - ""
+        - "&7Craft 20 &b&lBEACONS &7to finish!"
+        - ""
+        - "&e&lREWARDS"
+        - "  &fExample Reward #1"
+        - "  &fExample Reward #2"
+        - "  &fExample Reward #3"
+        - ""
+        - "&e&lSTARTING IN"
+        - "  &f{TIME_REMAINING}"
+    ended:
+      material: BARRIER
+      display_name: "&c&lCRAFTING TOURNAMENT"
+      lore:
+        - "&8Challenge Tournament"
+        - "&8{START_DAY} {START_MONTH} - {END_DAY} {END_MONTH}"
+        - ""
+        - "&e&lYOUR STATS"
+        - "  &7Beacons Crafted: &f{PLAYER_SCORE}"
+        - "  &7Position: &f#{PLAYER_POSITION}"
+        - ""
+        - "&e&lWINNING PLAYERS"
+        - "&4&l#1: &f{LEADER_NAME_1} &7({LEADER_SCORE_FORMATTED_1})"
+        - "&c&l#2: &f{LEADER_NAME_2} &7({LEADER_SCORE_FORMATTED_2})"
+        - "&6&l#3: &f{LEADER_NAME_3} &7({LEADER_SCORE_FORMATTED_3})"
+        - "&e&l#4: &f{LEADER_NAME_4} &7({LEADER_SCORE_FORMATTED_4})"
+        - "&7&l#5: &f{LEADER_NAME_5} &7({LEADER_SCORE_FORMATTED_5})"
+        - ""
+        - "&cThis tournament has ended!"
+  player_kills_tournament:
+    active:
+      material: PLAYER_HEAD
+      display_name: "&3&lPLAYER KILLS TOURNAMENT"
+      lore:
+        - "&8{START_DAY} {START_MONTH} - {END_DAY} {END_MONTH}"
+        - ""
+        - "&7Kill as many other players as you can!"
+        - ""
+        - "&3&lYOUR STATS"
+        - "  &7Players Killed: &f{PLAYER_SCORE}"
+        - "  &7Position: &f#{PLAYER_POSITION}"
+        - ""
+        - "&3&lTIME REMAINING"
+        - "  &f{TIME_REMAINING}"
+        - ""
+        - "&4&l#1: &f{LEADER_NAME_1} &7({LEADER_SCORE_FORMATTED_1})"
+        - "&c&l#2: &f{LEADER_NAME_2} &7({LEADER_SCORE_FORMATTED_2})"
+        - "&6&l#3: &f{LEADER_NAME_3} &7({LEADER_SCORE_FORMATTED_3})"
+        - "&e&l#4: &f{LEADER_NAME_4} &7({LEADER_SCORE_FORMATTED_4})"
+        - "&7&l#5: &f{LEADER_NAME_5} &7({LEADER_SCORE_FORMATTED_5})"
+        - ""
+        - "&7&o(( Top 5 updates every 60 seconds ))"
+    waiting:
+      material: ORANGE_STAINED_GLASS_PANE
+      display_name: "&3&lPLAYER KILLS TOURNAMENT"
+      lore:
+        - "&8{START_DAY} {START_MONTH} - {END_DAY} {END_MONTH}"
+        - ""
+        - "&7Kill as many other players as you can!"
+        - ""
+        - "&3&lREWARDS"
+        - "  &fExample Reward #1"
+        - "  &fExample Reward #2"
+        - "  &fExample Reward #3"
+        - ""
+        - "&3&lSTARTING IN"
+        - "  &f{TIME_REMAINING}"
+    ended:
+      material: BARRIER
+      display_name: "&c&lPLAYER KILLS TOURNAMENT"
+      lore:
+        - "&8{START_DAY} {START_MONTH} - {END_DAY} {END_MONTH}"
+        - ""
+        - "&3&lYOUR STATS"
+        - "  &7Beacons Crafted: &f{PLAYER_SCORE}"
+        - "  &7Position: &f#{PLAYER_POSITION}"
+        - ""
+        - "&3&lWINNING PLAYERS"
+        - "&4&l#1: &f{LEADER_NAME_1} &7({LEADER_SCORE_FORMATTED_1})"
+        - "&c&l#2: &f{LEADER_NAME_2} &7({LEADER_SCORE_FORMATTED_2})"
+        - "&6&l#3: &f{LEADER_NAME_3} &7({LEADER_SCORE_FORMATTED_3})"
+        - "&e&l#4: &f{LEADER_NAME_4} &7({LEADER_SCORE_FORMATTED_4})"
+        - "&7&l#5: &f{LEADER_NAME_5} &7({LEADER_SCORE_FORMATTED_5})"
+        - ""
+        - "&cThis tournament has ended!"
