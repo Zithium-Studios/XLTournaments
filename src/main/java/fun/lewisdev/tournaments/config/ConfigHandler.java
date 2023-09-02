@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class ConfigHandler {
 
@@ -57,8 +58,8 @@ public class ConfigHandler {
         if (configuration == null || file == null) return;
         try {
             getConfig().save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            plugin.getLogger().log(Level.SEVERE, "Error saving " + name, ex);
         }
     }
 
