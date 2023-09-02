@@ -17,7 +17,7 @@ import fun.lewisdev.tournaments.objective.XLObjective;
 import fun.lewisdev.tournaments.storage.StorageManager;
 import fun.lewisdev.tournaments.tournament.Tournament;
 import fun.lewisdev.tournaments.tournament.TournamentManager;
-import fun.lewisdev.tournaments.utility.Messages;
+import fun.lewisdev.tournaments.config.Messages;
 import me.mattstudios.mf.base.CommandManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;

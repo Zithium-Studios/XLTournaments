@@ -17,7 +17,7 @@ import fun.lewisdev.tournaments.tournament.TournamentManager;
 import fun.lewisdev.tournaments.tournament.TournamentStatus;
 import fun.lewisdev.tournaments.utility.GuiUtils;
 import fun.lewisdev.tournaments.utility.ItemStackBuilder;
-import fun.lewisdev.tournaments.utility.Messages;
+import fun.lewisdev.tournaments.config.Messages;
 import fun.lewisdev.tournaments.utility.TextUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
@@ -38,8 +38,6 @@ public class TournamentGUI {
     public void openInventory(Player player) {
         FileConfiguration config = plugin.getMenuFile().getConfig();
 
-        //Gui gui = new Gui(config.getInt("rows"), TextUtil.color(config.getString("title")));
-
         PaginatedGui gui = Gui.paginated()
                 .title(Component.text(TextUtil.color(config.getString("title"))))
                 .rows(config.getInt("rows"))
@@ -48,53 +46,6 @@ public class TournamentGUI {
         gui.setDefaultClickAction(event -> event.setCancelled(true));
 
         GuiUtils.setFillerItems(gui, config.getConfigurationSection("filler_items"));
-
-        GuiItem nextPage = new GuiItem(ItemStackBuilder.getItemStack(config.getConfigurationSection("page_items.next_page")).build());
-        nextPage.setAction(event -> gui.next());
-        gui.setItem(config.getInt("page_items.next_page.slot"), nextPage);
-
-        GuiItem previousPage = new GuiItem(ItemStackBuilder.getItemStack(config.getConfigurationSection("page_items.previous_page")).build());
-        previousPage.setAction(event -> gui.previous());
-        gui.setItem(config.getInt("page_items.previous_page.slot"), previousPage);
-
-        /*
-        {// Filler items
-            ConfigurationSection section = config.getConfigurationSection("filler_items");
-            if (section != null) {
-                for (String entry : section.getKeys(false)) {
-                    ItemStackBuilder builder = ItemStackBuilder.getItemStack(config.getConfigurationSection(section.getCurrentPath() + "." + entry));
-                    builder.withName(config.getString(section.getCurrentPath() + "." + entry + ".display_name").replace("{PLAYER}", player.getName()));
-                    builder.withLore(config.getStringList(section.getCurrentPath() + "." + entry + ".lore").stream().map(line -> line
-                            .replace("{PLAYER}", player.getName()))
-                            .collect(Collectors.toList()));
-
-                    GuiItem guiItem = new GuiItem(builder.build());
-                    if (config.contains(section.getCurrentPath() + "." + entry + ".commands")) {
-                        guiItem.setAction(event -> {
-                            player.closeInventory();
-                            for (String command : config.getStringList(section.getCurrentPath() + "." + entry + ".commands")) {
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{PLAYER}", player.getName()));
-                            }
-                        });
-                    }
-
-                    if (config.contains(section.getCurrentPath() + "." + entry + ".slots")) {
-                        for (String slot : config.getStringList(section.getCurrentPath() + "." + entry + ".slots")) {
-                            gui.setItem(Integer.parseInt(slot), guiItem);
-                        }
-                    } else if (config.contains(section.getCurrentPath() + "." + entry + ".slot")) {
-                        int slot = config.getInt(section.getCurrentPath() + "." + entry + ".slot");
-                        if (slot == -1) {
-                            gui.getFiller().fill(guiItem);
-                        } else {
-                            gui.setItem(slot, guiItem);
-                        }
-                    }
-                }
-            }
-        }
-
-         */
 
 
         {// Tournament items
@@ -170,27 +121,29 @@ public class TournamentGUI {
 
                     gui.addItem(guiItem);
 
-                    /*
+                    // Adding the next & previous page items.
+                    addPageItems(gui);
 
-                    if (config.contains(section.getCurrentPath() + "." + entry + ".slots")) {
-                        for (String slot : config.getStringList(section.getCurrentPath() + "." + entry + ".slots")) {
-                            gui.setItem(Integer.parseInt(slot), guiItem);
-                        }
-                    } else if (config.contains(section.getCurrentPath() + "." + entry + ".slot")) {
-                        int slot = config.getInt(section.getCurrentPath() + "." + entry + ".slot");
-                        if (slot == -1) {
-                            gui.getFiller().fill(guiItem);
-                        } else {
-                            gui.setItem(slot, guiItem);
-                        }
-                    }
-
-                     */
                 }
             }
         }
         gui.open(player);
 
+    }
+
+    private void addPageItems(PaginatedGui gui) {
+
+        FileConfiguration config = plugin.getMenuFile().getConfig();
+        // Making sure they are enabled in the config before adding them.
+        if (config.getBoolean("page_items.enabled", true)) {
+            GuiItem nextPage = new GuiItem(ItemStackBuilder.getItemStack(config.getConfigurationSection("page_items.next_page")).build());
+            nextPage.setAction(event -> gui.next());
+            gui.setItem(config.getInt("page_items.next_page.slot"), nextPage);
+
+            GuiItem previousPage = new GuiItem(ItemStackBuilder.getItemStack(config.getConfigurationSection("page_items.previous_page")).build());
+            previousPage.setAction(event -> gui.previous());
+            gui.setItem(config.getInt("page_items.previous_page.slot"), previousPage);
+        }
     }
 
 }
