@@ -65,103 +65,112 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
     }
 
     @Override
-    public String onRequest(OfflinePlayer player, String identifier) {
+    public String onRequest(OfflinePlayer player, @NotNull String identifier) {
         if (player == null) return "";
 
         final UUID uuid = player.getUniqueId();
 
         try {
             final Matcher matcher = START_DAY_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
                 return optionalTournament.get().getStartDay();
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = END_DAY_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
                 return optionalTournament.get().getEndDay();
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = START_MONTH_NUMBER_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
                 return optionalTournament.get().getStartMonthNumber();
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = START_MONTH_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
                 return optionalTournament.get().getStartMonth();
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = END_MONTH_NUMBER_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
                 return optionalTournament.get().getEndMonthNumber();
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = END_MONTH_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
                 return optionalTournament.get().getEndMonth();
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = TIME_REMAINING_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
                 return optionalTournament.get().getTimeRemaining();
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = LEADER_NAME_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
 
                 final Tournament tournament = optionalTournament.get();
                 final OfflinePlayer offlinePlayer = tournament.getPlayerFromPosition(Integer.parseInt(matcher.group(2)));
-                if(offlinePlayer == null) {
+                if (offlinePlayer == null) {
                     return "N/A";
                 } else {
                     return offlinePlayer.getName();
                 }
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = LEADER_SCORE_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
                 return optionalTournament.map(tournament -> String.valueOf(tournament.getScoreFromPosition(Integer.parseInt(matcher.group(2))))).orElse("Invalid Tournament ID");
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = PLAYER_SCORE_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
 
                 final Tournament tournament = optionalTournament.get();
                 if (tournament.isParticipant(uuid)) {
@@ -170,13 +179,14 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
                     return "N/A";
                 }
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             final Matcher matcher = PLAYER_POSITION_PATTERN.matcher(identifier.toUpperCase());
-            if(matcher.find()) {
+            if (matcher.find()) {
                 final Optional<Tournament> optionalTournament = tournamentManager.getTournament(matcher.group(1));
-                if (!optionalTournament.isPresent()) return "Invalid Tournament ID";
+                if (optionalTournament.isEmpty()) return "Invalid Tournament ID";
 
                 final Tournament tournament = optionalTournament.get();
                 if (tournament.isParticipant(uuid)) {
@@ -185,7 +195,8 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
                     return "N/A";
                 }
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 }
