@@ -15,6 +15,7 @@ filler_items:
 
 # These are the next & previous page items in the gui.
 page_items:
+  enabled: true # Should the page arrows be enabled or not.
   next_page:
     material: ARROW
     display_name: "&aNEXT PAGE ->"

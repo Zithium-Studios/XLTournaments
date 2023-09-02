@@ -8,7 +8,7 @@ package fun.lewisdev.tournaments.command;
 import fun.lewisdev.tournaments.XLTournamentsPlugin;
 import fun.lewisdev.tournaments.tournament.Tournament;
 import fun.lewisdev.tournaments.tournament.TournamentStatus;
-import fun.lewisdev.tournaments.utility.Messages;
+import fun.lewisdev.tournaments.config.Messages;
 import fun.lewisdev.tournaments.utility.TextUtil;
 import me.mattstudios.mf.annotations.*;
 import me.mattstudios.mf.base.CommandBase;
@@ -93,7 +93,7 @@ public class TournamentsCommand extends CommandBase {
     @Completion("#tournaments")
     public void infoSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if(!optionalTournament.isPresent()) {
+        if(optionalTournament.isEmpty()) {
             sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
             return;
         }
@@ -151,7 +151,7 @@ public class TournamentsCommand extends CommandBase {
         }
 
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if(!optionalTournament.isPresent()) {
+        if(optionalTournament.isEmpty()) {
             sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
             return;
         }
