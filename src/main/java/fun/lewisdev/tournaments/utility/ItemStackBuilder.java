@@ -1,6 +1,6 @@
 /*
  * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ * Copyright (c) 2023 Zithium Studios. All rights reserved.
  */
 
 package fun.lewisdev.tournaments.utility;
@@ -128,35 +128,12 @@ public class ItemStackBuilder {
         ITEM_STACK.addUnsafeEnchantment(enchantment, level);
         return this;
     }
-
-    public ItemStackBuilder withEnchantment(final Enchantment enchantment) {
-        return withEnchantment(enchantment, 1);
-    }
     
     public ItemStackBuilder withGlow() {
     	final ItemMeta meta = ITEM_STACK.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         ITEM_STACK.setItemMeta(meta);
         ITEM_STACK.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
-        return this;
-    }
-
-    public ItemStackBuilder withType(final Material material) {
-        ITEM_STACK.setType(material);
-        return this;
-    }
-
-    public ItemStackBuilder clearLore() {
-        final ItemMeta meta = ITEM_STACK.getItemMeta();
-        meta.setLore(new ArrayList<>());
-        ITEM_STACK.setItemMeta(meta);
-        return this;
-    }
-
-    public ItemStackBuilder clearEnchantments() {
-        for (Enchantment enchantment : ITEM_STACK.getEnchantments().keySet()) {
-            ITEM_STACK.removeEnchantment(enchantment);
-        }
         return this;
     }
 
