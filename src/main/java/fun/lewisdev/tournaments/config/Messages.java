@@ -3,8 +3,9 @@
  * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
  */
 
-package fun.lewisdev.tournaments.utility;
+package fun.lewisdev.tournaments.config;
 
+import fun.lewisdev.tournaments.utility.TextUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
