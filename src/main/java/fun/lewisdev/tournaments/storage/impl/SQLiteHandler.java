@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
 
 public class SQLiteHandler implements StorageHandler {
 
@@ -23,9 +24,11 @@ public class SQLiteHandler implements StorageHandler {
         file = new File(plugin.getDataFolder(), "database.db");
         if (!file.exists()) {
             try {
-                file.createNewFile();
+                if (file.createNewFile()) {
+                    plugin.getLogger().info("Created database file: " + file.getAbsolutePath());
+                }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                plugin.getLogger().log(Level.SEVERE, "Error while creating database file", ex);
                 return false;
             }
         }
@@ -37,17 +40,20 @@ public class SQLiteHandler implements StorageHandler {
             }
             connection = DriverManager.getConnection("jdbc:sqlite:" + file);
         } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
+            plugin.getLogger().log(Level.SEVERE, "Error while establishing database connection", ex);
         }
 
         createQueueTable();
         return true;
     }
 
+
     @Override
     public void onDisable() {
         try {
-            connection.close();
+            if (connection != null) {
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
