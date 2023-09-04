@@ -51,7 +51,7 @@ public class SQLiteHandler implements StorageHandler {
     @Override
     public void onDisable() {
         try {
-            if (connection != null) {
+            if (connection != null && !connection.isClosed()) {
                 connection.close();
             }
         } catch (SQLException ex) {
