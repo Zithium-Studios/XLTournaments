@@ -19,11 +19,13 @@ import fun.lewisdev.tournaments.tournament.Tournament;
 import fun.lewisdev.tournaments.tournament.TournamentManager;
 import fun.lewisdev.tournaments.config.Messages;
 import me.mattstudios.mf.base.CommandManager;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamentsAPI {
@@ -46,6 +48,9 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         getLogger().info("");
         getLogger().info("Loading plugin..");
 
+        loadMetrics();
+
+
         saveDefaultConfig();
         (messagesFile = new ConfigHandler(this, "messages")).saveDefaultConfig();
         (menuFile = new ConfigHandler(this, "menu")).saveDefaultConfig();
@@ -67,16 +72,13 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         // Register commands
         commandManager.register(new TournamentsCommand(this));
 
-        //todo Discord Webhook
-        //new WebhookListener(this);
-
         getLogger().info("");
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             objectiveManager.onEnable();
             tournamentManager.onEnable();
 
-            if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new PlaceholderAPIHook(this).register();
             }
         });
@@ -86,7 +88,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
     public void onDisable() {
         Bukkit.getOnlinePlayers().stream().filter(player -> player.getOpenInventory().getTopInventory().getHolder() instanceof BaseGui).forEach(HumanEntity::closeInventory);
 
-        if(tournamentManager != null) {
+        if (tournamentManager != null) {
             tournamentManager.onDisable(false);
         }
     }
@@ -99,6 +101,15 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
 
         tournamentManager.onDisable(true);
         tournamentManager.onEnable();
+    }
+
+    private void loadMetrics() {
+        if (getConfig().getBoolean("enable_metrics")) {
+            getLogger().log(Level.INFO, "Loading bstats metrics.");
+            int pluginId = 19726;
+            Metrics metrics = new Metrics(this, pluginId);
+        }
+        getLogger().log(Level.INFO, "Metrics are disabled.");
     }
 
     public HookManager getHookManager() {
