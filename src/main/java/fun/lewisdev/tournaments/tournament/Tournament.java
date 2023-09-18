@@ -117,6 +117,14 @@ public class Tournament {
         Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentStartEvent(this)));
     }
 
+    /**
+     * Stops the tournament if it is currently active. This method cancels any ongoing update tasks,
+     * processes rewards for participants, and triggers the TournamentEndEvent if applicable.
+     * If the tournament is not in an active state, this method does nothing.
+     *
+     * @throws IllegalStateException if the tournament is in an invalid state for stopping.
+     * @see TournamentEndEvent
+     */
     public void stop() {
         if (status != TournamentStatus.ACTIVE) return;
 
@@ -148,6 +156,12 @@ public class Tournament {
         Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this)));
     }
 
+    /**
+     * Updates the tournament's participant information, including their scores or rankings,
+     * and refreshes the list of sorted participants based on the updated data.
+     * This method sets a flag to prevent concurrent updates while it's running.
+     * It should be called periodically to ensure accurate participant data.
+     */
     public void update() {
         updating = true;
 
@@ -278,6 +292,13 @@ public class Tournament {
         return null;
     }
 
+    /**
+     * Retrieves the score of the participant at the specified position in the sorted list of participants.
+     * The position should be within the valid range of 1 to the size of the sorted participant list.
+     *
+     * @param position The position of the participant in the sorted list.
+     * @return The score of the participant at the given position, or 0 if the position is invalid or the score is non-positive.
+     */
     public int getScoreFromPosition(int position) {
         if (sortedParticipants.size() < position || position > sortedParticipants.size()) return 0;
         int count = 1;
@@ -294,8 +315,9 @@ public class Tournament {
 
     /**
      * Adds a tournament participant.
-     * @param uuid The target's uuid
-     * @param score The score to add to the target
+     *
+     * @param uuid           The target's uuid
+     * @param score          The score to add to the target
      * @param insertDatabase Insert into the database true/false
      */
     public void addParticipant(UUID uuid, int score, boolean insertDatabase) {
