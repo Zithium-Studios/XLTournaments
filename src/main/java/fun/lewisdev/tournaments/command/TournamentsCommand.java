@@ -165,7 +165,7 @@ public class TournamentsCommand extends CommandBase {
     @Permission("tournaments.admin")
     @WrongUsage("&c/tournament list")
     public void listSubCommand(final CommandSender sender) {
-        Messages.LIST_TOURNAMENTS.send(sender,"{LIST}", String.join(", ", plugin.getTournamentManager().getTournaments().stream().map(Tournament::getIdentifier).collect(Collectors.toList())));
+        Messages.LIST_TOURNAMENTS.send(sender,"{LIST}", plugin.getTournamentManager().getTournaments().stream().map(Tournament::getIdentifier).collect(Collectors.joining(", ")));
     }
 
     @SubCommand("end")
@@ -179,7 +179,7 @@ public class TournamentsCommand extends CommandBase {
         }
 
         Tournament tournament = optionalTournament.get();
-        tournament.setStatus(TournamentStatus.ENDED);
+        tournament.stop();
     }
 
 }
