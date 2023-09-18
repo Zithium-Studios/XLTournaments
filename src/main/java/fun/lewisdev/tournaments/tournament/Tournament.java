@@ -292,6 +292,12 @@ public class Tournament {
         return 0;
     }
 
+    /**
+     * Adds a tournament participant.
+     * @param uuid The target's uuid
+     * @param score The score to add to the target
+     * @param insertDatabase Insert into the database true/false
+     */
     public void addParticipant(UUID uuid, int score, boolean insertDatabase) {
         participants.put(uuid, score);
         if (insertDatabase) {

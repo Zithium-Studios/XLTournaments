@@ -24,6 +24,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,14 +69,13 @@ public class TournamentManager {
             try {
                 config = YamlConfiguration.loadConfiguration(file);
             } catch (Exception e) {
-                e.printStackTrace();
-                plugin.getLogger().severe("There was a YAML error while trying to load " + file.getName() + ". Skipping..");
+                plugin.getLogger().log(Level.SEVERE, "There was a YAML error while trying to load " + file.getName() + ". Skipping..", e);
                 continue;
             }
             registerTournament(file.getName().replace(".yml", ""), config);
         }
 
-        if(!listenersRegistered) {
+        if (!listenersRegistered) {
             Stream.of(
                     new Listener() {
                         @EventHandler(priority = EventPriority.MONITOR)
@@ -107,7 +107,7 @@ public class TournamentManager {
 
         tournaments.values().forEach(tournament -> {
             BukkitTask task = tournament.getUpdateTask();
-            if(task != null) {
+            if (task != null) {
                 task.cancel();
             }
         });
@@ -177,8 +177,8 @@ public class TournamentManager {
 
         try {
             builder.loadFromFile(plugin.getObjectiveManager(), config);
-        }catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            plugin.getLogger().log(Level.SEVERE, "There wasn an error while attempting to build the tournament!", ex);
             return;
         }
 
@@ -193,7 +193,7 @@ public class TournamentManager {
 
         objective.addTournament(tournament);
         tournament.updateStatus();
-        if(tournament.getStatus() == TournamentStatus.ACTIVE) {
+        if (tournament.getStatus() == TournamentStatus.ACTIVE) {
             tournament.start(false);
         }
 
