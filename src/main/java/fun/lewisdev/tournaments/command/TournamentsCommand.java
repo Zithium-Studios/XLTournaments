@@ -30,7 +30,7 @@ public class TournamentsCommand extends CommandBase {
     public TournamentsCommand(XLTournamentsPlugin plugin) {
         this.plugin = plugin;
         List<String> aliases = plugin.getConfig().getStringList("command_aliases");
-        if(!aliases.isEmpty()) {
+        if (!aliases.isEmpty()) {
             this.setAliases(plugin.getConfig().getStringList("command_aliases"));
         }
     }
@@ -44,7 +44,7 @@ public class TournamentsCommand extends CommandBase {
     @Permission("tournaments.admin")
     @WrongUsage("&c/tournament help")
     public void helpSubCommand(final CommandSender sender) {
-        for(String s : plugin.getMessagesFile().getConfig().getStringList("general.help")) {
+        for (String s : plugin.getMessagesFile().getConfig().getStringList("general.help")) {
             sender.sendMessage(TextUtil.color(s).replace("{VERSION}", plugin.getDescription().getVersion()));
         }
     }
@@ -79,8 +79,8 @@ public class TournamentsCommand extends CommandBase {
     @Permission("tournaments.admin")
     @WrongUsage("&c/tournament update")
     public void updateSubCommand(final CommandSender sender) {
-        for(Tournament tournament : plugin.getTournamentManager().getTournaments()) {
-            if(tournament.getStatus() == TournamentStatus.ACTIVE) {
+        for (Tournament tournament : plugin.getTournamentManager().getTournaments()) {
+            if (tournament.getStatus() == TournamentStatus.ACTIVE) {
                 tournament.update();
             }
         }
@@ -93,7 +93,7 @@ public class TournamentsCommand extends CommandBase {
     @Completion("#tournaments")
     public void infoSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if(optionalTournament.isEmpty()) {
+        if (optionalTournament.isEmpty()) {
             sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
             return;
         }
@@ -129,7 +129,7 @@ public class TournamentsCommand extends CommandBase {
     @Completion("#tournaments")
     public void clearSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if(optionalTournament.isEmpty()) {
+        if (optionalTournament.isEmpty()) {
             sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
             return;
         }
@@ -145,13 +145,13 @@ public class TournamentsCommand extends CommandBase {
     @Completion({"#players", "#tournaments"})
     public void clearPlayerSubCommand(final CommandSender sender, final Player target, final String input) {
 
-        if(target == null) {
+        if (target == null) {
             sender.sendMessage(TextUtil.color("&cPlayer is invalid or offline."));
             return;
         }
 
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if(optionalTournament.isEmpty()) {
+        if (optionalTournament.isEmpty()) {
             sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
             return;
         }
@@ -165,21 +165,30 @@ public class TournamentsCommand extends CommandBase {
     @Permission("tournaments.admin")
     @WrongUsage("&c/tournament list")
     public void listSubCommand(final CommandSender sender) {
-        Messages.LIST_TOURNAMENTS.send(sender,"{LIST}", plugin.getTournamentManager().getTournaments().stream().map(Tournament::getIdentifier).collect(Collectors.joining(", ")));
+        Messages.LIST_TOURNAMENTS.send(sender, "{LIST}", plugin.getTournamentManager().getTournaments().stream().map(Tournament::getIdentifier).collect(Collectors.joining(", ")));
     }
 
     @SubCommand("end")
+    @Permission("tournaments.admin")
+    @WrongUsage("&c/tournament end <tournament>")
     @Completion("#tournaments")
-    public void endSubCommand(final CommandSender sender, final String input){
-
+    public void endSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if(optionalTournament.isEmpty()) {
-            sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
-            return;
+
+        if (optionalTournament.isPresent()) {
+            Tournament tournament = optionalTournament.get();
+
+            if (tournament.getStatus() == TournamentStatus.ENDED) {
+                Messages.ALREADY_STOPPED.send(sender);
+            } else {
+                tournament.stop();
+                tournament.setStatus(TournamentStatus.ENDED);
+                Messages.STOPPED_TOURNAMENT.send(sender, "{TOURNAMENT}", tournament.getIdentifier());
+            }
+        } else {
+            sender.sendMessage(TextUtil.color("&cCould not find a tournament with that ID."));
         }
-
-        Tournament tournament = optionalTournament.get();
-        tournament.stop();
     }
-
 }
+
+
