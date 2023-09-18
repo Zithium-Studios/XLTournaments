@@ -300,17 +300,19 @@ public class Tournament {
      * @return The score of the participant at the given position, or 0 if the position is invalid or the score is non-positive.
      */
     public int getScoreFromPosition(int position) {
-        if (sortedParticipants.size() < position || position > sortedParticipants.size()) return 0;
-        int count = 1;
-        for (UUID uuid : sortedParticipants.keySet()) {
-            if (count == position) {
-                if (sortedParticipants.get(uuid) > 0) {
-                    return sortedParticipants.get(uuid);
-                }
-            }
-            count++;
+        // Check if the specified position is out of bounds or non-positive.
+        if (position < 1 || position > sortedParticipants.size()) {
+            return 0;
         }
-        return 0;
+
+        // Get the UUID of the participant at the specified position.
+        UUID uuid = (UUID) sortedParticipants.keySet().toArray()[position - 1];
+
+        // Get the score of the participant at the specified position.
+        int score = sortedParticipants.get(uuid);
+
+        // Return the score (positive or 0).
+        return Math.max(0, score);
     }
 
     /**
