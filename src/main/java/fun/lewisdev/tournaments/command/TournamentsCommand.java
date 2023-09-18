@@ -129,7 +129,7 @@ public class TournamentsCommand extends CommandBase {
     @Completion("#tournaments")
     public void clearSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if(!optionalTournament.isPresent()) {
+        if(optionalTournament.isEmpty()) {
             sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
             return;
         }
@@ -166,6 +166,20 @@ public class TournamentsCommand extends CommandBase {
     @WrongUsage("&c/tournament list")
     public void listSubCommand(final CommandSender sender) {
         Messages.LIST_TOURNAMENTS.send(sender,"{LIST}", String.join(", ", plugin.getTournamentManager().getTournaments().stream().map(Tournament::getIdentifier).collect(Collectors.toList())));
+    }
+
+    @SubCommand("end")
+    @Completion("#tournaments")
+    public void endSubCommand(final CommandSender sender, final String input){
+
+        Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
+        if(optionalTournament.isEmpty()) {
+            sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
+            return;
+        }
+
+        Tournament tournament = optionalTournament.get();
+        tournament.setStatus(TournamentStatus.ENDED);
     }
 
 }
