@@ -21,10 +21,6 @@ import java.util.regex.Pattern;
 
 public class TextUtil {
 
-    private final static String N0NCE_ID = "%%__NONCE__%%";
-    private final static String US3R_ID = "%%__USER__%%";
-    private final static String US3R_ID2 = "%%__USER__%%321";
-    private static final Pattern HEX_PATTERN = Pattern.compile("#<([A-Fa-f0-9]){6}>");
     private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.US);
 
     public static boolean isMCMarket() {
