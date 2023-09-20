@@ -58,7 +58,8 @@ public class TextUtil {
                 .replaceAll("&k", "<obfuscated>")
                 .replaceAll("&m", "<strikethrough>")
                 .replaceAll("&n", "<u>")
-                .replaceAll("&r", "<reset>");
+                .replaceAll("&r", "<reset>")
+                .replaceAll("&o", "<italic>");
     }
 
 
@@ -70,13 +71,6 @@ public class TextUtil {
     public static String getNumberFormatted(int value) {
         return NUMBER_FORMAT.format(value);
     }
-
-    /*
-    public static String color(String string) {
-        return IridiumColorAPI.process(string);
-    }
-
-     */
 
     public static String fromList(List<?> list) {
         if (list == null || list.isEmpty()) return null;
