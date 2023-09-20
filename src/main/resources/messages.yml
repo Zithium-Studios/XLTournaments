@@ -26,7 +26,7 @@ tournament:
   waiting: "{PREFIX} &cThis tournament is currently waiting to start."
   ended: "{PREFIX} &cThis tournament has already ended."
   cleared: "{PREFIX} &7You have removed all users in the {TOURNAMENT} tournament."
-  cleared_player: ""
+  cleared_player: "{PREFIX} &7You have cleaned {PLAYER} from {TOURNAMENT}."
   list: "{PREFIX} &7Enabled tournaments: &a{LIST}"
   stopped: "{PREFIX} &cYou have stopped the {TOURNAMENT} tournament."
   already_stopped: "{PREFIX} &cThat tournament is not currently active."
