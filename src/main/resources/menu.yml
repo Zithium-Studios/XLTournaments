@@ -5,7 +5,6 @@ title: "&lTOURNAMENTS"
 # Min rows: 1, Max rows: 6
 rows: 3
 
-
 # Should tournaments that have ended be displayed in the menu
 hide_completed_tournaments: false
 
@@ -15,7 +14,7 @@ filler_items:
     material: GRAY_STAINED_GLASS_PANE
     amount: 1
     display_name: "&r"
-    slots: [0-10, 12, 14, 16-26]
+    slots: [ "0-10", "12", "14", "16-26" ]
 
 # These are the next & previous page items in the gui.
 page_items:
