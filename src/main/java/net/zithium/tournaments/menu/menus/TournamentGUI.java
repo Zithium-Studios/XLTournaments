@@ -1,6 +1,5 @@
 /*
  * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
  * Copyright (2) 2023 Zithium Studios
  */
 
@@ -57,6 +56,7 @@ public class TournamentGUI {
                     if (optionalTournament.isEmpty()) continue;
                     Tournament tournament = optionalTournament.get();
 
+                    // Not displaying tournaments in the menu if they are not running.
                     if (config.getBoolean("hide_completed_tournaments")) {
                         if (tournament.getStatus() == TournamentStatus.ENDED) {
                             continue;
