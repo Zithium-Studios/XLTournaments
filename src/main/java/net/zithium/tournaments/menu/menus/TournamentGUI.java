@@ -57,6 +57,12 @@ public class TournamentGUI {
                     if (optionalTournament.isEmpty()) continue;
                     Tournament tournament = optionalTournament.get();
 
+                    if (config.getBoolean("hide_completed_tournaments")) {
+                        if (tournament.getStatus() == TournamentStatus.ENDED) {
+                            continue;
+                        }
+                    }
+
                     ItemStackBuilder builder = null;
                     TournamentStatus status = tournament.getStatus();
                     if (status == TournamentStatus.ACTIVE) {

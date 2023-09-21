@@ -5,6 +5,10 @@ title: "&lTOURNAMENTS"
 # Min rows: 1, Max rows: 6
 rows: 3
 
+
+# Should tournaments that have ended be displayed in the menu
+hide_completed_tournaments: false
+
 # These are static items and serve no click purpose
 filler_items:
   glass:
