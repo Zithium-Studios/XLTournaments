@@ -57,7 +57,7 @@ public class TournamentGUI {
                     Tournament tournament = optionalTournament.get();
 
                     // Not displaying tournaments in the menu if they are not running.
-                    if (config.getBoolean("hide_completed_tournaments")) {
+                    if (config.getBoolean("hide_completed_tournaments", false)) {
                         if (tournament.getStatus() == TournamentStatus.ENDED) {
                             continue;
                         }
