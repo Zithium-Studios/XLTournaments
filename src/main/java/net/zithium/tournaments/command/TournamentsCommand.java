@@ -41,7 +41,7 @@ public class TournamentsCommand extends CommandBase {
     }
 
     @SubCommand("help")
-    @Permission("tournaments.admin")
+    @Permission({"tournaments.admin", "tournaments.command.help"})
     @WrongUsage("&c/tournament help")
     public void helpSubCommand(final CommandSender sender) {
         for (String s : plugin.getMessagesFile().getConfig().getStringList("general.help")) {
@@ -50,7 +50,7 @@ public class TournamentsCommand extends CommandBase {
     }
 
     @SubCommand("reload")
-    @Permission("tournaments.admin")
+    @Permission({"tournaments.admin", "tournaments.command.reload"})
     @WrongUsage("&c/tournament reload")
     public void reloadSubCommand(final CommandSender sender) {
         plugin.reload();
@@ -76,7 +76,7 @@ public class TournamentsCommand extends CommandBase {
     }
 
     @SubCommand("update")
-    @Permission("tournaments.admin")
+    @Permission({"tournaments.admin", "tournaments.command.update"})
     @WrongUsage("&c/tournament update")
     public void updateSubCommand(final CommandSender sender) {
         for (Tournament tournament : plugin.getTournamentManager().getTournaments()) {
@@ -88,7 +88,7 @@ public class TournamentsCommand extends CommandBase {
     }
 
     @SubCommand("info")
-    @Permission("tournaments.admin")
+    @Permission({"tournaments.admin", "tournaments.command.info"})
     @WrongUsage("&c/tournament info <tournament>")
     @Completion("#tournaments")
     public void infoSubCommand(final CommandSender sender, final String input) {
@@ -124,7 +124,7 @@ public class TournamentsCommand extends CommandBase {
     }
 
     @SubCommand("clear")
-    @Permission("tournaments.admin")
+    @Permission({"tournaments.admin", "tournaments.command.clear"})
     @WrongUsage("&c/tournament clear <tournament>")
     @Completion("#tournaments")
     public void clearSubCommand(final CommandSender sender, final String input) {
@@ -140,7 +140,7 @@ public class TournamentsCommand extends CommandBase {
     }
 
     @SubCommand("clearplayer")
-    @Permission("tournaments.admin")
+    @Permission({"tournaments.admin", "tournaments.command.clearplayer"})
     @WrongUsage("&c/tournament clearplayer <player> <tournament>")
     @Completion({"#players", "#tournaments"})
     public void clearPlayerSubCommand(final CommandSender sender, final Player target, final String input) {
@@ -162,14 +162,14 @@ public class TournamentsCommand extends CommandBase {
     }
 
     @SubCommand("list")
-    @Permission("tournaments.admin")
+    @Permission({"tournaments.admin", "tournaments.command.list"})
     @WrongUsage("&c/tournament list")
     public void listSubCommand(final CommandSender sender) {
         Messages.LIST_TOURNAMENTS.send(sender, "{LIST}", plugin.getTournamentManager().getTournaments().stream().map(Tournament::getIdentifier).collect(Collectors.joining(", ")));
     }
 
     @SubCommand("end")
-    @Permission("tournaments.admin")
+    @Permission({"tournaments.admin", "tournaments.command.end"})
     @WrongUsage("&c/tournament end <tournament>")
     @Completion("#tournaments")
     public void endSubCommand(final CommandSender sender, final String input) {
