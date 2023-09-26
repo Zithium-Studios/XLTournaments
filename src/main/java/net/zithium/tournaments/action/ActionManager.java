@@ -9,7 +9,7 @@ import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.tournament.Tournament;
 import net.zithium.tournaments.utility.TextUtil;
 import net.zithium.tournaments.action.actions.*;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
