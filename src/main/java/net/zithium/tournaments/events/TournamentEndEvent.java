@@ -8,13 +8,14 @@ package net.zithium.tournaments.events;
 import net.zithium.tournaments.tournament.Tournament;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class TournamentEndEvent extends Event {
 
     private static final HandlerList HANDLERS_LIST = new HandlerList();
-    private boolean cancelled = false;
+    private final boolean cancelled = false;
 
-    private Tournament tournament;
+    private final Tournament tournament;
 
     public TournamentEndEvent(Tournament tournament) {
         this.tournament = tournament;
@@ -25,7 +26,7 @@ public class TournamentEndEvent extends Event {
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS_LIST;
     }
 
