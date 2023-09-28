@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'fun.lewisdev'
-version = '3.13.1'
+version = '3.13.2'
 description = 'XLTournaments'
 
 repositories {
@@ -63,9 +63,10 @@ build {
 shadowJar {
     minimize()
     archiveFileName = "XLTournaments-${project.version}.jar"
-    relocate 'dev.triumphteam.gui', 'fun.lewisdev.tournaments.libs.gui'
-    relocate 'me.mattstudios.mf', 'fun.lewisdev.tournaments.libs.command'
-    relocate 'org.codemc.worldguardwrapper', 'fun.lewisdev.tournaments.libs.worldguardwrapper'
-    relocate 'com.zaxxer.hikari', 'fun.lewisdev.tournaments.libs.hikari'
-    relocate 'org.bstats', 'fun.lewisdev.tournaments.libs.metrics'
+    relocate 'dev.triumphteam.gui', 'net.zithium.tournaments.libs.gui'
+    relocate 'me.mattstudios.mf', 'net.zithium.tournaments.libs.command'
+    relocate 'org.codemc.worldguardwrapper', 'net.zithium.tournaments.libs.worldguardwrapper'
+    relocate 'com.zaxxer.hikari', 'net.zithium.tournaments.libs.hikari'
+    relocate 'org.bstats', 'net.zithium.tournaments.libs.metrics'
+    relocate 'net.kyori.adventure', 'net.zithium.tournaments.libs.adventure'
 }
