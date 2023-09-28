@@ -5,6 +5,7 @@
 
 package net.zithium.tournaments.action.actions;
 
+import net.zithium.library.utils.Color;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.action.Action;
 import net.zithium.tournaments.utility.TextUtil;
@@ -20,9 +21,6 @@ public class BroadcastMessageAction implements Action {
 
     @Override
     public void execute(XLTournamentsPlugin plugin, Player player, String data) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(TextUtil.color(data));
-            break;
-        }
+        Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.sendMessage(Color.stringColor(data)));
     }
 }
