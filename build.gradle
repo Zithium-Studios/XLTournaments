@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'fun.lewisdev'
-version = '3.13.2'
+version = '3.13.3'
 description = 'XLTournaments'
 
 repositories {
@@ -23,11 +23,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.zaxxer:HikariCP:5.0.1'
-    implementation 'me.mattstudios.utils:matt-framework:1.4.6'
-    implementation 'dev.triumphteam:triumph-gui:3.1.5'
-    implementation 'org.bstats:bstats-bukkit:3.0.2'
-    implementation 'com.github.ItzSave:ZithiumLibrary:v1.0.4'
+    implementation('com.zaxxer:HikariCP:5.0.1')
+    implementation('me.mattstudios.utils:matt-framework:1.4.6')
+    implementation('dev.triumphteam:triumph-gui:3.1.5')
+    implementation('org.bstats:bstats-bukkit:3.0.2')
+    implementation('com.github.ItzSave:ZithiumLibrary:v1.0.4')
 
     compileOnly 'org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT'
     compileOnly 'com.mojang:authlib:1.5.21'
@@ -63,9 +63,10 @@ build {
 shadowJar {
     minimize()
     archiveFileName = "XLTournaments-${project.version}.jar"
-    relocate 'dev.triumphteam.gui', 'fun.lewisdev.tournaments.libs.gui'
-    relocate 'me.mattstudios.mf', 'fun.lewisdev.tournaments.libs.command'
-    relocate 'org.codemc.worldguardwrapper', 'fun.lewisdev.tournaments.libs.worldguardwrapper'
-    relocate 'com.zaxxer.hikari', 'fun.lewisdev.tournaments.libs.hikari'
-    relocate 'org.bstats', 'fun.lewisdev.tournaments.libs.metrics'
+    relocate 'dev.triumphteam.gui', 'net.zithium.tournaments.libs.gui'
+    relocate 'me.mattstudios.mf', 'net.zithium.tournaments.libs.command'
+    relocate 'org.codemc.worldguardwrapper', 'net.zithium.tournaments.libs.worldguardwrapper'
+    relocate 'com.zaxxer.hikari', 'net.zithium.tournaments.libs.hikari'
+    relocate 'org.bstats', 'net.zithium.tournaments.libs.metrics'
+    relocate 'net.zithium.library', 'net.zithium.tournaments.libs.library'
 }

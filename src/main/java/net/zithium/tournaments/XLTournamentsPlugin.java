@@ -6,7 +6,7 @@
 package net.zithium.tournaments;
 
 import dev.triumphteam.gui.guis.BaseGui;
-import net.zithium.tournaments.action.ActionManager;
+import net.zithium.library.action.ActionManager;
 import net.zithium.tournaments.command.TournamentsCommand;
 import net.zithium.tournaments.config.ConfigHandler;
 import net.zithium.tournaments.hook.HookManager;
@@ -58,7 +58,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
 
         (hookManager = new HookManager(this)).onEnable();
         (storageManager = new StorageManager(this)).onEnable();
-        (actionManager = new ActionManager(this)).onEnable();
+        (actionManager = new ActionManager()).onEnable();
 
         objectiveManager = new ObjectiveManager(this);
         tournamentManager = new TournamentManager(this);

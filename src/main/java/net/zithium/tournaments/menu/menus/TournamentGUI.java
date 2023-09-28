@@ -8,6 +8,8 @@ package net.zithium.tournaments.menu.menus;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
+import net.zithium.library.items.ItemStackBuilder;
+import net.zithium.library.utils.Color;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.hook.HookManager;
 import net.zithium.tournaments.hook.hooks.VaultHook;
@@ -15,7 +17,6 @@ import net.zithium.tournaments.tournament.Tournament;
 import net.zithium.tournaments.tournament.TournamentManager;
 import net.zithium.tournaments.tournament.TournamentStatus;
 import net.zithium.tournaments.utility.GuiUtils;
-import net.zithium.tournaments.utility.ItemStackBuilder;
 import net.zithium.tournaments.config.Messages;
 import net.zithium.tournaments.utility.TextUtil;
 import net.kyori.adventure.text.Component;
@@ -38,7 +39,7 @@ public class TournamentGUI {
         FileConfiguration config = plugin.getMenuFile().getConfig();
 
         PaginatedGui gui = Gui.paginated()
-                .title(Component.text(TextUtil.color(config.getString("title"))))
+                .title(Component.text(Color.stringColor(config.getString("title"))))
                 .rows(config.getInt("rows"))
                 .create();
 

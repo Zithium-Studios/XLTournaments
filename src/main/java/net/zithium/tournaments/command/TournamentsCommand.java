@@ -46,7 +46,7 @@ public class TournamentsCommand extends CommandBase {
     @WrongUsage("&c/tournament help")
     public void helpSubCommand(final CommandSender sender) {
         for (String s : plugin.getMessagesFile().getConfig().getStringList("general.help")) {
-            sender.sendMessage(TextUtil.color(s).replace("{VERSION}", plugin.getDescription().getVersion()));
+            sender.sendMessage(Color.stringColor(s).replace("{VERSION}", plugin.getDescription().getVersion()));
         }
     }
 
@@ -110,17 +110,17 @@ public class TournamentsCommand extends CommandBase {
         sender.sendMessage(Color.stringColor("&bObjective: &f" + tournament.getObjective().getIdentifier()));
         sender.sendMessage(Color.stringColor("&bTimeline: &f" + tournament.getTimeline()));
         sender.sendMessage(Color.stringColor("&bTimezone: &f" + tournament.getZoneId().getId()));
-        sender.sendMessage(TextUtil.color("&bStart Date: &f" + DateTimeFormatter.ofPattern("yyyy/MM/dd - hh:mm:ss").format(tournament.getStartDate())));
-        sender.sendMessage(TextUtil.color("&bEnd Date: &f" + DateTimeFormatter.ofPattern("yyyy/MM/dd - hh:mm:ss").format(tournament.getEndDate())));
-        sender.sendMessage(TextUtil.color("&bDisabled Worlds: &f" + tournament.getDisabledWorlds()));
-        sender.sendMessage(TextUtil.color("&bDisabled Gamemodes: &f" + tournament.getDisabledGamemodes()));
-        sender.sendMessage(TextUtil.color("&bAutomatic Participation: &f" + tournament.isAutomaticParticipation()));
-        sender.sendMessage(TextUtil.color("&bParticipation Cost: &f" + tournament.getParticipationCost()));
+        sender.sendMessage(Color.stringColor("&bStart Date: &f" + DateTimeFormatter.ofPattern("yyyy/MM/dd - hh:mm:ss").format(tournament.getStartDate())));
+        sender.sendMessage(Color.stringColor("&bEnd Date: &f" + DateTimeFormatter.ofPattern("yyyy/MM/dd - hh:mm:ss").format(tournament.getEndDate())));
+        sender.sendMessage(Color.stringColor("&bDisabled Worlds: &f" + tournament.getDisabledWorlds()));
+        sender.sendMessage(Color.stringColor("&bDisabled Gamemodes: &f" + tournament.getDisabledGamemodes()));
+        sender.sendMessage(Color.stringColor("&bAutomatic Participation: &f" + tournament.isAutomaticParticipation()));
+        sender.sendMessage(Color.stringColor("&bParticipation Cost: &f" + tournament.getParticipationCost()));
         org.bukkit.permissions.Permission permission = tournament.getParticipationPermission();
-        sender.sendMessage(TextUtil.color("&bParticipation Permission: &f" + (permission == null ? "N/A" : permission.getName())));
-        sender.sendMessage(TextUtil.color("&bLeaderboard Refresh: &f" + tournament.getLeaderboardRefresh()));
+        sender.sendMessage(Color.stringColor("&bParticipation Permission: &f" + (permission == null ? "N/A" : permission.getName())));
+        sender.sendMessage(Color.stringColor("&bLeaderboard Refresh: &f" + tournament.getLeaderboardRefresh()));
         Set<String> metadata = tournament.getMeta().keySet();
-        sender.sendMessage(TextUtil.color("&bMetadata: &f" + (metadata.isEmpty() ? "N/A" : metadata)));
+        sender.sendMessage(Color.stringColor("&bMetadata: &f" + (metadata.isEmpty() ? "N/A" : metadata)));
         sender.sendMessage("");
     }
 
@@ -131,7 +131,7 @@ public class TournamentsCommand extends CommandBase {
     public void clearSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
         if (optionalTournament.isEmpty()) {
-            sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
+            sender.sendMessage(Color.stringColor("&cCould not find tournament with that ID"));
             return;
         }
 
@@ -147,13 +147,13 @@ public class TournamentsCommand extends CommandBase {
     public void clearPlayerSubCommand(final CommandSender sender, final Player target, final String input) {
 
         if (target == null) {
-            sender.sendMessage(TextUtil.color("&cPlayer is invalid or offline."));
+            sender.sendMessage(Color.stringColor("&cPlayer is invalid or offline."));
             return;
         }
 
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
         if (optionalTournament.isEmpty()) {
-            sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
+            sender.sendMessage(Color.stringColor("&cCould not find tournament with that ID"));
             return;
         }
 
@@ -187,7 +187,7 @@ public class TournamentsCommand extends CommandBase {
                 Messages.STOPPED_TOURNAMENT.send(sender, "{TOURNAMENT}", tournament.getIdentifier());
             }
         } else {
-            sender.sendMessage(TextUtil.color("&cCould not find a tournament with that ID."));
+            sender.sendMessage(Color.stringColor("&cCould not find a tournament with that ID."));
         }
     }
 }

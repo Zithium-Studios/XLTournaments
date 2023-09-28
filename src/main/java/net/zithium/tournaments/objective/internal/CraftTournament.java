@@ -5,10 +5,10 @@
 
 package net.zithium.tournaments.objective.internal;
 
+import net.zithium.library.version.XMaterial;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.objective.XLObjective;
 import net.zithium.tournaments.tournament.Tournament;
-import net.zithium.tournaments.utility.universal.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

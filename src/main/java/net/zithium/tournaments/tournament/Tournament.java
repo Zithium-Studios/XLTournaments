@@ -5,8 +5,8 @@
 
 package net.zithium.tournaments.tournament;
 
+import net.zithium.library.action.ActionManager;
 import net.zithium.tournaments.XLTournamentsPlugin;
-import net.zithium.tournaments.action.ActionManager;
 import net.zithium.tournaments.events.CompletedChallengeEvent;
 import net.zithium.tournaments.events.TournamentEndEvent;
 import net.zithium.tournaments.events.TournamentStartEvent;
@@ -104,7 +104,7 @@ public class Tournament {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, this::clearParticipants);
 
             if (!startActions.isEmpty()) {
-                Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getOnlinePlayers().forEach(player -> actionManager.executeActions(player, startActions, this)));
+                Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getOnlinePlayers().forEach(player -> actionManager.executeActions(player, startActions)));
             }
         }
 
@@ -142,14 +142,14 @@ public class Tournament {
                             }
                         });
                     } else {
-                        Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(player.getPlayer(), rewards.get(position), this));
+                        Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(player.getPlayer(), rewards.get(position)));
                     }
                 }
             }
         }
 
         if (!endActions.isEmpty()) {
-            Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(null, endActions, this));
+            Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(null, endActions));
             return;
         }
 
