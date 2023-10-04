@@ -46,15 +46,17 @@ public class ObjectiveManager {
         registerObjective(new DuelsObjective(), "Duels");
         registerObjective(new MythicMobsObjective(), "MythicMobs");
         registerObjective(new RandomEventsWinObjective(), "RandomEvents");
-        registerObjective(new BedWars1058BedBreakObjective(), "BedWars1058");
-        registerObjective(new BedWars1058KillsObjective(), "BedWars1058");
-        registerObjective(new BedWars1058FinalKillsObjective(), "BedWars1058");
-        registerObjective(new BedWars1058LevelUpObjective(), "BedWars1058");
-        registerObjective(new BedWars1058WinObjective(), "BedWars1058");
+        registerObjective(new BedWars1058BedBreakObjective(), "BedWars1058"); // FOR REMOVAL
+        registerObjective(new BedWars1058KillsObjective(), "BedWars1058"); // FOR REMOVAL
+        registerObjective(new BedWars1058FinalKillsObjective(), "BedWars1058"); // FOR REMOVAL
+        registerObjective(new BedWars1058LevelUpObjective(), "BedWars1058"); // FOR REMOVAL
+        registerObjective(new BedWars1058WinObjective(), "BedWars1058"); // FOR REMOVAL
         registerObjective(new PlaceholderAPIObjective(), "PlaceholderAPI");
-        registerObjective(new GoldenCratesObjective(), "GoldenCrates");
+        registerObjective(new GoldenCratesObjective(), "GoldenCrates"); // FOR REMOVAL
         registerObjective(new EssentialsBalanceReceiveObjective(), "Essentials");
         registerObjective(new EssentialsBalanceSpendObjective(), "Essentials");
+        registerObjective(new ExcellentCratesObjective(), "ExcellentCrates");
+        registerObjective(new XPrisonRankupObjective(), "X-Prison");
 
         plugin.getLogger().info("Loaded " + objectives.size() + " tournament objectives (" + String.join(", ", objectives.keySet()) + ").");
     }
