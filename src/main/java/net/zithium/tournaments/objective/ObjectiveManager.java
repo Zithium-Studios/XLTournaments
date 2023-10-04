@@ -1,6 +1,6 @@
 /*
  * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ * Copyright (c) 2023 Zithium Studios. All rights reserved.
  */
 
 package net.zithium.tournaments.objective;
@@ -33,6 +33,7 @@ public class ObjectiveManager {
         registerObjective(new MobKillsObjective());
         registerObjective(new PlayerFishObjective());
         registerObjective(new PlaytimeObjective());
+        registerObjective(new PotionBrewObjective());
 
         // Register External Objectives
         registerObjective(new ChatReactionObjective(), "ChatReaction");
