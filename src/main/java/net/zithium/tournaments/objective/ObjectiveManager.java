@@ -33,7 +33,7 @@ public class ObjectiveManager {
         registerObjective(new MobKillsObjective());
         registerObjective(new PlayerFishObjective());
         registerObjective(new PlaytimeObjective());
-        registerObjective(new PotionBrewObjective());
+        registerObjective(new PotionBrewObjective(plugin));
 
         // Register External Objectives
         registerObjective(new ChatReactionObjective(), "ChatReaction");
