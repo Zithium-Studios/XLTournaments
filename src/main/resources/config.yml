@@ -16,6 +16,26 @@ storage:
     database: ""
     use_ssl: true
 
+# Customize the discord webhook that is sent when a tournament has ended.
+discord_webhook:
+  # Should the webhook be enabled or not
+  enable: false
+  # The URL for the webhook.
+  url: ''
+  # Link to an avatar to use for the webhook.
+  avatar_url: 'https://cdn.discordapp.com/attachments/1028362255785545747/1159605391274037298/XLT_logo.PNG?ex=6531a1ad&is=651f2cad&hm=c0beef7c23632a12fa461c12102e2878c17cb2d19ae46ba90e6d99f4ee7cce40&'
+  # This is the message sent when the tournament ends.
+  # Placeholders:
+  #  {TOURNAMENT} - Returns the name of the tournament.
+  #  {FIRST_PLACE} - Returns the name of the first place winner.
+  #  {SECOND_PLACE} - Returns the name of the second place winner.
+  #  {THIRD_PLACE} - Returns the name of the first place winner.
+  #
+  #  {FIRST_PLACE_SCORE} - Returns the score of the first place winner.
+  #  {SECOND_PLACE_SCORE} - Returns the score of the second place winner.
+  #  {THIRD_PLACE_SCORE} - Returns the score of the third place winner.
+  content: 'The {TOURNAMENT} has completed here are the winners!\n\n:first_place: 1st Place: {FIRST_PLACE}\n:second_place: 2nd Place: {SECOND_PLACE}\n:third_place: 3rd Place: {THIRD_PLACE}'
+
 # Command aliases to the main /tournament command
 # ** You will need to restart your server if you edit this list **
 command_aliases:

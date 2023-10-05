@@ -190,6 +190,30 @@ public class TournamentsCommand extends CommandBase {
             sender.sendMessage(Color.stringColor("&cCould not find a tournament with that ID."));
         }
     }
+
+    @SubCommand("start")
+    @Permission({"tournaments.admin", "tournaments.command.start"})
+    @WrongUsage("&c/tournament start <tournament>")
+    @Completion("#tournaments")
+    public void startSubCommand(final CommandSender sender, final String input) {
+        Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
+
+        if (optionalTournament.isPresent()) {
+            Tournament tournament = optionalTournament.get();
+
+            if (tournament.getStatus() == TournamentStatus.ACTIVE) {
+                Messages.ALREADY_STOPPED.send(sender);
+            } else {
+                tournament.start(false);
+                tournament.setStatus(TournamentStatus.ACTIVE);
+                sender.sendMessage(Color.stringColor("&aStarted tournament"));
+            }
+        } else {
+            sender.sendMessage(Color.stringColor("&cCould not find a tournament with that ID."));
+        }
+    }
+
+
 }
 
 
