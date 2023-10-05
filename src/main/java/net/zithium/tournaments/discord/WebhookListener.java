@@ -6,8 +6,15 @@
 package net.zithium.tournaments.discord;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
+import net.zithium.tournaments.events.TournamentEndEvent;
+import net.zithium.tournaments.tournament.Tournament;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class WebhookListener implements Listener {
 
@@ -18,7 +25,7 @@ public class WebhookListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    /*@EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onTournamentEnd(TournamentEndEvent event) {
         Tournament tournament = event.getTournament();
         DiscordWebhook webhook = new DiscordWebhook(plugin.getConfig().getString("discord_webhook.url"));
@@ -32,6 +39,6 @@ public class WebhookListener implements Listener {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }*/
+    }
 
 }
