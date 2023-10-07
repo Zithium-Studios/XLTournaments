@@ -44,6 +44,9 @@ public class CraftTournament extends XLObjective {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onItemCraft(CraftItemEvent event) {
         ItemStack craftedItem = event.getCurrentItem();
+
+        if (craftedItem == null) return;
+
         int amount = craftedItem.getAmount();
 
         if (event.isShiftClick()) {
