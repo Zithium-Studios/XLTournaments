@@ -6,9 +6,10 @@
 package net.zithium.tournaments;
 
 import dev.triumphteam.gui.guis.BaseGui;
-import net.zithium.tournaments.action.ActionManager;
+import net.zithium.library.action.ActionManager;
 import net.zithium.tournaments.command.TournamentsCommand;
 import net.zithium.tournaments.config.ConfigHandler;
+import net.zithium.tournaments.discord.WebhookListener;
 import net.zithium.tournaments.hook.HookManager;
 import net.zithium.tournaments.hook.hooks.PlaceholderAPIHook;
 import net.zithium.tournaments.menu.MenuManager;
@@ -58,7 +59,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
 
         (hookManager = new HookManager(this)).onEnable();
         (storageManager = new StorageManager(this)).onEnable();
-        (actionManager = new ActionManager(this)).onEnable();
+        (actionManager = new ActionManager()).onEnable();
 
         objectiveManager = new ObjectiveManager(this);
         tournamentManager = new TournamentManager(this);
@@ -73,6 +74,10 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         commandManager.register(new TournamentsCommand(this));
 
         getLogger().info("");
+
+        if (getConfig().getBoolean("discord_webhook.enable", false)) {
+            new WebhookListener(this);
+        }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             objectiveManager.onEnable();
@@ -101,12 +106,14 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
 
         tournamentManager.onDisable(true);
         tournamentManager.onEnable();
+
     }
 
     private void loadMetrics() {
         if (getConfig().getBoolean("enable_metrics")) {
             getLogger().log(Level.INFO, "Loading bstats metrics.");
             int pluginId = 19726;
+            @SuppressWarnings("unused")
             Metrics metrics = new Metrics(this, pluginId);
         }
         getLogger().log(Level.INFO, "Metrics are disabled.");
@@ -158,4 +165,5 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
     public Optional<Tournament> getTournament(String identifier) {
         return tournamentManager.getTournament(identifier);
     }
+
 }

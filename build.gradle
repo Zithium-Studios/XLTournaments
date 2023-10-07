@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'fun.lewisdev'
-version = '3.13.2'
+version = '3.14.0'
 description = 'XLTournaments'
 
 repositories {
@@ -23,11 +23,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.zaxxer:HikariCP:5.0.1'
-    implementation 'me.mattstudios.utils:matt-framework:1.4.6'
-    implementation 'dev.triumphteam:triumph-gui:3.1.5'
-    implementation 'org.bstats:bstats-bukkit:3.0.2'
-    implementation "net.kyori:adventure-text-minimessage:4.14.0"
+    implementation('com.zaxxer:HikariCP:5.0.1')
+    implementation('me.mattstudios.utils:matt-framework:1.4.6')
+    implementation('dev.triumphteam:triumph-gui:3.1.5')
+    implementation('org.bstats:bstats-bukkit:3.0.2')
+    implementation('com.github.ItzSave:ZithiumLibrary:v1.0.6')
 
     compileOnly 'org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT'
     compileOnly 'com.mojang:authlib:1.5.21'
@@ -36,7 +36,7 @@ dependencies {
     compileOnly 'com.github.electro2560:ClueScrollsAPI:c5f0b7aa3a'
     compileOnly 'com.github.Realizedd.Duels:duels-api:3.4.0'
     compileOnly 'com.andrei1058.bedwars:bedwars-api:22.3.4'
-    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
     compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
     compileOnly 'me.clip:placeholderapi:2.11.4'
     compileOnly 'com.github.NuVotifier:NuVotifier:2.6.0'
@@ -68,5 +68,5 @@ shadowJar {
     relocate 'org.codemc.worldguardwrapper', 'net.zithium.tournaments.libs.worldguardwrapper'
     relocate 'com.zaxxer.hikari', 'net.zithium.tournaments.libs.hikari'
     relocate 'org.bstats', 'net.zithium.tournaments.libs.metrics'
-    relocate 'net.kyori.adventure', 'net.zithium.tournaments.libs.adventure'
+    relocate 'net.zithium.library', 'net.zithium.tournaments.libs.library'
 }

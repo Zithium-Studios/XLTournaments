@@ -5,6 +5,7 @@
 
 package net.zithium.tournaments.command;
 
+import net.zithium.library.utils.Color;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.tournament.Tournament;
 import net.zithium.tournaments.tournament.TournamentStatus;
@@ -45,7 +46,7 @@ public class TournamentsCommand extends CommandBase {
     @WrongUsage("&c/tournament help")
     public void helpSubCommand(final CommandSender sender) {
         for (String s : plugin.getMessagesFile().getConfig().getStringList("general.help")) {
-            sender.sendMessage(TextUtil.color(s).replace("{VERSION}", plugin.getDescription().getVersion()));
+            sender.sendMessage(Color.stringColor(s).replace("{VERSION}", plugin.getDescription().getVersion()));
         }
     }
 
@@ -61,16 +62,16 @@ public class TournamentsCommand extends CommandBase {
     @WrongUsage("&c/tournament about")
     public void aboutSubCommand(final CommandSender sender) {
         sender.sendMessage("");
-        sender.sendMessage(TextUtil.color("&b&lXLTournaments"));
-        sender.sendMessage(TextUtil.color("&bVersion: &fv" + plugin.getDescription().getVersion()));
-        sender.sendMessage(TextUtil.color("&bAuthor: &fZithium Studios"));
+        sender.sendMessage(Color.stringColor("&b&lXLTournaments"));
+        sender.sendMessage(Color.stringColor("&bVersion: &fv" + plugin.getDescription().getVersion()));
+        sender.sendMessage(Color.stringColor("&bAuthor: &fZithium Studios"));
 
         if (!TextUtil.isValidDownload()) {
-            sender.sendMessage(TextUtil.color("&4Registered to: &cFailed to find licensed owner to this plugin. Contact developer to report possible leak (itzsave)."));
+            sender.sendMessage(Color.stringColor("&4Registered to: &cFailed to find licensed owner to this plugin. Contact developer to report possible leak (itzsave)."));
         } else if (TextUtil.isMCMarket()) {
-            sender.sendMessage(TextUtil.color("&4Registered to: &chttps://builtbybit.com/members/%%__USER__%%/"));
+            sender.sendMessage(Color.stringColor("&4Registered to: &chttps://builtbybit.com/members/%%__USER__%%/"));
         } else {
-            sender.sendMessage(TextUtil.color("&4Registered to: &chttps://www.spigotmc.org/members/%%__USER__%%/"));
+            sender.sendMessage(Color.stringColor("&4Registered to: &chttps://www.spigotmc.org/members/%%__USER__%%/"));
         }
         sender.sendMessage("");
     }
@@ -94,32 +95,32 @@ public class TournamentsCommand extends CommandBase {
     public void infoSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
         if (optionalTournament.isEmpty()) {
-            sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
+            sender.sendMessage(Color.stringColor("&cCould not find tournament with that ID"));
             return;
         }
 
         Tournament tournament = optionalTournament.get();
 
         sender.sendMessage("");
-        sender.sendMessage(TextUtil.color("&b&lTournament Information"));
+        sender.sendMessage(Color.stringColor("&b&lTournament Information"));
         sender.sendMessage("");
-        sender.sendMessage(TextUtil.color("&bIdentifier: &f" + tournament.getIdentifier()));
-        sender.sendMessage(TextUtil.color("&bStatus: &f" + tournament.getStatus().toString()));
-        sender.sendMessage(TextUtil.color("&bParticipants Amount: &f" + tournament.getParticipants().size()));
-        sender.sendMessage(TextUtil.color("&bObjective: &f" + tournament.getObjective().getIdentifier()));
-        sender.sendMessage(TextUtil.color("&bTimeline: &f" + tournament.getTimeline()));
-        sender.sendMessage(TextUtil.color("&bTimezone: &f" + tournament.getZoneId().getId()));
-        sender.sendMessage(TextUtil.color("&bStart Date: &f" + DateTimeFormatter.ofPattern("yyyy/MM/dd - hh:mm:ss").format(tournament.getStartDate())));
-        sender.sendMessage(TextUtil.color("&bEnd Date: &f" + DateTimeFormatter.ofPattern("yyyy/MM/dd - hh:mm:ss").format(tournament.getEndDate())));
-        sender.sendMessage(TextUtil.color("&bDisabled Worlds: &f" + tournament.getDisabledWorlds()));
-        sender.sendMessage(TextUtil.color("&bDisabled Gamemodes: &f" + tournament.getDisabledGamemodes()));
-        sender.sendMessage(TextUtil.color("&bAutomatic Participation: &f" + tournament.isAutomaticParticipation()));
-        sender.sendMessage(TextUtil.color("&bParticipation Cost: &f" + tournament.getParticipationCost()));
+        sender.sendMessage(Color.stringColor("&bIdentifier: &f" + tournament.getIdentifier()));
+        sender.sendMessage(Color.stringColor("&bStatus: &f" + tournament.getStatus().toString()));
+        sender.sendMessage(Color.stringColor("&bParticipants Amount: &f" + tournament.getParticipants().size()));
+        sender.sendMessage(Color.stringColor("&bObjective: &f" + tournament.getObjective().getIdentifier()));
+        sender.sendMessage(Color.stringColor("&bTimeline: &f" + tournament.getTimeline()));
+        sender.sendMessage(Color.stringColor("&bTimezone: &f" + tournament.getZoneId().getId()));
+        sender.sendMessage(Color.stringColor("&bStart Date: &f" + DateTimeFormatter.ofPattern("yyyy/MM/dd - hh:mm:ss").format(tournament.getStartDate())));
+        sender.sendMessage(Color.stringColor("&bEnd Date: &f" + DateTimeFormatter.ofPattern("yyyy/MM/dd - hh:mm:ss").format(tournament.getEndDate())));
+        sender.sendMessage(Color.stringColor("&bDisabled Worlds: &f" + tournament.getDisabledWorlds()));
+        sender.sendMessage(Color.stringColor("&bDisabled Gamemodes: &f" + tournament.getDisabledGamemodes()));
+        sender.sendMessage(Color.stringColor("&bAutomatic Participation: &f" + tournament.isAutomaticParticipation()));
+        sender.sendMessage(Color.stringColor("&bParticipation Cost: &f" + tournament.getParticipationCost()));
         org.bukkit.permissions.Permission permission = tournament.getParticipationPermission();
-        sender.sendMessage(TextUtil.color("&bParticipation Permission: &f" + (permission == null ? "N/A" : permission.getName())));
-        sender.sendMessage(TextUtil.color("&bLeaderboard Refresh: &f" + tournament.getLeaderboardRefresh()));
+        sender.sendMessage(Color.stringColor("&bParticipation Permission: &f" + (permission == null ? "N/A" : permission.getName())));
+        sender.sendMessage(Color.stringColor("&bLeaderboard Refresh: &f" + tournament.getLeaderboardRefresh()));
         Set<String> metadata = tournament.getMeta().keySet();
-        sender.sendMessage(TextUtil.color("&bMetadata: &f" + (metadata.isEmpty() ? "N/A" : metadata)));
+        sender.sendMessage(Color.stringColor("&bMetadata: &f" + (metadata.isEmpty() ? "N/A" : metadata)));
         sender.sendMessage("");
     }
 
@@ -130,7 +131,7 @@ public class TournamentsCommand extends CommandBase {
     public void clearSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
         if (optionalTournament.isEmpty()) {
-            sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
+            sender.sendMessage(Color.stringColor("&cCould not find tournament with that ID"));
             return;
         }
 
@@ -146,13 +147,13 @@ public class TournamentsCommand extends CommandBase {
     public void clearPlayerSubCommand(final CommandSender sender, final Player target, final String input) {
 
         if (target == null) {
-            sender.sendMessage(TextUtil.color("&cPlayer is invalid or offline."));
+            sender.sendMessage(Color.stringColor("&cPlayer is invalid or offline."));
             return;
         }
 
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
         if (optionalTournament.isEmpty()) {
-            sender.sendMessage(TextUtil.color("&cCould not find tournament with that ID"));
+            sender.sendMessage(Color.stringColor("&cCould not find tournament with that ID"));
             return;
         }
 
@@ -186,9 +187,33 @@ public class TournamentsCommand extends CommandBase {
                 Messages.STOPPED_TOURNAMENT.send(sender, "{TOURNAMENT}", tournament.getIdentifier());
             }
         } else {
-            sender.sendMessage(TextUtil.color("&cCould not find a tournament with that ID."));
+            sender.sendMessage(Color.stringColor("&cCould not find a tournament with that ID."));
         }
     }
+
+    @SubCommand("start")
+    @Permission({"tournaments.admin", "tournaments.command.start"})
+    @WrongUsage("&c/tournament start <tournament>")
+    @Completion("#tournaments")
+    public void startSubCommand(final CommandSender sender, final String input) {
+        Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
+
+        if (optionalTournament.isPresent()) {
+            Tournament tournament = optionalTournament.get();
+
+            if (tournament.getStatus() == TournamentStatus.ACTIVE) {
+                Messages.ALREADY_STOPPED.send(sender);
+            } else {
+                tournament.start(false);
+                tournament.setStatus(TournamentStatus.ACTIVE);
+                sender.sendMessage(Color.stringColor("&aStarted tournament"));
+            }
+        } else {
+            sender.sendMessage(Color.stringColor("&cCould not find a tournament with that ID."));
+        }
+    }
+
+
 }
 
 
