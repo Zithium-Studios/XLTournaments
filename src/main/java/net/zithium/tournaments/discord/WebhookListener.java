@@ -31,7 +31,6 @@ public class WebhookListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onTournamentEnd(TournamentEndEvent event) {
 
-        plugin.getLogger().log(Level.INFO, "[WEBHOOK] Attempting to execute the webhook.");
         FileConfiguration config = plugin.getConfig();
 
         Tournament tournament = event.getTournament();
