@@ -94,7 +94,7 @@ public class TournamentsCommand extends CommandBase {
     @Completion("#tournaments")
     public void infoSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if (optionalTournament.isEmpty()) {
+        if (!optionalTournament.isPresent()) {
             sender.sendMessage(Color.stringColor("&cCould not find tournament with that ID"));
             return;
         }
@@ -130,7 +130,7 @@ public class TournamentsCommand extends CommandBase {
     @Completion("#tournaments")
     public void clearSubCommand(final CommandSender sender, final String input) {
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if (optionalTournament.isEmpty()) {
+        if (!optionalTournament.isPresent()) {
             sender.sendMessage(Color.stringColor("&cCould not find tournament with that ID"));
             return;
         }
@@ -152,7 +152,7 @@ public class TournamentsCommand extends CommandBase {
         }
 
         Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(input);
-        if (optionalTournament.isEmpty()) {
+        if (!optionalTournament.isPresent()) {
             sender.sendMessage(Color.stringColor("&cCould not find tournament with that ID"));
             return;
         }
@@ -202,11 +202,11 @@ public class TournamentsCommand extends CommandBase {
             Tournament tournament = optionalTournament.get();
 
             if (tournament.getStatus() == TournamentStatus.ACTIVE) {
-                Messages.ALREADY_STOPPED.send(sender);
+                Messages.ALREADY_STARTED.send(sender);
             } else {
                 tournament.start(false);
                 tournament.setStatus(TournamentStatus.ACTIVE);
-                sender.sendMessage(Color.stringColor("&aStarted tournament"));
+                Messages.STARTED_TOURNAMENT.send(sender, "{TOURNAMENT}", tournament.getIdentifier());
             }
         } else {
             sender.sendMessage(Color.stringColor("&cCould not find a tournament with that ID."));

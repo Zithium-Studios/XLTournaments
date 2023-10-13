@@ -28,7 +28,9 @@ public enum Messages {
     TOURNAMENT_CLEARED_PLAYER("tournament.cleared_player"),
     LIST_TOURNAMENTS("tournament.list"),
     STOPPED_TOURNAMENT("tournament.stopped"),
-    ALREADY_STOPPED("tournament.already_stopped");
+    STARTED_TOURNAMENT("tournament.started"),
+    ALREADY_STOPPED("tournament.already_stopped"),
+    ALREADY_STARTED("tournament.already_started");
 
     private static FileConfiguration config;
     private final String path;

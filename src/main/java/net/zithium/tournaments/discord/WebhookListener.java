@@ -65,11 +65,18 @@ public class WebhookListener implements Listener {
     }
 
     private String getPositionName(int position) {
-        return switch (position) {
-            case 0 -> "first";
-            case 1 -> "second";
-            case 2 -> "third";
-            default -> "invalid";
-        };
+        String result;
+
+        if (position == 0) {
+            result = "first";
+        } else if (position == 1) {
+            result = "second";
+        } else if (position == 2) {
+            result = "third";
+        } else {
+            result = "invalid";
+        }
+
+        return result;
     }
 }

@@ -29,4 +29,6 @@ tournament:
   cleared_player: "{PREFIX} &7You have cleaned {PLAYER} from {TOURNAMENT}."
   list: "{PREFIX} &7Enabled tournaments: &a{LIST}"
   stopped: "{PREFIX} &cYou have stopped the {TOURNAMENT} tournament."
+  started: "{PREFIX} &aYou have started the {TOURNAMENT} tournament."
   already_stopped: "{PREFIX} &cThat tournament is not currently active."
+  already_started: "{PREFIX} &fThat tournament is already active."
