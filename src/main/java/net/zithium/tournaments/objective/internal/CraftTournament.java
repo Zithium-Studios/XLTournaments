@@ -5,7 +5,6 @@
 
 package net.zithium.tournaments.objective.internal;
 
-import net.zithium.library.version.XMaterial;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.objective.XLObjective;
 import net.zithium.tournaments.tournament.Tournament;
@@ -16,29 +15,28 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CraftTournament extends XLObjective {
 
-    public CraftTournament() {
+    private final XLTournamentsPlugin plugin;
+
+
+    public CraftTournament(XLTournamentsPlugin plugin) {
         super("ITEM_CRAFT");
+        this.plugin = plugin;
     }
 
     @Override
     public boolean loadTournament(Tournament tournament, FileConfiguration config) {
-        String objective = config.getString("objective");
-        if(objective.contains(";")) {
-            Optional<XMaterial> xMaterial = XMaterial.matchXMaterial(objective.split(";")[1]);
-            if (xMaterial.isPresent()) {
-                tournament.setMeta("ITEM_CRAFT", xMaterial.get().parseMaterial());
-                return true;
-            }
+        if (config.contains("item_whitelist")) {
+            Set<String> itemWhitelist = new HashSet<>(config.getStringList("item_whitelist"));
+            tournament.setMeta("ITEM_WHITELIST", itemWhitelist);
         }
-
-        JavaPlugin.getProvidingPlugin(XLTournamentsPlugin.class).getLogger().warning("The crafting material in tournament " + tournament.getIdentifier() + " is invalid.");
-        return false;
+        return true;
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -52,7 +50,7 @@ public class CraftTournament extends XLObjective {
         if (event.isShiftClick()) {
             int max = event.getInventory().getMaxStackSize();
             ItemStack[] matrix = event.getInventory().getMatrix();
-            for (ItemStack is: matrix) {
+            for (ItemStack is : matrix) {
                 if (is == null || is.getType() == Material.AIR) continue;
                 int tmp = is.getAmount();
                 if (tmp < max && tmp > 0) max = tmp;
@@ -61,11 +59,19 @@ public class CraftTournament extends XLObjective {
         }
 
         Player player = (Player) event.getWhoClicked();
-        for(Tournament tournament : getTournaments()) {
-            if(tournament.getMeta("ITEM_CRAFT") == craftedItem.getType() && canExecute(tournament, player)) {
-                tournament.addScore(player.getUniqueId(), amount);
+        for (Tournament tournament : getTournaments()) {
+            if (canExecute(tournament, player)) {
+                if (tournament.hasMeta("ITEM_WHITELIST")) {
+                    Set<String> itemWhitelist = (Set<String>) tournament.getMeta("ITEM_WHITELIST");
+                    Material craftedMaterial = craftedItem.getType();
+                    if (itemWhitelist.contains(craftedMaterial.toString())) {
+                        tournament.addScore(player.getUniqueId(), amount);
+                        break;
+                    }
+                } else {
+                    tournament.addScore(player.getUniqueId(), amount);
+                }
             }
         }
     }
-
 }

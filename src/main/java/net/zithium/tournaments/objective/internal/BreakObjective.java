@@ -57,15 +57,15 @@ public class BreakObjective extends XLObjective {
 
         for (Tournament tournament : getTournaments()) {
             if (canExecute(tournament, player) && !block.hasMetadata("XLTPlacedBlock")) {
-
                 if (tournament.hasMeta("BLOCK_WHITELIST")) {
                     List<String> whitelist = (List<String>) tournament.getMeta("BLOCK_WHITELIST");
                     if (!whitelist.contains(block.getType().toString())) {
-                        continue;
+                        tournament.addScore(player.getUniqueId(), 1);
+                        break;
                     }
+                } else {
+                    tournament.addScore(player.getUniqueId(), 1);
                 }
-
-                tournament.addScore(player.getUniqueId(), 1);
             }
         }
     }

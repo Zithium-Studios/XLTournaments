@@ -28,7 +28,7 @@ public class ObjectiveManager {
         // Register Internal Objectives
         registerObjective(new BreakObjective(plugin));
         registerObjective(new PlaceObjective());
-        registerObjective(new CraftTournament());
+        registerObjective(new CraftTournament(plugin));
         registerObjective(new PlayerKillsObjective());
         registerObjective(new MobKillsObjective());
         registerObjective(new PlayerFishObjective());

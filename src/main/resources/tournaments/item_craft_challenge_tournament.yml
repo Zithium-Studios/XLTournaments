@@ -17,7 +17,7 @@ disabled_gamemodes:
 
 # Tournament objective
 # Full Objectives List: https://docs.zithium.net/xl-series/xltournaments/objective-types
-objective: ITEM_CRAFT;BEACON
+objective: ITEM_CRAFT
 
 # How long should we wait to refresh the leaderboard (in seconds)?
 # Min: 10
