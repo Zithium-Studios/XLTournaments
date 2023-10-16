@@ -53,13 +53,16 @@ public class BreakObjective extends XLObjective {
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
-        if(XBlock.isCrop(block) && !XBlock.isFullyGrown(block)) return;
+        if (XBlock.isCrop(block) && !XBlock.isFullyGrown(block)) return;
 
-        for(final Tournament tournament : getTournaments()) {
-            if(canExecute(tournament, player) && !block.hasMetadata("XLTPlacedBlock")) {
+        for (Tournament tournament : getTournaments()) {
+            if (canExecute(tournament, player) && !block.hasMetadata("XLTPlacedBlock")) {
 
-                if(tournament.hasMeta("BLOCK_WHITELIST") && !((List<String>) tournament.getMeta("BLOCK_WHITELIST")).contains(block.getType().toString())) {
-                    continue;
+                if (tournament.hasMeta("BLOCK_WHITELIST")) {
+                    List<String> whitelist = (List<String>) tournament.getMeta("BLOCK_WHITELIST");
+                    if (!whitelist.contains(block.getType().toString())) {
+                        continue;
+                    }
                 }
 
                 tournament.addScore(player.getUniqueId(), 1);
