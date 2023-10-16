@@ -53,7 +53,18 @@ public class WebhookListener implements Listener {
     private String replacePlaceholders(String text, Tournament tournament) {
         for (int i = 0; i < 3; i++) {
             OfflinePlayer player = tournament.getPlayerFromPosition(i + 1);
-            String playerName = (player != null) ? player.getName() : "No " + getPositionName(i) + " place winner";
+
+            String playerName;
+            if (player == null) {
+                playerName = "No " + getPositionName(i) + " place winner";
+            } else {
+                playerName = player.getName();
+            }
+
+            if (playerName == null) {
+                return "There was an error fetching the player name";
+            }
+
             int score = tournament.getScoreFromPosition(i + 1);
             text = text.replace("{" + getPositionName(i).toUpperCase() + "_PLACE}", playerName);
             text = text.replace("{" + getPositionName(i).toUpperCase() + "_PLACE_SCORE}", String.valueOf(score));

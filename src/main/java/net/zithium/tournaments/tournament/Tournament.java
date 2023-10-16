@@ -280,14 +280,18 @@ public class Tournament {
         return participants.getOrDefault(uuid, 0);
     }
 
+    /**
+     * Gets the OfflinePlayer associated with the specified position in the tournament.
+     *
+     * @param position The position in the tournament (1 for first place, 2 for second, etc.).
+     * @return The OfflinePlayer associated with the given position or null if not found.
+     */
     public OfflinePlayer getPlayerFromPosition(int position) {
-        if (sortedParticipants.size() < position || position > sortedParticipants.size()) return null;
+        if (position < 1 || position > sortedParticipants.size()) return null;
         int count = 1;
         for (UUID uuid : sortedParticipants.keySet()) {
             if (count == position) {
-                if (sortedParticipants.get(uuid) > 0) {
-                    return Bukkit.getOfflinePlayer(uuid);
-                }
+                return Bukkit.getOfflinePlayer(uuid);
             }
             count++;
         }
