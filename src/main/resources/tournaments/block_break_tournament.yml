@@ -6,18 +6,24 @@
 enabled: true
 
 # Worlds listed in here will not have the tournament active.
-disabled_worlds: [example_world, another_world]
+disabled_worlds: [ example_world, another_world ]
 
 # Gamemodes that should not contribute to the tournament
 disabled_gamemodes:
   - CREATIVE
   - SPECTATOR
- # - SURVIVAL
- # - ADVENTURE
+  # - SURVIVAL
+  # - ADVENTURE
 
 # Tournament objective
 # Full Objectives List: https://docs.zithium.net/xl-series/xltournaments/objective-types
 objective: BLOCK_BREAK
+
+# Which blocks should be counted?
+# Obtain material names from: https://helpch.at/docs/
+# ( Uncomment to enable )
+#block_whitelist:
+#  - STONE
 
 # How long should we wait to refresh the leaderboard (in seconds)?
 # Min: 10
