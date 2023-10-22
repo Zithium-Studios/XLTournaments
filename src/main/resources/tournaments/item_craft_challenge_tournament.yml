@@ -19,6 +19,10 @@ disabled_gamemodes:
 # Full Objectives List: https://docs.zithium.net/xl-series/xltournaments/objective-types
 objective: ITEM_CRAFT
 
+# A list of items counted towards this tournament.
+item_whitelist:
+  - BEACON
+
 # How long should we wait to refresh the leaderboard (in seconds)?
 # Min: 10
 leaderboard_refresh: 60
