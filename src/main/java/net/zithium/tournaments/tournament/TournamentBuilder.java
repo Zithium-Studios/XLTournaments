@@ -15,6 +15,7 @@ import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.permissions.Permission;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -55,7 +56,7 @@ public class TournamentBuilder {
         // Set timeline
         Timeline timeline;
         try {
-            timeline = Timeline.valueOf(config.getString("timeline"));
+            timeline = Timeline.valueOf(config.getString("timeline").toUpperCase());
         } catch (Exception e) {
             throw new TournamentLoadException("The timeline (" + config.getString("timeline") + ") set in file " + tournament.getIdentifier() + ".yml does not exist. Skipping..");
         }
