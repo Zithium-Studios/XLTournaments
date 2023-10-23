@@ -151,7 +151,6 @@ public class Tournament {
         if (!endActions.isEmpty()) {
             Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(null, endActions));
             Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this)));
-            System.out.println("Empty actions are not empty.");
             return;
         }
 
