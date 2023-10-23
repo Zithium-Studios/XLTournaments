@@ -57,12 +57,9 @@ public class WebhookListener implements Listener {
             String playerName;
             if (player == null) {
                 playerName = "No " + getPositionName(i) + " place winner";
+                plugin.getLogger().log(Level.INFO, "There was an error fetching the player for " + getPositionName(i));
             } else {
                 playerName = player.getName();
-            }
-
-            if (playerName == null) {
-                return "There was an error fetching the player name";
             }
 
             int score = tournament.getScoreFromPosition(i + 1);
