@@ -19,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class BreakObjective extends XLObjective {
     private final XLTournamentsPlugin plugin;
     private final boolean excludePlaced;
 
-    public BreakObjective(XLTournamentsPlugin plugin) {
+    public BreakObjective(@NotNull XLTournamentsPlugin plugin) {
         super("BLOCK_BREAK");
 
         FileConfiguration config = plugin.getConfig();
@@ -48,15 +49,15 @@ public class BreakObjective extends XLObjective {
     }
 
     @Override
-    public boolean loadTournament(Tournament tournament, FileConfiguration config) {
+    public boolean loadTournament(Tournament tournament, @NotNull FileConfiguration config) {
         if (config.contains("block_whitelist")) {
-            tournament.setMeta("BLOCK_WHITELIST", config.getStringList("block_whitelist"));
+            tournament.setMeta("BLOCK_WHITELIST_" + tournament.getIdentifier(), config.getStringList("block_whitelist"));
         }
         return true;
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void onBlockBreak(@NotNull BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
@@ -65,21 +66,26 @@ public class BreakObjective extends XLObjective {
         }
 
         for (Tournament tournament : getTournaments()) {
-            if (canExecute(tournament, player) && !block.hasMetadata("XLTPlacedBlock")) {
-                if (tournament.hasMeta("BLOCK_WHITELIST")) {
-                    List<String> whitelist = (List<String>) tournament.getMeta("BLOCK_WHITELIST");
-                    if (whitelist.contains(block.getType().toString())) {
-                        tournament.addScore(player.getUniqueId(), 1);
-                        break;
-                    } else {
-                        return; // Do nothing if the block is not in the whitelist.
-                    }
-                } else {
-                    // Ignore the whitelist if not present.
+            if (!canExecute(tournament, player) || block.hasMetadata("XLTPlacedBlock")) {
+                continue;
+            }
+
+            String tournamentIdentifier = tournament.getIdentifier();
+
+            if (tournament.hasMeta("BLOCK_WHITELIST_" + tournamentIdentifier)) {
+                List<String> whitelist = (List<String>) tournament.getMeta("BLOCK_WHITELIST_" + tournamentIdentifier);
+                String blockType = block.getType().toString();
+
+
+                if (whitelist.contains(blockType)) {
                     tournament.addScore(player.getUniqueId(), 1);
                 }
+            } else {
+                // Ignore the whitelist if not present.
+                tournament.addScore(player.getUniqueId(), 1);
             }
         }
+
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

@@ -185,7 +185,7 @@ public class TournamentManager {
         try {
             builder.loadFromFile(plugin.getObjectiveManager(), config);
         } catch (Exception ex) {
-            plugin.getLogger().log(Level.SEVERE, "There wasn an error while attempting to build the tournament!", ex);
+            plugin.getLogger().log(Level.SEVERE, "There was an error while attempting to build the tournament!", ex);
             return;
         }
 

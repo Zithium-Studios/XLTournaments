@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public abstract class XLObjective implements Listener {
@@ -32,12 +33,20 @@ public abstract class XLObjective implements Listener {
     public abstract boolean loadTournament(Tournament tournament, FileConfiguration config);
 
     public void addTournament(Tournament tournament) {
-        if(!listenerRegistered) {
+        if (!listenerRegistered) {
             Bukkit.getServer().getPluginManager().registerEvents(this, JavaPlugin.getProvidingPlugin(XLTournamentsPlugin.class));
             listenerRegistered = true;
         }
-        tournamentsLinked.put(tournament.getIdentifier(), tournament);
+        
+        String tournamentIdentifier = tournament.getIdentifier();
+
+        if (tournamentsLinked.containsKey(tournamentIdentifier)) {
+            Bukkit.getServer().getLogger().log(Level.SEVERE, "A tournament with the identifier of " + tournamentIdentifier + " already exists!");
+        } else {
+            tournamentsLinked.put(tournamentIdentifier, tournament);
+        }
     }
+
 
     public boolean canExecute(Tournament tournament, Player player) {
         UUID uuid = player.getUniqueId();
