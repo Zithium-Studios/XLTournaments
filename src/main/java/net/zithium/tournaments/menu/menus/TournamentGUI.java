@@ -41,15 +41,10 @@ public class TournamentGUI {
     public void openInventory(Player player) {
         FileConfiguration config = plugin.getMenuFile().getConfig();
 
-        if (config == null) {
-            plugin.getLogger().log(Level.SEVERE, "Could not locate the menu.yml file.");
-            return;
-        }
-
-        String guiTitle = Color.stringColor(config.getString("title"));
-
-        //PaginatedGui gui = new PaginatedGui(config.getInt("rows"), guiTitle);
-        PaginatedGui gui = createGUI(config.getInt("rows"), guiTitle);
+        PaginatedGui gui = Gui.paginated()
+                .title(Component.text(Color.stringColor(config.getString("title"))))
+                .rows(config.getInt("rows"))
+                .create();
 
         gui.setDefaultClickAction(event -> event.setCancelled(true));
 
