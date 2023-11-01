@@ -55,7 +55,7 @@ public class TournamentBuilder {
         // Set timeline
         Timeline timeline;
         try {
-            timeline = Timeline.valueOf(config.getString("timeline"));
+            timeline = Timeline.valueOf(config.getString("timeline").toUpperCase());
         } catch (Exception e) {
             throw new TournamentLoadException("The timeline (" + config.getString("timeline") + ") set in file " + tournament.getIdentifier() + ".yml does not exist. Skipping..");
         }

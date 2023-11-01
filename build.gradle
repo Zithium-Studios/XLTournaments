@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.15.1'
+version = '3.15.3'
 description = 'XLTournaments'
 
 
