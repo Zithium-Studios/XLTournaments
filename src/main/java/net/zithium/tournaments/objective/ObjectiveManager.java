@@ -67,16 +67,16 @@ public class ObjectiveManager {
     }
 
     public void registerObjective(XLObjective objective, String requiredPlugin) {
-        if(requiredPlugin != null) {
+        if (requiredPlugin != null) {
             if (plugin.getServer().getPluginManager().isPluginEnabled(requiredPlugin)) {
                 objectives.put(objective.getIdentifier(), objective);
                 plugin.getLogger().info("Registered external objective " + objective.getIdentifier() + " using " + requiredPlugin + " plugin.");
             }
-        }else{
+        } else {
             objectives.put(objective.getIdentifier(), objective);
         }
 
-        if(!objective.getClass().getPackage().getName().startsWith("fun.lewisdev.tournaments.objective")) {
+        if (!objective.getClass().getPackage().getName().startsWith("fun.lewisdev.tournaments.objective")) {
             plugin.getLogger().info("Registered external objective " + objective.getIdentifier() + ".");
         }
 
