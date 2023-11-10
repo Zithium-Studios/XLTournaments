@@ -36,7 +36,7 @@ dependencies {
     // EXTERNAL OBJECTIVES
     compileOnly 'com.github.electro2560:ClueScrollsAPI:c5f0b7aa3a'
     compileOnly 'com.github.Realizedd.Duels:duels-api:3.4.0'
-    compileOnly 'com.andrei1058.bedwars:bedwars-api:22.3.4'
+    compileOnly 'com.andrei1058.bedwars:bedwars-api:23.11'
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
     compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
     compileOnly 'me.clip:placeholderapi:2.11.4'
