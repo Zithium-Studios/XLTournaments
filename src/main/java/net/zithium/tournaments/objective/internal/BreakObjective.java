@@ -11,6 +11,7 @@ import net.zithium.tournaments.objective.hook.TEBlockExplode;
 import net.zithium.tournaments.tournament.Tournament;
 import net.zithium.tournaments.utility.universal.XBlock;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -90,8 +91,15 @@ public class BreakObjective extends XLObjective {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (excludePlaced) {
-            event.getBlock().setMetadata("XLTPlacedBlock", new FixedMetadataValue(plugin, event.getPlayer().getName()));
+        Block block = event.getBlock();
+
+        // Check if the block is sugar cane or cactus and not a crop
+        if ((block.getType().equals(Material.SUGAR_CANE) || block.getType().equals(Material.CACTUS)) && !XBlock.isCrop(block)) {
+            // Exclude logic for sugar cane, cactus, and not a crop
+            if (excludePlaced) {
+                block.setMetadata("XLTPlacedBlock", new FixedMetadataValue(plugin, event.getPlayer().getName()));
+            }
         }
     }
+
 }
