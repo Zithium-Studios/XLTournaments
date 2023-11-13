@@ -1,6 +1,6 @@
 /*
  * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ * Copyright (c) Zithium Studios. All rights reserved.
  */
 
 package net.zithium.tournaments.config;
@@ -42,13 +42,13 @@ public class ConfigHandler {
         try {
             configuration.load(file);
         } catch (InvalidConfigurationException | IOException e) {
-            e.printStackTrace();
             plugin.getLogger().severe("============= CONFIGURATION ERROR =============");
             plugin.getLogger().severe("There was an error loading " + name);
             plugin.getLogger().severe("Please check for any obvious configuration mistakes");
             plugin.getLogger().severe("such as using tabs for spaces or forgetting to end quotes");
             plugin.getLogger().severe("before reporting to the developer. The plugin will now disable..");
             plugin.getLogger().severe("============= CONFIGURATION ERROR =============");
+            plugin.getLogger().log(Level.SEVERE, " ", e);
             plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
 
