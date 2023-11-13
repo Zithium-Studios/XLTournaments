@@ -27,13 +27,13 @@ discord_webhook:
   # This is the message sent when the tournament ends.
   # Placeholders:
   #  {TOURNAMENT} - Returns the name of the tournament.
-  #  {FIRST_PLACE} - Returns the name of the first place winner.
-  #  {SECOND_PLACE} - Returns the name of the second place winner.
-  #  {THIRD_PLACE} - Returns the name of the first place winner.
+  #  {1_PLACE} - Returns the name of the first place winner.
+  #  {2_PLACE} - Returns the name of the second place winner.
+  #  {3_PLACE} - Returns the name of the first place winner.
   #
-  #  {FIRST_PLACE_SCORE} - Returns the score of the first place winner.
-  #  {SECOND_PLACE_SCORE} - Returns the score of the second place winner.
-  #  {THIRD_PLACE_SCORE} - Returns the score of the third place winner.
+  #  {1_PLACE_SCORE} - Returns the score of the first place winner.
+  #  {2_PLACE_SCORE} - Returns the score of the second place winner.
+  #  {3_PLACE_SCORE} - Returns the score of the third place winner.
   content: 'The {TOURNAMENT} has completed here are the winners!\n\n:first_place: 1st Place: {FIRST_PLACE}\n:second_place: 2nd Place: {SECOND_PLACE}\n:third_place: 3rd Place: {THIRD_PLACE}'
 
 # Command aliases to the main /tournament command

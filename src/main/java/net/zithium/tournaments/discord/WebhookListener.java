@@ -51,40 +51,28 @@ public class WebhookListener implements Listener {
     }
 
     private String replacePlaceholders(String text, Tournament tournament) {
-        for (int i = 0; i < 3; i++) {
-            OfflinePlayer player = tournament.getPlayerFromPosition(i + 1);
+        for (int i = 1; i <= 3; i++) {
+            OfflinePlayer player = tournament.getPlayerFromPosition(i);
+            String playerName = (player != null) ? player.getName() : "Unknown";
 
-            String playerName;
-            if (player == null) {
-                playerName = "No " + getPositionName(i) + " place winner";
-                plugin.getLogger().log(Level.INFO, "There was an error fetching the player for " + getPositionName(i));
-            } else {
-                playerName = player.getName();
+            // Ensure that both text and playerName are not null before replacement
+            if (text != null && playerName != null) {
+                text = text.replace("{" + i + "_PLACE}", playerName);
             }
 
-            int score = tournament.getScoreFromPosition(i + 1);
-            text = text.replace("{" + getPositionName(i).toUpperCase() + "_PLACE}", playerName);
-            text = text.replace("{" + getPositionName(i).toUpperCase() + "_PLACE_SCORE}", String.valueOf(score));
+            // Replace score placeholders
+            Integer playerScore = tournament.getScoreFromPosition(i);
+            String scorePlaceholder = (playerScore != null) ? String.valueOf(playerScore) : "No score";
+            text = text.replace("{" + i + "_SCORE}", scorePlaceholder);
         }
 
-        text = text.replace("{TOURNAMENT}", tournament.getIdentifier());
+        // Make sure that the text is not null before further replacements
+        if (text != null) {
+            text = text.replace("{TOURNAMENT}", tournament.getIdentifier());
+        }
 
         return text;
     }
 
-    private String getPositionName(int position) {
-        String result;
 
-        if (position == 0) {
-            result = "first";
-        } else if (position == 1) {
-            result = "second";
-        } else if (position == 2) {
-            result = "third";
-        } else {
-            result = "invalid";
-        }
-
-        return result;
-    }
 }
