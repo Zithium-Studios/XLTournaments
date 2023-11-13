@@ -28,7 +28,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import java.util.Optional;
-import java.util.logging.Level;
 
 public class TournamentGUI {
 
@@ -163,8 +162,9 @@ public class TournamentGUI {
      * title and row count are determined based on the provided parameters, with support for
      * components for versions that allow it.
      * </p>
-     * @param rows   The number of rows in the GUI.
-     * @param title  The title of the GUI.
+     *
+     * @param rows  The number of rows in the GUI.
+     * @param title The title of the GUI.
      * @return A PaginatedGui instance for displaying tournament items.
      */
     private PaginatedGui createGUI(int rows, String title) {
