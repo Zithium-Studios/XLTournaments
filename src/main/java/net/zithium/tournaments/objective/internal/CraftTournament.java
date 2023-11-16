@@ -17,7 +17,6 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class CraftTournament extends XLObjective {
