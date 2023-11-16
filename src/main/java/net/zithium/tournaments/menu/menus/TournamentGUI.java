@@ -33,16 +33,29 @@ public class TournamentGUI {
 
     private final XLTournamentsPlugin plugin;
 
+    private final FileConfiguration config;
+
+    private final boolean ENABLE_PAGE_ITEMS;
+    private final boolean HIDE_COMPLETED_TOURNAMENTS;
+    private final String GUI_TITLE;
+    private final int GUI_ROWS;
+
     public TournamentGUI(XLTournamentsPlugin plugin) {
         this.plugin = plugin;
+        this.config = plugin.getMenuFile().getConfig();
+
+        // Configuration Values
+        this.ENABLE_PAGE_ITEMS = config.getBoolean("page_items.enabled", true);
+        this.HIDE_COMPLETED_TOURNAMENTS = config.getBoolean("hide_completed_tournaments", false);
+        this.GUI_TITLE = config.getString("title");
+        this.GUI_ROWS = config.getInt("rows");
     }
 
     public void openInventory(Player player) {
-        FileConfiguration config = plugin.getMenuFile().getConfig();
 
         PaginatedGui gui = Gui.paginated()
-                .title(Component.text(Color.stringColor(config.getString("title"))))
-                .rows(config.getInt("rows"))
+                .title(Component.text(Color.stringColor(GUI_TITLE)))
+                .rows(GUI_ROWS)
                 .create();
 
         gui.setDefaultClickAction(event -> event.setCancelled(true));
@@ -60,7 +73,7 @@ public class TournamentGUI {
                     Tournament tournament = optionalTournament.get();
 
                     // Not displaying tournaments in the menu if they are not running.
-                    if (config.getBoolean("hide_completed_tournaments", false)) {
+                    if (HIDE_COMPLETED_TOURNAMENTS) {
                         if (tournament.getStatus() == TournamentStatus.ENDED) {
                             continue;
                         }
@@ -141,10 +154,8 @@ public class TournamentGUI {
     }
 
     private void addPageItems(PaginatedGui gui) {
-
-        FileConfiguration config = plugin.getMenuFile().getConfig();
         // Making sure they are enabled in the config before adding them.
-        if (config.getBoolean("page_items.enabled", true)) {
+        if (ENABLE_PAGE_ITEMS) {
             GuiItem nextPage = new GuiItem(ItemStackBuilder.getItemStack(config.getConfigurationSection("page_items.next_page")).build());
             nextPage.setAction(event -> gui.next());
             gui.setItem(config.getInt("page_items.next_page.slot"), nextPage);
