@@ -92,13 +92,12 @@ public class BreakObjective extends XLObjective {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         Block block = event.getBlock();
-
-        // Check if the block is sugar cane or cactus and not a crop
-        if ((block.getType().equals(Material.SUGAR_CANE) || block.getType().equals(Material.CACTUS)) && !XBlock.isCrop(block)) {
-            // Exclude logic for sugar cane, cactus, and not a crop
-            if (excludePlaced) {
+        if (excludePlaced) {
+            if ((block.getType().equals(Material.SUGAR_CANE) || block.getType().equals(Material.CACTUS)) && !XBlock.isCrop(block)) {
                 block.setMetadata("XLTPlacedBlock", new FixedMetadataValue(plugin, event.getPlayer().getName()));
             }
+
+            block.setMetadata("XLTPlacedBlock", new FixedMetadataValue(plugin, event.getPlayer().getName()));
         }
     }
 
