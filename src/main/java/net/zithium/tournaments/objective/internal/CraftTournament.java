@@ -42,6 +42,7 @@ public class CraftTournament extends XLObjective {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onItemCraft(CraftItemEvent event) {
         ItemStack craftedItem = event.getCurrentItem();
+        Player player = (Player) event.getWhoClicked();
 
         if (craftedItem == null) return;
 
@@ -58,19 +59,22 @@ public class CraftTournament extends XLObjective {
             amount *= max;
         }
 
-        Player player = (Player) event.getWhoClicked();
+
         for (Tournament tournament : getTournaments()) {
-            if (canExecute(tournament, player)) {
-                if (tournament.hasMeta("ITEM_WHITELIST")) {
-                    Set<String> itemWhitelist = (Set<String>) tournament.getMeta("ITEM_WHITELIST");
-                    Material craftedMaterial = craftedItem.getType();
-                    if (itemWhitelist.contains(craftedMaterial.toString())) {
-                        tournament.addScore(player.getUniqueId(), amount);
-                        break;
-                    }
-                } else {
+            if (!canExecute(tournament, player)) {
+                return;
+            }
+
+            if (tournament.hasMeta("ITEM_WHITELIST")) {
+
+                Set<String> itemWhitelist = (Set<String>) tournament.getMeta("ITEM_WHITELIST");
+                Material craftedMaterial = craftedItem.getType();
+
+                if (itemWhitelist.contains(craftedMaterial.toString())) {
                     tournament.addScore(player.getUniqueId(), amount);
                 }
+            } else {
+                tournament.addScore(player.getUniqueId(), amount);
             }
         }
     }
