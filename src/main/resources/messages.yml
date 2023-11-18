@@ -18,6 +18,10 @@ general:
     - "&f/tournament clearplayer <player> <tournament> &8- &7&oClear specific user from a tournament"
     - ""
 
+placeholders:
+  # This is what is displayed when a placeholder doesn't have a player.
+  no_player: "N/A"
+
 tournament:
   force_updated_tournaments: "{PREFIX} &aYou have forcefully updated all active tournaments."
   already_participating: "{PREFIX} &cYou are already participating in this tournament."
