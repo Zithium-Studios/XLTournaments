@@ -49,7 +49,7 @@ public enum Messages {
         String message;
         if (value == null) {
             message = "XLTournaments: message not found (" + this.path + ")";
-        }else {
+        } else {
             message = value instanceof List ? TextUtil.fromList((List<?>) value) : value.toString();
         }
 
