@@ -5,8 +5,10 @@
 
 package net.zithium.tournaments.utility;
 
+import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.tournament.Tournament;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -56,6 +58,9 @@ public class TextUtil {
     }
 
     public static String setPlaceholders(String text, UUID uuid, Tournament tournament) {
+
+        FileConfiguration config = XLTournamentsPlugin.getPlugin(XLTournamentsPlugin.class).getMessagesFile().getConfig();
+
         text = text.replace("{START_DAY}", tournament.getStartDay())
                 .replace("{END_DAY}", tournament.getEndDay())
                 .replace("{START_MONTH}", tournament.getStartMonth())
@@ -75,7 +80,7 @@ public class TextUtil {
             final Matcher matcher = pattern.matcher(text);
             while (matcher.find()) {
                 OfflinePlayer player = tournament.getPlayerFromPosition(Integer.parseInt(matcher.group(1)));
-                text = matcher.replaceAll(player != null ? player.getName() : "N/A");
+                text = matcher.replaceAll(player != null ? player.getName() : config.getString("placeholders.no_player", "N/A"));
             }
         } catch (Exception ignored) {
         }

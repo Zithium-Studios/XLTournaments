@@ -103,6 +103,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         messagesFile.reload();
         menuFile.reload();
         Messages.setConfiguration(messagesFile.getConfig());
+        menuManager = new MenuManager(this);
 
         tournamentManager.onDisable(true);
         tournamentManager.onEnable();

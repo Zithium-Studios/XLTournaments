@@ -76,7 +76,7 @@ public class ObjectiveManager {
             objectives.put(objective.getIdentifier(), objective);
         }
 
-        if (!objective.getClass().getPackage().getName().startsWith("fun.lewisdev.tournaments.objective")) {
+        if (!objective.getClass().getPackage().getName().startsWith("net.zithium.tournaments.objective")) {
             plugin.getLogger().info("Registered external objective " + objective.getIdentifier() + ".");
         }
 
