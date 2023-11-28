@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.15.7'
+version = '3.15.8'
 description = 'XLTournaments'
 
 
@@ -17,7 +17,6 @@ repositories {
     maven { url = uri('https://repo.codemc.io/repository/maven-public/') }
     maven { url = uri('https://mvn.lumine.io/repository/maven-public/') }
     maven { url = uri('https://repo.extendedclip.com/content/repositories/placeholderapi/') }
-    //maven { url = uri('https://repo.andrei1058.dev/releases/') }
     maven { url = uri('https://repo.essentialsx.net/releases/') }
     maven { url = uri('https://libraries.minecraft.net/') }
     maven { url = uri('https://repo.crazycrew.us/releases') }
@@ -38,7 +37,6 @@ dependencies {
     // EXTERNAL OBJECTIVES
     compileOnly 'com.github.electro2560:ClueScrollsAPI:c5f0b7aa3a'
     compileOnly 'com.github.Realizedd.Duels:duels-api:3.4.0'
-    //compileOnly 'com.andrei1058.bedwars:bedwars-api:23.3'
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
     compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
     compileOnly 'me.clip:placeholderapi:2.11.5'
