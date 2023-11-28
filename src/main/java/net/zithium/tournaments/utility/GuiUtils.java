@@ -2,7 +2,6 @@ package net.zithium.tournaments.utility;
 
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
-import net.zithium.library.items.ItemStackBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 

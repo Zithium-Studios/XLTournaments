@@ -17,7 +17,7 @@ repositories {
     maven { url = uri('https://repo.codemc.io/repository/maven-public/') }
     maven { url = uri('https://mvn.lumine.io/repository/maven-public/') }
     maven { url = uri('https://repo.extendedclip.com/content/repositories/placeholderapi/') }
-    maven { url = uri('https://repo.andrei1058.dev/releases/') }
+    //maven { url = uri('https://repo.andrei1058.dev/releases/') }
     maven { url = uri('https://repo.essentialsx.net/releases/') }
     maven { url = uri('https://libraries.minecraft.net/') }
     maven { url = uri('https://repo.crazycrew.us/releases') }
@@ -29,6 +29,8 @@ dependencies {
     implementation('dev.triumphteam:triumph-gui:3.1.7')
     implementation('org.bstats:bstats-bukkit:3.0.2')
     implementation('com.github.ItzSave:ZithiumLibrary:v1.0.10')
+    implementation('net.kyori:adventure-text-minimessage:4.14.0')
+    implementation('net.kyori:adventure-text-serializer-legacy:4.14.0')
 
     compileOnly 'org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT'
     compileOnly 'com.mojang:authlib:1.5.21'
@@ -36,15 +38,15 @@ dependencies {
     // EXTERNAL OBJECTIVES
     compileOnly 'com.github.electro2560:ClueScrollsAPI:c5f0b7aa3a'
     compileOnly 'com.github.Realizedd.Duels:duels-api:3.4.0'
-    compileOnly 'com.andrei1058.bedwars:bedwars-api:23.11'
+    //compileOnly 'com.andrei1058.bedwars:bedwars-api:23.3'
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
     compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
     compileOnly 'me.clip:placeholderapi:2.11.5'
     compileOnly 'com.github.NuVotifier:NuVotifier:2.7.2'
     compileOnly 'io.lumine.xikage:MythicMobs:4.12.0'
     compileOnly 'net.essentialsx:EssentialsX:2.20.1'
-    compileOnly "com.badbones69.crazycrates:crazycrates-paper-api:1.14"
-    compileOnly "com.badbones69.crazyenvoys:crazyenvoys-paper-api:1.5"
+    compileOnly 'com.badbones69.crazycrates:crazycrates-paper-api:1.14'
+    compileOnly 'com.badbones69.crazyenvoys:crazyenvoys-paper-api:1.5'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
 }
 
@@ -69,10 +71,12 @@ build {
 shadowJar {
     minimize()
     archiveFileName = "XLTournaments-${project.version}.jar"
-    relocate 'dev.triumphteam.gui', 'net.zithium.tournaments.libs.gui'
-    relocate 'me.mattstudios.mf', 'net.zithium.tournaments.libs.command'
-    relocate 'org.codemc.worldguardwrapper', 'net.zithium.tournaments.libs.worldguardwrapper'
-    relocate 'com.zaxxer.hikari', 'net.zithium.tournaments.libs.hikari'
-    relocate 'org.bstats', 'net.zithium.tournaments.libs.metrics'
-    relocate 'net.zithium.library', 'net.zithium.tournaments.libs.library'
+    relocate 'dev.triumphteam.gui', 'net.zithium.tournaments.libs.gui' // GUI Library
+    relocate 'me.mattstudios.mf', 'net.zithium.tournaments.libs.command' // Command Library
+    relocate 'org.codemc.worldguardwrapper', 'net.zithium.tournaments.libs.worldguardwrapper' // Worldguard Wrapper
+    relocate 'com.zaxxer.hikari', 'net.zithium.tournaments.libs.hikari' // SQLite (HikariCP)
+    relocate 'org.bstats', 'net.zithium.tournaments.libs.metrics' // bStats
+    relocate 'net.zithium.library', 'net.zithium.tournaments.libs.library' // ZithiumLibrary
+
+    relocate "net.kyori.adventure", "net.zithium.tournaments.libs.adventure"
 }

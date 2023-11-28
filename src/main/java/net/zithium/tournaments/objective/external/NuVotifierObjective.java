@@ -31,6 +31,7 @@ public class NuVotifierObjective extends XLObjective {
     public void onPlayerVote(VotifierEvent event) {
         Vote vote = event.getVote();
         String name = vote.getUsername();
+        @SuppressWarnings("deprecation")
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
         Player player = offlinePlayer.getPlayer();
         if(offlinePlayer.isOnline() && player != null) {
