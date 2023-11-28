@@ -1,6 +1,6 @@
 package net.zithium.tournaments.utility;
 
-import net.zithium.library.items.Base64Util;
+import net.zithium.tournaments.utility.Base64Util;
 import net.zithium.library.version.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
