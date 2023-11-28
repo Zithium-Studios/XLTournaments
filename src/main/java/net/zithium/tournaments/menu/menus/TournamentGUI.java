@@ -10,7 +10,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.zithium.library.items.ItemStackBuilder;
+import net.zithium.tournaments.utility.ItemStackBuilder;
 import net.zithium.library.utils.Color;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.hook.HookManager;
