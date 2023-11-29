@@ -102,21 +102,11 @@ public class ItemStackBuilder {
         return this;
     }
 
-    public ItemStackBuilder setSkullOwner(OfflinePlayer offlinePlayer) {
-        try {
-            SkullMeta im = (SkullMeta) ITEM_STACK.getItemMeta();
-            im.setOwningPlayer(offlinePlayer);
-            ITEM_STACK.setItemMeta(im);
-        } catch (ClassCastException ignored) {
-        }
-        return this;
-    }
-
     public ItemStackBuilder withLore(List<String> lore) {
         final ItemMeta meta = ITEM_STACK.getItemMeta();
         List<String> coloredLore = new ArrayList<String>();
         for (String s : lore) {
-            coloredLore.add(ChatColor.translateAlternateColorCodes('&', s));
+            coloredLore.add(net.zithium.library.utils.Color.stringColor(s));
         }
         meta.setLore(coloredLore);
         ITEM_STACK.setItemMeta(meta);
