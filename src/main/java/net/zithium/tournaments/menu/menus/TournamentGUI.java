@@ -9,7 +9,7 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.zithium.tournaments.utility.ItemStackBuilder;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.hook.HookManager;
@@ -20,7 +20,6 @@ import net.zithium.tournaments.tournament.TournamentStatus;
 import net.zithium.tournaments.utility.GuiUtils;
 import net.zithium.tournaments.config.Messages;
 import net.zithium.tournaments.utility.TextUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -52,10 +51,13 @@ public class TournamentGUI {
 
     public void openInventory(Player player) {
 
+        Component COMPONENT_TITLE = MiniMessage.miniMessage().deserialize(TextUtil.replaceLegacy(GUI_TITLE));
+
         PaginatedGui gui = Gui.paginated()
-                .title(Component.text(TextUtil.color(GUI_TITLE)))
+                .title(COMPONENT_TITLE)
                 .rows(GUI_ROWS)
                 .create();
+
 
         gui.setDefaultClickAction(event -> event.setCancelled(true));
 
@@ -68,7 +70,7 @@ public class TournamentGUI {
             if (section != null) {
                 for (String entry : section.getKeys(false)) {
                     Optional<Tournament> optionalTournament = tournamentManager.getTournament(entry);
-                    if (!optionalTournament.isPresent()) continue;
+                    if (optionalTournament.isEmpty()) continue;
                     Tournament tournament = optionalTournament.get();
 
                     // Not displaying tournaments in the menu if they are not running.
@@ -163,24 +165,6 @@ public class TournamentGUI {
             previousPage.setAction(event -> gui.previous());
             gui.setItem(config.getInt("page_items.previous_page.slot"), previousPage);
         }
-    }
-
-    /**
-     * Creates a paginated graphical user interface (GUI) for tournaments.
-     * <p>
-     * This method creates a PaginatedGui for displaying tournament items in a GUI menu. The GUI
-     * title and row count are determined based on the provided parameters, with support for
-     * components for versions that allow it.
-     * </p>
-     *
-     * @param rows  The number of rows in the GUI.
-     * @param title The title of the GUI.
-     * @return A PaginatedGui instance for displaying tournament items.
-     */
-    private PaginatedGui createGUI(int rows, String title) {
-        String stringTitle = TextUtil.color(title);
-        Component componentTitle = LegacyComponentSerializer.legacyAmpersand().deserialize(stringTitle);
-        return Gui.paginated().title(componentTitle).rows(rows).create();
     }
 
 }
