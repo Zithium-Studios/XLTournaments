@@ -11,7 +11,6 @@ import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.zithium.tournaments.utility.ItemStackBuilder;
-import net.zithium.library.utils.Color;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.hook.HookManager;
 import net.zithium.tournaments.hook.hooks.VaultHook;
@@ -54,7 +53,7 @@ public class TournamentGUI {
     public void openInventory(Player player) {
 
         PaginatedGui gui = Gui.paginated()
-                .title(Component.text(Color.stringColor(GUI_TITLE)))
+                .title(Component.text(TextUtil.color(GUI_TITLE)))
                 .rows(GUI_ROWS)
                 .create();
 
@@ -179,23 +178,9 @@ public class TournamentGUI {
      * @return A PaginatedGui instance for displaying tournament items.
      */
     private PaginatedGui createGUI(int rows, String title) {
-        String stringTitle = Color.stringColor(title);
+        String stringTitle = TextUtil.color(title);
         Component componentTitle = LegacyComponentSerializer.legacyAmpersand().deserialize(stringTitle);
-        if (supportsComponents()) {
-            return Gui.paginated().title(componentTitle).rows(rows).create();
-        } else {
-            @SuppressWarnings("deprecation") // new PaginatedGui is deprecated but needed as certain versions doesn't have components.
-            PaginatedGui gui = new PaginatedGui(rows, title);
-            return gui;
-        }
-    }
-
-    private boolean supportsComponents() {
-        if (Bukkit.getServer().getVersion().contains("1.18.2")) {
-            return true;
-        } else {
-            return false;
-        }
+        return Gui.paginated().title(componentTitle).rows(rows).create();
     }
 
 }
