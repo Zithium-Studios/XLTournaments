@@ -38,6 +38,8 @@ public class TournamentGUI {
     private final String GUI_TITLE;
     private final int GUI_ROWS;
 
+    private final ConfigurationSection FILLER_ITEMS_SECTION;
+
     public TournamentGUI(XLTournamentsPlugin plugin) {
         this.plugin = plugin;
         this.config = plugin.getMenuFile().getConfig();
@@ -45,8 +47,9 @@ public class TournamentGUI {
         // Configuration Values
         this.ENABLE_PAGE_ITEMS = config.getBoolean("page_items.enabled", true);
         this.HIDE_COMPLETED_TOURNAMENTS = config.getBoolean("hide_completed_tournaments", false);
-        this.GUI_TITLE = config.getString("title");
-        this.GUI_ROWS = config.getInt("rows");
+        this.GUI_TITLE = config.getString("title", "&lTOURNAMENTS");
+        this.GUI_ROWS = config.getInt("rows", 3);
+        this.FILLER_ITEMS_SECTION = config.getConfigurationSection("filler_items");
     }
 
     public void openInventory(Player player) {
@@ -61,7 +64,7 @@ public class TournamentGUI {
 
         gui.setDefaultClickAction(event -> event.setCancelled(true));
 
-        GuiUtils.setFillerItems(gui, config.getConfigurationSection("filler_items"));
+        GuiUtils.setFillerItems(gui, FILLER_ITEMS_SECTION);
 
 
         {// Tournament items
