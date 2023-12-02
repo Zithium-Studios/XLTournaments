@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.15.7'
+version = '3.15.9'
 description = 'XLTournaments'
 
 
@@ -17,7 +17,6 @@ repositories {
     maven { url = uri('https://repo.codemc.io/repository/maven-public/') }
     maven { url = uri('https://mvn.lumine.io/repository/maven-public/') }
     maven { url = uri('https://repo.extendedclip.com/content/repositories/placeholderapi/') }
-    //maven { url = uri('https://repo.andrei1058.dev/releases/') }
     maven { url = uri('https://repo.essentialsx.net/releases/') }
     maven { url = uri('https://libraries.minecraft.net/') }
     maven { url = uri('https://repo.crazycrew.us/releases') }
@@ -26,19 +25,25 @@ repositories {
 dependencies {
     implementation('com.zaxxer:HikariCP:5.1.0')
     implementation('me.mattstudios.utils:matt-framework:1.4.6')
+
     implementation('dev.triumphteam:triumph-gui:3.1.7')
+
     implementation('org.bstats:bstats-bukkit:3.0.2')
     implementation('com.github.ItzSave:ZithiumLibrary:v1.0.10')
+
+    // Adventure
     implementation('net.kyori:adventure-text-minimessage:4.14.0')
     implementation('net.kyori:adventure-text-serializer-legacy:4.14.0')
 
-    compileOnly 'org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT'
+    // Apache
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
     compileOnly 'com.mojang:authlib:1.5.21'
 
     // EXTERNAL OBJECTIVES
     compileOnly 'com.github.electro2560:ClueScrollsAPI:c5f0b7aa3a'
     compileOnly 'com.github.Realizedd.Duels:duels-api:3.4.0'
-    //compileOnly 'com.andrei1058.bedwars:bedwars-api:23.3'
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
     compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
     compileOnly 'me.clip:placeholderapi:2.11.5'
@@ -58,6 +63,7 @@ processResources {
         expand props
     }
 }
+
 
 compileJava {
     sourceCompatibility = 1.8

@@ -1,18 +1,12 @@
 package net.zithium.tournaments.utility;
 
-import net.zithium.tournaments.utility.Base64Util;
 import net.zithium.library.version.XMaterial;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,11 +67,6 @@ public class ItemStackBuilder {
         return builder;
     }
 
-    public ItemStackBuilder setType(Material material) {
-        ITEM_STACK.setType(material);
-        return this;
-    }
-
     public ItemStackBuilder withAmount(int amount) {
         ITEM_STACK.setAmount(amount);
         return this;
@@ -97,27 +86,23 @@ public class ItemStackBuilder {
         }
 
         final ItemMeta meta = ITEM_STACK.getItemMeta();
-        meta.setDisplayName(net.zithium.library.utils.Color.stringColor(name));
+        meta.setDisplayName(TextUtil.color(name));
         ITEM_STACK.setItemMeta(meta);
-        return this;
-    }
-
-    public ItemStackBuilder setSkullOwner(OfflinePlayer offlinePlayer) {
-        try {
-            SkullMeta im = (SkullMeta) ITEM_STACK.getItemMeta();
-            im.setOwningPlayer(offlinePlayer);
-            ITEM_STACK.setItemMeta(im);
-        } catch (ClassCastException ignored) {
-        }
         return this;
     }
 
     public ItemStackBuilder withLore(List<String> lore) {
         final ItemMeta meta = ITEM_STACK.getItemMeta();
+
+        if (ITEM_STACK.getType() == Material.AIR) {
+            return this;
+        }
+
         List<String> coloredLore = new ArrayList<String>();
         for (String s : lore) {
-            coloredLore.add(ChatColor.translateAlternateColorCodes('&', s));
+            coloredLore.add(TextUtil.color(s));
         }
+
         meta.setLore(coloredLore);
         ITEM_STACK.setItemMeta(meta);
         return this;
@@ -131,48 +116,12 @@ public class ItemStackBuilder {
     }
 
 
-    public ItemStackBuilder withEnchantment(Enchantment enchantment, final int level) {
-        ITEM_STACK.addUnsafeEnchantment(enchantment, level);
-        return this;
-    }
-
-    public ItemStackBuilder withEnchantment(Enchantment enchantment) {
-        ITEM_STACK.addUnsafeEnchantment(enchantment, 1);
-        return this;
-    }
-
     public ItemStackBuilder withGlow() {
         final ItemMeta meta = ITEM_STACK.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         ITEM_STACK.setItemMeta(meta);
         ITEM_STACK.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
         return this;
-    }
-
-    public ItemStackBuilder clearLore() {
-        final ItemMeta meta = ITEM_STACK.getItemMeta();
-        meta.setLore(new ArrayList<String>());
-        ITEM_STACK.setItemMeta(meta);
-        return this;
-    }
-
-    public ItemStackBuilder clearEnchantments() {
-        for (Enchantment enchantment : ITEM_STACK.getEnchantments().keySet()) {
-            ITEM_STACK.removeEnchantment(enchantment);
-        }
-        return this;
-    }
-
-    public ItemStackBuilder withColor(Color color) {
-        Material type = ITEM_STACK.getType();
-        if (type == Material.LEATHER_BOOTS || type == Material.LEATHER_CHESTPLATE || type == Material.LEATHER_HELMET || type == Material.LEATHER_LEGGINGS) {
-            LeatherArmorMeta meta = (LeatherArmorMeta) ITEM_STACK.getItemMeta();
-            meta.setColor(color);
-            ITEM_STACK.setItemMeta(meta);
-            return this;
-        } else {
-            throw new IllegalArgumentException("withColor is only applicable for leather armor!");
-        }
     }
 
     private String replace(String message, Object... replacements) {
