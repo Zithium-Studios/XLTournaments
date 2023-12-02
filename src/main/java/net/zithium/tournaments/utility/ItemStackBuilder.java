@@ -102,6 +102,7 @@ public class ItemStackBuilder {
         for (String s : lore) {
             coloredLore.add(TextUtil.color(s));
         }
+
         meta.setLore(coloredLore);
         ITEM_STACK.setItemMeta(meta);
         return this;

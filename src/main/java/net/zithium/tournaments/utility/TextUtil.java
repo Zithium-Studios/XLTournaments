@@ -1,6 +1,6 @@
 /*
  * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ * Copyright (c) 2023 Zithium Studios. All rights reserved.
  */
 
 package net.zithium.tournaments.utility;
@@ -121,9 +121,11 @@ public class TextUtil {
         return text;
     }
 
-    public static String color(String message){
-        Component cm = MiniMessage.miniMessage().deserialize(replaceLegacy(message));
-        return LegacyComponentSerializer.legacySection().serialize(cm);
+
+    public static String color(String message) {
+        Component componentMessage = MiniMessage.miniMessage().deserialize(replaceLegacy(message));
+        LegacyComponentSerializer serializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
+        return serializer.serialize(componentMessage);
     }
 
     /**
@@ -133,7 +135,7 @@ public class TextUtil {
      * @param legacyText The text containing legacy color codes.
      * @return The text with Adventure format codes.
      */
-    private static String replaceLegacy(String legacyText) {
+    public static String replaceLegacy(String legacyText) {
         return legacyText
                 .replaceAll("&1", "<dark_blue>")
                 .replaceAll("&2", "<dark_green>")
@@ -153,9 +155,8 @@ public class TextUtil {
                 .replaceAll("&l", "<bold>")
                 .replaceAll("&k", "<obfuscated>")
                 .replaceAll("&m", "<strikethrough>")
-                .replaceAll("&n", "<underline>")
+                .replaceAll("&n", "<u>")
                 .replaceAll("&r", "<reset>")
                 .replaceAll("&o", "<italic>");
     }
-
 }
