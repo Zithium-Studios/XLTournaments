@@ -73,7 +73,7 @@ public class TournamentGUI {
             if (section != null) {
                 for (String entry : section.getKeys(false)) {
                     Optional<Tournament> optionalTournament = tournamentManager.getTournament(entry);
-                    if (optionalTournament.isEmpty()) continue;
+                    if (!optionalTournament.isPresent()) continue;
                     Tournament tournament = optionalTournament.get();
 
                     // Not displaying tournaments in the menu if they are not running.
