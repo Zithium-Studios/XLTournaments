@@ -34,6 +34,7 @@ public class ObjectiveManager {
         registerObjective(new PlayerFishObjective());
         registerObjective(new PlaytimeObjective());
         registerObjective(new PotionBrewObjective(plugin));
+        registerObjective(new PlayerConsumeObjective());
 
         // Register External Objectives
         registerObjective(new ChatReactionObjective(), "ChatReaction");

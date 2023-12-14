@@ -26,21 +26,21 @@ public class TimerTask implements Runnable {
 
     @Override
     public void run() {
-        for(Tournament tournament : tournamentManager.getTournaments().stream().filter(tournament -> tournament.getStatus() != TournamentStatus.ENDED).collect(Collectors.toList())) {
+        for (Tournament tournament : tournamentManager.getTournaments().stream().filter(tournament -> tournament.getStatus() != TournamentStatus.ENDED).collect(Collectors.toList())) {
 
             // Tournament starting
-            if(tournament.getStatus() == TournamentStatus.WAITING && tournament.getStartTimeMillis() < System.currentTimeMillis()) {
+            if (tournament.getStatus() == TournamentStatus.WAITING && tournament.getStartTimeMillis() < System.currentTimeMillis()) {
                 tournament.start(true);
                 continue;
             }
 
             // Tournament ended
-            if(tournament.getEndTimeMillis() < System.currentTimeMillis()) {
+            if (tournament.getEndTimeMillis() < System.currentTimeMillis()) {
 
                 tournament.stop();
                 tournament.setStatus(TournamentStatus.ENDED);
 
-                if(tournament.getTimeline() != Timeline.SPECIFIC) {
+                if (tournament.getTimeline() != Timeline.SPECIFIC) {
                     Bukkit.getScheduler().runTaskAsynchronously(JAVA_PLUGIN, tournament::clearParticipants);
                     tournament.setStatus(TournamentStatus.ENDED);
 

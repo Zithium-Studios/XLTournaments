@@ -1,6 +1,6 @@
 /*
  * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ * Copyright (c) 2023 Zithium Studios. All rights reserved.
  */
 
 package net.zithium.tournaments.objective;
@@ -15,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public abstract class XLObjective implements Listener {

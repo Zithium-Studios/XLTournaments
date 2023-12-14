@@ -1,6 +1,6 @@
 /*
  * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ * Copyright (c) 2023 Zithium Studios. All rights reserved.
  */
 
 package net.zithium.tournaments.storage;
