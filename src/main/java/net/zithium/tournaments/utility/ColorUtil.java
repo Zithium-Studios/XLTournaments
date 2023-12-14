@@ -28,7 +28,6 @@ public class ColorUtil {
     private static final String RGB_REPLACEMENT = "<#$1$2$3$4$5$6>";
 
 
-
     public static String color(String message) {
         Component component = MiniMessage.miniMessage().deserialize(replaceLegacyWithTags(message.replace('\u00A7', '&')));
         return LEGACY_HEX_SERIALIZER.serialize(component);
@@ -53,5 +52,34 @@ public class ColorUtil {
         }
 
         return output;
+    }
+
+    public static Component componentColor(String component) {
+        return MiniMessage.miniMessage().deserialize(replaceLegacy(component));
+    }
+
+    private static String replaceLegacy(String legacyText) {
+        return legacyText
+                .replaceAll("&1", "<dark_blue>")
+                .replaceAll("&2", "<dark_green>")
+                .replaceAll("&3", "<dark_aqua>")
+                .replaceAll("&4", "<dark_red>")
+                .replaceAll("&5", "<dark_purple>")
+                .replaceAll("&6", "<gold>")
+                .replaceAll("&7", "<gray>")
+                .replaceAll("&8", "<dark_gray>")
+                .replaceAll("&9", "<blue>")
+                .replaceAll("&a", "<green>")
+                .replaceAll("&b", "<aqua>")
+                .replaceAll("&c", "<red>")
+                .replaceAll("&d", "<light_purple>")
+                .replaceAll("&e", "<yellow>")
+                .replaceAll("&f", "<white>")
+                .replaceAll("&l", "<bold>")
+                .replaceAll("&k", "<obfuscated>")
+                .replaceAll("&m", "<strikethrough>")
+                .replaceAll("&n", "<underline>")
+                .replaceAll("&r", "<reset>")
+                .replaceAll("&o", "<italic>");
     }
 }

@@ -9,7 +9,6 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.zithium.tournaments.utility.ColorUtil;
 import net.zithium.tournaments.utility.ItemStackBuilder;
 import net.zithium.tournaments.XLTournamentsPlugin;
@@ -55,7 +54,7 @@ public class TournamentGUI {
 
     public void openInventory(Player player) {
 
-        Component COMPONENT_TITLE = MiniMessage.miniMessage().deserialize(ColorUtil.color(GUI_TITLE));
+        Component COMPONENT_TITLE = ColorUtil.componentColor(GUI_TITLE);
 
         PaginatedGui gui = Gui.paginated()
                 .title(COMPONENT_TITLE)
