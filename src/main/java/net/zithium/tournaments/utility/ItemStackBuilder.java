@@ -86,7 +86,7 @@ public class ItemStackBuilder {
         }
 
         final ItemMeta meta = ITEM_STACK.getItemMeta();
-        meta.setDisplayName(TextUtil.color(name));
+        meta.setDisplayName(ColorUtil.color(name));
         ITEM_STACK.setItemMeta(meta);
         return this;
     }
@@ -100,7 +100,7 @@ public class ItemStackBuilder {
 
         List<String> coloredLore = new ArrayList<String>();
         for (String s : lore) {
-            coloredLore.add(TextUtil.color(s));
+            coloredLore.add(ColorUtil.color(s));
         }
 
         meta.setLore(coloredLore);

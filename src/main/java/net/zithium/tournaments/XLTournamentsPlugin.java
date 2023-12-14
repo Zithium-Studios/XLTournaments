@@ -25,6 +25,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -165,6 +166,11 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
     @Override
     public Optional<Tournament> getTournament(String identifier) {
         return tournamentManager.getTournament(identifier);
+    }
+
+    @Override
+    public List<Tournament> getTournaments(){
+        return tournamentManager.getTournaments();
     }
 
 }

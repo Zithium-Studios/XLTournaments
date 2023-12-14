@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.15.10'
+version = '3.16.0'
 description = 'XLTournaments'
 
 
@@ -62,12 +62,6 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
-}
-
-
-compileJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
 }
 
 build {

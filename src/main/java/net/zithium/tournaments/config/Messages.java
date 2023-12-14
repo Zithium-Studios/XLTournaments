@@ -5,7 +5,7 @@
 
 package net.zithium.tournaments.config;
 
-import net.zithium.library.utils.Color;
+import net.zithium.tournaments.utility.ColorUtil;
 import net.zithium.tournaments.utility.TextUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -54,7 +54,7 @@ public enum Messages {
         }
 
         if (!message.isEmpty()) {
-            receiver.sendMessage(Color.stringColor(replace(message, replacements)));
+            receiver.sendMessage(ColorUtil.color(replace(message, replacements)));
         }
     }
 

@@ -1,6 +1,6 @@
 /*
  * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ * Copyright (c) 2023 Zithium Studios. All rights reserved.
  */
 
 package net.zithium.tournaments;
@@ -8,6 +8,7 @@ package net.zithium.tournaments;
 import net.zithium.tournaments.objective.XLObjective;
 import net.zithium.tournaments.tournament.Tournament;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface XLTournamentsAPI {
@@ -35,5 +36,12 @@ public interface XLTournamentsAPI {
      * @return The Tournament object
      */
     Optional<Tournament> getTournament(String identifier);
+
+    /**
+     * Gets a list of all tournaments
+     *
+     * @return A list of all tournaments.
+     */
+    List<Tournament> getTournaments();
 
 }
