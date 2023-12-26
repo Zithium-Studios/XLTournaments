@@ -59,6 +59,7 @@ public class ObjectiveManager {
         registerObjective(new EssentialsBalanceSpendObjective(), "Essentials");
         registerObjective(new ExcellentCratesObjective(), "ExcellentCrates");
         registerObjective(new XPrisonRankupObjective(), "X-Prison");
+        registerObjective(new ODailyQuestsObjective("ODailyQuests"));
 
         plugin.getLogger().info("Loaded " + objectives.size() + " tournament objectives (" + String.join(", ", objectives.keySet()) + ").");
     }
