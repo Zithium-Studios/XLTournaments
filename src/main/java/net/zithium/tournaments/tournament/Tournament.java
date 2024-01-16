@@ -98,24 +98,41 @@ public class Tournament {
         }
     }
 
-    public void start(boolean firstTime) {
-
-        if (firstTime) {
+    /**
+     * Starts the tournament, initializing necessary tasks and triggering associated actions.
+     *
+     * @param clearParticipants Should all tournament participants be cleared when this method is called.
+     */
+    public void start(boolean clearParticipants) {
+        // If it's the first time, asynchronously clear participants.
+        if (clearParticipants) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, this::clearParticipants);
 
+            // If there are start actions defined, execute them for all online players.
             if (!startActions.isEmpty()) {
-                Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getOnlinePlayers().forEach(player -> actionManager.executeActions(player, startActions)));
+                Bukkit.getScheduler().runTask(plugin, () ->
+                        Bukkit.getOnlinePlayers().forEach(player ->
+                                actionManager.executeActions(player, startActions)
+                        )
+                );
             }
         }
 
+        // Set the tournament status to ACTIVE.
         status = TournamentStatus.ACTIVE;
 
+        // Schedule a task to periodically update the tournament (asynchronously).
         updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+            // If not already updating, perform the update.
             if (!isUpdating()) update();
         }, 0, leaderboardRefresh * 20L);
 
-        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentStartEvent(this)));
+        // Trigger a TournamentStartEvent to notify other plugins.
+        Bukkit.getScheduler().runTask(plugin, () ->
+                Bukkit.getPluginManager().callEvent(new TournamentStartEvent(this))
+        );
     }
+
 
     /**
      * Stops the tournament if it is currently active. This method cancels any ongoing update tasks,
