@@ -5,8 +5,8 @@
 
 package net.zithium.tournaments.tournament;
 
-import net.zithium.library.action.ActionManager;
 import net.zithium.tournaments.XLTournamentsPlugin;
+import net.zithium.tournaments.action.ActionManager;
 import net.zithium.tournaments.events.CompletedChallengeEvent;
 import net.zithium.tournaments.events.TournamentEndEvent;
 import net.zithium.tournaments.events.TournamentStartEvent;
@@ -110,11 +110,7 @@ public class Tournament {
 
             // If there are start actions defined, execute them for all online players.
             if (!startActions.isEmpty()) {
-                Bukkit.getScheduler().runTask(plugin, () ->
-                        Bukkit.getOnlinePlayers().forEach(player ->
-                                actionManager.executeActions(player, startActions)
-                        )
-                );
+                Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(null, startActions));
             }
         }
 
@@ -167,8 +163,6 @@ public class Tournament {
 
         if (!endActions.isEmpty()) {
             Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(null, endActions));
-            Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this)));
-            return;
         }
 
         Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this)));
@@ -192,6 +186,9 @@ public class Tournament {
         updating = false;
     }
 
+    /**
+     * Clears all participants from the target tournament.
+     */
     public void clearParticipants() {
         participants.clear();
         sortedParticipants.clear();
