@@ -75,6 +75,8 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         // Register commands
         commandManager.register(new TournamentsCommand(this));
 
+        setDebugMode();
+
         getLogger().info("");
 
         if (getConfig().getBoolean("discord_webhook.enable", false)) {
@@ -106,6 +108,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         menuFile.reload();
         Messages.setConfiguration(messagesFile.getConfig());
         menuManager = new MenuManager(this);
+        setDebugMode();
 
         tournamentManager.onDisable(true);
         tournamentManager.onEnable();
