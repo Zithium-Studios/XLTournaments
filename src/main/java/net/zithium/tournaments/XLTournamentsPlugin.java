@@ -38,6 +38,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
     private ObjectiveManager objectiveManager;
     private MenuManager menuManager;
     private HookManager hookManager;
+    private static boolean debugMode;
 
     private ConfigHandler messagesFile, menuFile;
 
@@ -151,6 +152,14 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
 
     public ConfigHandler getMessagesFile() {
         return messagesFile;
+    }
+
+    public static boolean isDebugMode() {
+        return debugMode;
+    }
+
+    public void setDebugMode() {
+        debugMode = getConfig().getBoolean("debug", false);
     }
 
     @Override

@@ -105,15 +105,15 @@ public class Tournament {
      * @param clearParticipants Should all tournament participants be cleared when this method is called.
      */
     public void start(boolean clearParticipants) {
-        plugin.getLogger().log(Level.INFO, "Executing tournament start.");
+        if (debug()) plugin.getLogger().log(Level.INFO, "Executing tournament start.");
         // If it's the first time, asynchronously clear participants.
         if (clearParticipants) {
-            plugin.getLogger().log(Level.INFO, "Clearing tournament participants.");
+            if (debug()) plugin.getLogger().log(Level.INFO, "Clearing tournament participants.");
             Bukkit.getScheduler().runTaskAsynchronously(plugin, this::clearParticipants);
 
             // If there are start actions defined, execute them for all online players.
             if (!startActions.isEmpty()) {
-                plugin.getLogger().log(Level.INFO, "Executing start actions.");
+                if (debug()) plugin.getLogger().log(Level.INFO, "Executing start actions.");
                 Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(null, startActions));
             }
         }
@@ -131,7 +131,7 @@ public class Tournament {
         Bukkit.getScheduler().runTask(plugin, () ->
                 Bukkit.getPluginManager().callEvent(new TournamentStartEvent(this))
         );
-        plugin.getLogger().log(Level.INFO, "Tournament has been started.");
+        if (debug()) plugin.getLogger().log(Level.INFO, "Tournament has been started.");
     }
 
 
