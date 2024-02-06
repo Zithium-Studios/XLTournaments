@@ -44,11 +44,9 @@ public class TimerTask implements Runnable {
 
                 tournament.stop();
                 tournament.setStatus(TournamentStatus.ENDED);
+                Bukkit.getScheduler().runTaskAsynchronously(JAVA_PLUGIN, tournament::clearParticipants);
 
                 if (tournament.getTimeline() != Timeline.SPECIFIC) {
-                    Bukkit.getScheduler().runTaskAsynchronously(JAVA_PLUGIN, tournament::clearParticipants);
-                    tournament.setStatus(TournamentStatus.ENDED);
-
                     Bukkit.getScheduler().runTaskLater(JAVA_PLUGIN, () -> {
                         tournament.updateStatus();
                         tournament.start(true);
