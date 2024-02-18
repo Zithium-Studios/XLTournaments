@@ -41,6 +41,7 @@ public interface XLTournamentsAPI {
      * Gets a list of all tournaments
      *
      * @return A list of all tournaments.
+     * @since 3.16.0
      */
     List<Tournament> getTournaments();
 

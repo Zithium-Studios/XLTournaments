@@ -5,8 +5,8 @@
 
 package net.zithium.tournaments.tournament;
 
-import net.zithium.library.action.ActionManager;
 import net.zithium.tournaments.XLTournamentsPlugin;
+import net.zithium.tournaments.action.ActionManager;
 import net.zithium.tournaments.events.CompletedChallengeEvent;
 import net.zithium.tournaments.events.TournamentEndEvent;
 import net.zithium.tournaments.events.TournamentStartEvent;
@@ -25,6 +25,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 public class Tournament {
 
@@ -98,24 +99,41 @@ public class Tournament {
         }
     }
 
-    public void start(boolean firstTime) {
-
-        if (firstTime) {
+    /**
+     * Starts the tournament, initializing necessary tasks and triggering associated actions.
+     *
+     * @param clearParticipants Should all tournament participants be cleared when this method is called.
+     */
+    public void start(boolean clearParticipants) {
+        if (debug()) plugin.getLogger().log(Level.INFO, "Executing tournament start.");
+        // If it's the first time, asynchronously clear participants.
+        if (clearParticipants) {
+            if (debug()) plugin.getLogger().log(Level.INFO, "Clearing tournament participants.");
             Bukkit.getScheduler().runTaskAsynchronously(plugin, this::clearParticipants);
 
+            // If there are start actions defined, execute them for all online players.
             if (!startActions.isEmpty()) {
-                Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getOnlinePlayers().forEach(player -> actionManager.executeActions(player, startActions)));
+                if (debug()) plugin.getLogger().log(Level.INFO, "Executing start actions.");
+                Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(null, startActions));
             }
         }
 
+        // Set the tournament status to ACTIVE.
         status = TournamentStatus.ACTIVE;
 
+        // Schedule a task to periodically update the tournament (asynchronously).
         updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+            // If not already updating, perform the update.
             if (!isUpdating()) update();
         }, 0, leaderboardRefresh * 20L);
 
-        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentStartEvent(this)));
+        // Trigger a TournamentStartEvent to notify other plugins.
+        Bukkit.getScheduler().runTask(plugin, () ->
+                Bukkit.getPluginManager().callEvent(new TournamentStartEvent(this))
+        );
+        if (debug()) plugin.getLogger().log(Level.INFO, "Tournament has been started.");
     }
+
 
     /**
      * Stops the tournament if it is currently active. This method cancels any ongoing update tasks,
@@ -126,7 +144,12 @@ public class Tournament {
      * @see TournamentEndEvent
      */
     public void stop() {
+        if (debug()) plugin.getLogger().log(Level.INFO, "Executing tournament stop.");
         if (status != TournamentStatus.ACTIVE) return;
+
+        Bukkit.getScheduler().runTask(plugin, () ->
+                Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this))
+                );
 
         if (updateTask != null) updateTask.cancel();
         update();
@@ -149,12 +172,10 @@ public class Tournament {
         }
 
         if (!endActions.isEmpty()) {
+            if (debug()) plugin.getLogger().log(Level.INFO, "Executing end actions.");
             Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(null, endActions));
-            Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this)));
-            return;
         }
-
-        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this)));
+        if (debug()) plugin.getLogger().log(Level.INFO, "Tournament has been stopped.");
     }
 
     /**
@@ -175,7 +196,11 @@ public class Tournament {
         updating = false;
     }
 
+    /**
+     * Clears all participants from the target tournament.
+     */
     public void clearParticipants() {
+        if (debug()) plugin.getLogger().log(Level.INFO, "Clearing participants for", identifier);
         participants.clear();
         sortedParticipants.clear();
         storageHandler.clearParticipants(identifier);
@@ -327,8 +352,13 @@ public class Tournament {
      * @param score          The score to add to the target
      * @param insertDatabase Insert into the database true/false
      */
+
     public void addParticipant(UUID uuid, int score, boolean insertDatabase) {
-        participants.put(uuid, score);
+        if (debug()) plugin.getLogger().log(Level.INFO, "[DEBUG] Adding " + uuid + " to a tournament");
+
+        synchronized (participants) {
+            participants.put(uuid, score);
+        }
         if (insertDatabase) {
             storageHandler.addParticipant(getIdentifier(), uuid);
         }
@@ -508,5 +538,9 @@ public class Tournament {
 
     public void setStatus(TournamentStatus status) {
         this.status = status;
+    }
+
+    public boolean debug() {
+        return XLTournamentsPlugin.isDebugMode();
     }
 }

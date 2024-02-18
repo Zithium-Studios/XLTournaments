@@ -7,6 +7,6 @@ package net.zithium.tournaments.utility;
 
 public enum Timeline {
 
-    SPECIFIC, DAILY, WEEKLY, MONTHLY
+    SPECIFIC, DAILY, WEEKLY, MONTHLY, NONE
 
 }

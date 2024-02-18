@@ -53,9 +53,6 @@ placeholderapi_objective_task_update: 60
 # How many ticks until we fetch new playtime data?
 playtime_objective_task_update: 200 # 10 seconds
 
-# Should we exclude placed blocks from counting towards the BLOCK_BREAK objective?
-exclude_placed_blocks: true
-
 # Should the plugin report stats to https://bstats.org/
 # All usage statistics are anonymous and has zero impact on performance.
 enable_metrics: true

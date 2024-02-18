@@ -28,13 +28,10 @@ import java.util.List;
 public class BreakObjective extends XLObjective {
 
     private final XLTournamentsPlugin plugin;
-    private final boolean excludePlaced;
+    private boolean excludePlaced;
 
     public BreakObjective(@NotNull XLTournamentsPlugin plugin) {
         super("BLOCK_BREAK");
-
-        FileConfiguration config = plugin.getConfig();
-        excludePlaced = config.getBoolean("exclude_placed_blocks");
 
         // Exception handling for "TokenEnchant" plugin
         if (plugin.getServer().getPluginManager().isPluginEnabled("TokenEnchant")) {
@@ -51,6 +48,10 @@ public class BreakObjective extends XLObjective {
 
     @Override
     public boolean loadTournament(Tournament tournament, @NotNull FileConfiguration config) {
+        if (config.contains("exclude_placed_blocks")) {
+            excludePlaced = config.getBoolean("exclude_placed_blocks");
+        }
+
         if (config.contains("block_whitelist")) {
             tournament.setMeta("BLOCK_WHITELIST_" + tournament.getIdentifier(), config.getStringList("block_whitelist"));
         }

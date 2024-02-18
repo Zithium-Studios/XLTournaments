@@ -13,6 +13,7 @@ import net.zithium.tournaments.utility.Timeline;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class TimerTask implements Runnable {
@@ -36,14 +37,16 @@ public class TimerTask implements Runnable {
 
             // Tournament ended
             if (tournament.getEndTimeMillis() < System.currentTimeMillis()) {
+                if (tournament.getStatus() == TournamentStatus.ENDED) {
+                    if (XLTournamentsPlugin.isDebugMode()) JAVA_PLUGIN.getLogger().log(Level.INFO, "Attempted to end already ended tournament. This has been averted, please report to developer.");
+                    continue;
+                }
 
                 tournament.stop();
                 tournament.setStatus(TournamentStatus.ENDED);
+                Bukkit.getScheduler().runTaskAsynchronously(JAVA_PLUGIN, tournament::clearParticipants);
 
                 if (tournament.getTimeline() != Timeline.SPECIFIC) {
-                    Bukkit.getScheduler().runTaskAsynchronously(JAVA_PLUGIN, tournament::clearParticipants);
-                    tournament.setStatus(TournamentStatus.ENDED);
-
                     Bukkit.getScheduler().runTaskLater(JAVA_PLUGIN, () -> {
                         tournament.updateStatus();
                         tournament.start(true);

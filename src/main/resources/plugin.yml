@@ -2,5 +2,9 @@ name: XLTournaments
 version: '${version}'
 authors: [ItsLewizzz, ItzSave]
 main: net.zithium.tournaments.XLTournamentsPlugin
-api-version: 1.13
+api-version: 1.19
 softdepend: [Vault, PlaceholderAPI]
+
+commands:
+  tournament:
+    description: Main command.

@@ -13,6 +13,7 @@ import me.mattstudios.mf.annotations.*;
 import me.mattstudios.mf.base.CommandBase;
 import net.zithium.tournaments.utility.ColorUtil;
 import net.zithium.tournaments.utility.TextUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -184,6 +185,7 @@ public class TournamentsCommand extends CommandBase {
             } else {
                 tournament.stop();
                 tournament.setStatus(TournamentStatus.ENDED);
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, tournament::clearParticipants);
                 Messages.STOPPED_TOURNAMENT.send(sender, "{TOURNAMENT}", tournament.getIdentifier());
             }
         } else {

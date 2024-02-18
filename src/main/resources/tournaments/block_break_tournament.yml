@@ -8,6 +8,9 @@ enabled: true
 # Worlds listed in here will not have the tournament active.
 disabled_worlds: [ example_world, another_world ]
 
+# Should we exclude placed blocks from counting towards the BLOCK_BREAK objective?
+exclude_placed_blocks: true
+
 # Gamemodes that should not contribute to the tournament
 disabled_gamemodes:
   - CREATIVE

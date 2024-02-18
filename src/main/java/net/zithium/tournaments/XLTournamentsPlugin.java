@@ -6,7 +6,7 @@
 package net.zithium.tournaments;
 
 import dev.triumphteam.gui.guis.BaseGui;
-import net.zithium.library.action.ActionManager;
+import net.zithium.tournaments.action.ActionManager;
 import net.zithium.tournaments.command.TournamentsCommand;
 import net.zithium.tournaments.config.ConfigHandler;
 import net.zithium.tournaments.discord.WebhookListener;
@@ -38,6 +38,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
     private ObjectiveManager objectiveManager;
     private MenuManager menuManager;
     private HookManager hookManager;
+    private static boolean debugMode;
 
     private ConfigHandler messagesFile, menuFile;
 
@@ -60,7 +61,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
 
         (hookManager = new HookManager(this)).onEnable();
         (storageManager = new StorageManager(this)).onEnable();
-        (actionManager = new ActionManager()).onEnable();
+        (actionManager = new ActionManager(this)).onEnable();
 
         objectiveManager = new ObjectiveManager(this);
         tournamentManager = new TournamentManager(this);
@@ -73,6 +74,8 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
 
         // Register commands
         commandManager.register(new TournamentsCommand(this));
+
+        setDebugMode();
 
         getLogger().info("");
 
@@ -105,6 +108,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         menuFile.reload();
         Messages.setConfiguration(messagesFile.getConfig());
         menuManager = new MenuManager(this);
+        setDebugMode();
 
         tournamentManager.onDisable(true);
         tournamentManager.onEnable();
@@ -151,6 +155,14 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
 
     public ConfigHandler getMessagesFile() {
         return messagesFile;
+    }
+
+    public static boolean isDebugMode() {
+        return debugMode;
+    }
+
+    public void setDebugMode() {
+        debugMode = getConfig().getBoolean("debug", false);
     }
 
     @Override

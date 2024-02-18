@@ -5,7 +5,7 @@
 
 package net.zithium.tournaments.objective.external;
 
-import com.badbones69.crazyenvoys.paper.api.events.EnvoyOpenEvent;
+import com.badbones69.crazyenvoys.api.events.EnvoyOpenEvent;
 import net.zithium.tournaments.objective.XLObjective;
 import net.zithium.tournaments.tournament.Tournament;
 import org.bukkit.configuration.file.FileConfiguration;
