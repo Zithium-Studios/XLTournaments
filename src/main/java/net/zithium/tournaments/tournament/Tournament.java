@@ -137,7 +137,8 @@ public class Tournament {
 
     /**
      * Stops the tournament if it is currently active. This method cancels any ongoing update tasks,
-     * processes rewards for participants, and triggers the TournamentEndEvent if applicable.
+     * processes rewards for participants, triggers the TournamentEndEvent if applicable,
+     * executes end actions, and clears all participant data.
      * If the tournament is not in an active state, this method does nothing.
      *
      * @throws IllegalStateException if the tournament is in an invalid state for stopping.
@@ -149,7 +150,7 @@ public class Tournament {
 
         Bukkit.getScheduler().runTask(plugin, () ->
                 Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this))
-                );
+        );
 
         if (updateTask != null) updateTask.cancel();
         update();
@@ -176,6 +177,8 @@ public class Tournament {
             Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(null, endActions));
         }
         if (debug()) plugin.getLogger().log(Level.INFO, "Tournament has been stopped.");
+
+        clearParticipants();
     }
 
     /**
