@@ -66,6 +66,7 @@ public class CraftTournament extends XLObjective {
 
             if (tournament.hasMeta("ITEM_WHITELIST")) {
 
+                @SuppressWarnings("unchecked")
                 Set<String> itemWhitelist = (Set<String>) tournament.getMeta("ITEM_WHITELIST");
                 Material craftedMaterial = craftedItem.getType();
 
