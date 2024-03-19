@@ -33,17 +33,11 @@ public class PlayerConsumeObjective extends XLObjective {
     public void playerConsumeEvent(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
         ItemStack consumedItem = event.getItem();
-
-        Bukkit.getLogger().log(Level.INFO, "Consumed Item: " + consumedItem.getType());
         if (consumedItem == null || !consumedItem.getType().isEdible()) {
             return;
         }
 
         for (Tournament tournament : getTournaments()) {
-
-            Bukkit.getLogger().log(Level.WARNING, "Whitelist: " + tournament.getMeta("ITEM_WHITELIST_" + tournament.getIdentifier()));
-
-
             if (canExecute(tournament, player)) {
                 String tournamentIdentifier = tournament.getIdentifier();
 
