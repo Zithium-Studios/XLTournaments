@@ -47,25 +47,22 @@ public class CraftTournament extends XLObjective {
 
         int amount = craftedItem.getAmount();
 
+        // Ensure the inventory is not full before attempting to count items.
         if (event.isShiftClick()) {
-            int max = event.getInventory().getMaxStackSize();
-            ItemStack[] matrix = event.getInventory().getMatrix();
-            for (ItemStack is : matrix) {
-                if (is == null || is.getType() == Material.AIR) continue;
-                int tmp = is.getAmount();
-                if (tmp < max && tmp > 0) max = tmp;
+            if (player.getInventory().firstEmpty() == -1) {
+                amount = 1;
+            } else {
+                amount = craftedItem.getAmount();
             }
-            amount *= max;
         }
-
 
         for (Tournament tournament : getTournaments()) {
             if (!canExecute(tournament, player)) {
                 return;
             }
 
+            // Handle optional whitelist settings.
             if (tournament.hasMeta("ITEM_WHITELIST")) {
-
                 @SuppressWarnings("unchecked")
                 Set<String> itemWhitelist = (Set<String>) tournament.getMeta("ITEM_WHITELIST");
                 Material craftedMaterial = craftedItem.getType();
