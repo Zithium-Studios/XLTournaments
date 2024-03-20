@@ -1,6 +1,6 @@
 /*
  * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ * Copyright (c) 2020 - 2024 Zithium Studios. All rights reserved.
  */
 
 package net.zithium.tournaments.task;
@@ -13,8 +13,8 @@ import net.zithium.tournaments.utility.Timeline;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Iterator;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public class TimerTask implements Runnable {
 
@@ -25,9 +25,10 @@ public class TimerTask implements Runnable {
         this.tournamentManager = tournamentManager;
     }
 
-    @Override
     public void run() {
-        for (Tournament tournament : tournamentManager.getTournaments().stream().filter(tournament -> tournament.getStatus() != TournamentStatus.ENDED).collect(Collectors.toList())) {
+        Iterator<Tournament> iterator = tournamentManager.getTournaments().stream().filter(tournament -> tournament.getStatus() != TournamentStatus.ENDED).iterator();
+        while (iterator.hasNext()) {
+            Tournament tournament = iterator.next();
 
             // Tournament starting
             if (tournament.getStatus() == TournamentStatus.WAITING && tournament.getStartTimeMillis() < System.currentTimeMillis()) {
@@ -39,6 +40,7 @@ public class TimerTask implements Runnable {
             if (tournament.getEndTimeMillis() < System.currentTimeMillis()) {
                 if (tournament.getStatus() == TournamentStatus.ENDED) {
                     if (XLTournamentsPlugin.isDebugMode()) JAVA_PLUGIN.getLogger().log(Level.INFO, "Attempted to end already ended tournament. This has been averted, please report to developer.");
+                    iterator.remove();
                     continue;
                 }
 
@@ -54,6 +56,10 @@ public class TimerTask implements Runnable {
                 }
             }
 
+            // Remove the tournament if it's already ended
+            if (tournament.getStatus() == TournamentStatus.ENDED) {
+                iterator.remove();
+            }
         }
     }
 }
