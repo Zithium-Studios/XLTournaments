@@ -58,8 +58,14 @@ public class TimerTask implements Runnable {
 
             // Remove the tournament if it's already ended
             if (tournament.getStatus() == TournamentStatus.ENDED) {
-                iterator.remove();
+                try {
+                    iterator.remove();
+                } catch (IllegalStateException e) {
+                    // Catch possible error when attempting to remove tournament.
+                    Bukkit.getLogger().log(Level.WARNING, "Error removing already ended tournament", e);
+                }
             }
+
         }
     }
 }
