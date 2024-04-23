@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.17.0-BETA-1.5'
+version = '3.17.0'
 description = 'XLTournaments'
 
 java {
@@ -18,7 +18,7 @@ repositories {
     maven { url = uri('https://jitpack.io') }
     maven { url = uri('https://raw.githubusercontent.com/TeamVK/maven-repository/master/release/') }
     maven { url = uri('https://repo.codemc.io/repository/maven-public/') }
-    maven { url = uri('https://mvn.lumine.io/repository/maven-public/') }
+    maven { url = uri('https://mvn.lumine.io/repository/maven-public/') } // MythicMobs
     maven { url = uri('https://repo.extendedclip.com/content/repositories/placeholderapi/') }
     maven { url = uri('https://repo.essentialsx.net/releases/') }
     maven { url = uri('https://libraries.minecraft.net/') }
@@ -50,7 +50,7 @@ dependencies {
     compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
     compileOnly 'me.clip:placeholderapi:2.11.5'
     compileOnly 'com.github.NuVotifier:NuVotifier:2.7.2'
-    compileOnly 'io.lumine.xikage:MythicMobs:4.12.0'
+    compileOnly 'io.lumine:Mythic-Dist:5.6.1'
     compileOnly 'net.essentialsx:EssentialsX:2.20.1'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
 }
