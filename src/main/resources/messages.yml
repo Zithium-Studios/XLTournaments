@@ -19,7 +19,7 @@ general:
     - ""
 
 placeholders:
-  # This is what is displayed when a placeholder doesn't have a player.
+  # This shows up when a player hasn't been assigned to a placeholder yet.
   no_player: "N/A"
 
 tournament:
