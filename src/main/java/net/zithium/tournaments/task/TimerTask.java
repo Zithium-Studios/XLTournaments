@@ -26,7 +26,7 @@ public class TimerTask implements Runnable {
     }
 
     public void run() {
-        Iterator<Tournament> iterator = tournamentManager.getTournaments().stream().filter(tournament -> tournament.getStatus() != TournamentStatus.ENDED).iterator();
+        Iterator<Tournament> iterator = tournamentManager.getTournaments().stream().filter(tournament -> tournament.getStatus() != TournamentStatus.ENDED).iterator(); // Filters out already ended tournaments.
         while (iterator.hasNext()) {
             Tournament tournament = iterator.next();
 
@@ -38,15 +38,7 @@ public class TimerTask implements Runnable {
 
             // Tournament ended
             if (tournament.getEndTimeMillis() < System.currentTimeMillis()) {
-                if (tournament.getStatus() == TournamentStatus.ENDED) {
-                    if (XLTournamentsPlugin.isDebugMode()) JAVA_PLUGIN.getLogger().log(Level.INFO, "Attempted to end already ended tournament. This has been averted, please report to developer.");
-                    iterator.remove();
-                    continue;
-                }
-
                 tournament.stop();
-                tournament.setStatus(TournamentStatus.ENDED);
-                Bukkit.getScheduler().runTaskAsynchronously(JAVA_PLUGIN, tournament::clearParticipants);
 
                 if (tournament.getTimeline() != Timeline.SPECIFIC) {
                     Bukkit.getScheduler().runTaskLater(JAVA_PLUGIN, () -> {
@@ -55,16 +47,6 @@ public class TimerTask implements Runnable {
                     }, 100L);
                 }
             }
-
-            // Remove the tournament if it's already ended
-            if (tournament.getStatus() == TournamentStatus.ENDED) {
-                try {
-                    iterator.remove();
-                } catch (UnsupportedOperationException ignored) {
-                    // Ignore error.
-                }
-            }
-
         }
     }
 }
