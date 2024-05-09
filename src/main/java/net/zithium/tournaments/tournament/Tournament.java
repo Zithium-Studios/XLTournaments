@@ -154,23 +154,23 @@ public class Tournament {
         if (updateTask != null) updateTask.cancel();
         update();
 
-        if (!challenge) {
-            for (int position : rewards.keySet()) {
-                OfflinePlayer player = getPlayerFromPosition(position);
-                if (player == null) continue;
-                if (player.isOnline()) {
-                    Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(player.getPlayer(), rewards.get(position)));
-                    if (debug()) plugin.getLogger().log(Level.INFO, "Executed end actions for " + player.getName() + "(" + player.getUniqueId() + ")");
-                    continue;
-                }
+        if (challenge) return;
 
-                Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                    for (String action : rewards.get(position)) {
-                        storageHandler.addActionToQueue(player.getUniqueId().toString(), action);
-                        if (debug()) plugin.getLogger().log(Level.INFO, "Queued end actions for " + player.getName() + "(" + player.getUniqueId() + ")");
-                    }
-                });
+        for (int position : rewards.keySet()) {
+            OfflinePlayer player = getPlayerFromPosition(position);
+            if (player == null) continue;
+            if (player.isOnline()) {
+                Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(player.getPlayer(), rewards.get(position)));
+                if (debug()) plugin.getLogger().log(Level.INFO, "Executed end actions for " + player.getName() + "(" + player.getUniqueId() + ")");
+                continue;
             }
+
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                for (String action : rewards.get(position)) {
+                    storageHandler.addActionToQueue(player.getUniqueId().toString(), action);
+                    if (debug()) plugin.getLogger().log(Level.INFO, "Queued end actions for " + player.getName() + "(" + player.getUniqueId() + ")");
+                }
+            });
         }
 
         if (!endActions.isEmpty()) {

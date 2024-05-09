@@ -9,7 +9,7 @@ import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.config.ConfigHandler;
 import net.zithium.tournaments.objective.XLObjective;
 import net.zithium.tournaments.storage.StorageHandler;
-import net.zithium.tournaments.task.TimerTask;
+import net.zithium.tournaments.task.TournamentUpdateTask;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -95,7 +95,7 @@ public class TournamentManager {
             loadPlayerCache(player);
         }
 
-        timerTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new TimerTask(this), 100L, 20L);
+        timerTask = new TournamentUpdateTask(this).runTaskTimer(plugin, 100L, 20L);
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> tournaments.values().forEach(Tournament::update));
     }

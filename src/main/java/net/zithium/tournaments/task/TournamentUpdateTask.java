@@ -12,16 +12,16 @@ import net.zithium.tournaments.tournament.TournamentStatus;
 import net.zithium.tournaments.utility.Timeline;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Iterator;
-import java.util.logging.Level;
 
-public class TimerTask implements Runnable {
+public class TournamentUpdateTask extends BukkitRunnable {
 
     private static final JavaPlugin JAVA_PLUGIN = JavaPlugin.getProvidingPlugin(XLTournamentsPlugin.class);
     private final TournamentManager tournamentManager;
 
-    public TimerTask(TournamentManager tournamentManager) {
+    public TournamentUpdateTask(TournamentManager tournamentManager) {
         this.tournamentManager = tournamentManager;
     }
 
