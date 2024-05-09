@@ -34,6 +34,7 @@ public class Tournament {
     private final StorageHandler storageHandler;
     private final String identifier;
 
+    private UUID gameUniqueId;
     private BukkitTask updateTask;
     private TournamentStatus status;
     private ZonedDateTime startDate, endDate;
@@ -121,6 +122,8 @@ public class Tournament {
         // Set the tournament status to ACTIVE.
         status = TournamentStatus.ACTIVE;
 
+        gameUniqueId = UUID.randomUUID();
+
         // Schedule a task to periodically update the tournament (asynchronously).
         updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
             // If not already updating, perform the update.
@@ -148,9 +151,11 @@ public class Tournament {
         if (debug()) plugin.getLogger().log(Level.INFO, "Executing tournament stop.");
         if (status != TournamentStatus.ACTIVE) throw new IllegalStateException("Attempted to stop a Tournament that is not ACTIVE");
 
+        Bukkit.getScheduler().runTask(plugin, () ->
+                Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this, new TournamentData(identifier, gameUniqueId, new LinkedHashMap<>(sortedParticipants))))
+        );
         status = TournamentStatus.ENDED;
-        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this)));
-
+        
         if (updateTask != null) updateTask.cancel();
         update();
 
