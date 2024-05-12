@@ -66,10 +66,6 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String identifier) {
-        if (player == null) return "";
-
-        final UUID uuid = player.getUniqueId();
-
         try {
             final Matcher matcher = START_DAY_PATTERN.matcher(identifier.toUpperCase());
             if (matcher.find()) {
@@ -165,6 +161,9 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             }
         } catch (Exception ignored) {
         }
+
+        if (player == null) return null;
+        final UUID uuid = player.getUniqueId();
 
         try {
             final Matcher matcher = PLAYER_SCORE_PATTERN.matcher(identifier.toUpperCase());
