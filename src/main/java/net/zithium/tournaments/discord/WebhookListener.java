@@ -55,7 +55,10 @@ public class WebhookListener implements Listener {
     private String replacePlaceholders(@NotNull String text, TournamentData tournament) {
         for (int i = 1; i <= 3; i++) {
             OfflinePlayer player = tournament.getPlayerFromPosition(i);
-            String playerName = (player != null) ? player.getName() : "Unknown";
+
+            if (player == null) return "Unknown"; // Player is not found
+            if (player.getFirstPlayed() == 0) return null; // Player has never joined before
+            String playerName = player.getName();
 
             // Ensure that both text and playerName are not null before replacement
             if (playerName != null) {
