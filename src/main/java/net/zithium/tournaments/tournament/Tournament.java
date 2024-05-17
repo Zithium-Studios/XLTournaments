@@ -34,6 +34,7 @@ public class Tournament {
     private final StorageHandler storageHandler;
     private final String identifier;
 
+    private UUID gameUniqueId;
     private BukkitTask updateTask;
     private TournamentStatus status;
     private ZonedDateTime startDate, endDate;
@@ -121,6 +122,8 @@ public class Tournament {
         // Set the tournament status to ACTIVE.
         status = TournamentStatus.ACTIVE;
 
+        gameUniqueId = UUID.randomUUID();
+
         // Schedule a task to periodically update the tournament (asynchronously).
         updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
             // If not already updating, perform the update.
@@ -146,30 +149,31 @@ public class Tournament {
      */
     public void stop() {
         if (debug()) plugin.getLogger().log(Level.INFO, "Executing tournament stop.");
-        if (status != TournamentStatus.ACTIVE) return;
-
-        Bukkit.getScheduler().runTask(plugin, () ->
-                Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this))
-        );
-
+        if (status != TournamentStatus.ACTIVE) throw new IllegalStateException("Attempted to stop a Tournament that is not ACTIVE");
+        status = TournamentStatus.ENDED;
+        
         if (updateTask != null) updateTask.cancel();
         update();
 
-        if (!challenge) {
-            for (int position : rewards.keySet()) {
-                OfflinePlayer player = getPlayerFromPosition(position);
-                if (player != null) {
-                    if (!player.isOnline()) {
-                        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                            for (String action : rewards.get(position)) {
-                                storageHandler.addActionToQueue(player.getUniqueId().toString(), action);
-                            }
-                        });
-                    } else {
-                        Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(player.getPlayer(), rewards.get(position)));
-                    }
-                }
+        Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this, new TournamentData(identifier, gameUniqueId, new LinkedHashMap<>(sortedParticipants))));
+
+        if (challenge) return;
+
+        for (int position : rewards.keySet()) {
+            OfflinePlayer player = getPlayerFromPosition(position);
+            if (player == null) continue;
+            if (player.isOnline()) {
+                Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(player.getPlayer(), rewards.get(position)));
+                if (debug()) plugin.getLogger().log(Level.INFO, "Executed end actions for " + player.getName() + "(" + player.getUniqueId() + ")");
+                continue;
             }
+
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                for (String action : rewards.get(position)) {
+                    storageHandler.addActionToQueue(player.getUniqueId().toString(), action);
+                    if (debug()) plugin.getLogger().log(Level.INFO, "Queued end actions for " + player.getName() + "(" + player.getUniqueId() + ")");
+                }
+            });
         }
 
         if (!endActions.isEmpty()) {

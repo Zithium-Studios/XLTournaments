@@ -8,12 +8,14 @@ package net.zithium.tournaments.discord;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.events.TournamentEndEvent;
 import net.zithium.tournaments.tournament.Tournament;
+import net.zithium.tournaments.tournament.TournamentData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -33,12 +35,12 @@ public class WebhookListener implements Listener {
 
         FileConfiguration config = plugin.getConfig();
 
-        Tournament tournament = event.getTournament();
+        TournamentData tournament = event.getTournamentData();
         DiscordWebhook webhook = new DiscordWebhook(config.getString("discord_webhook.url"));
         //DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
 
 
-        webhook.setContent(replacePlaceholders(config.getString("discord_webhook.content"), tournament));
+        webhook.setContent(replacePlaceholders(config.getString("discord_webhook.content", "'discord_webhook.content' not found."), tournament));
 
         webhook.setAvatarUrl(config.getString("discord_webhook.avatar_url"));
         try {
@@ -50,26 +52,27 @@ public class WebhookListener implements Listener {
         }
     }
 
-    private String replacePlaceholders(String text, Tournament tournament) {
+    private String replacePlaceholders(@NotNull String text, TournamentData tournament) {
         for (int i = 1; i <= 3; i++) {
             OfflinePlayer player = tournament.getPlayerFromPosition(i);
-            String playerName = (player != null) ? player.getName() : "Unknown";
+
+            if (player == null) return "Unknown"; // Player is not found
+            if (player.getFirstPlayed() == 0) return null; // Player has never joined before
+            String playerName = player.getName();
 
             // Ensure that both text and playerName are not null before replacement
-            if (text != null && playerName != null) {
+            if (playerName != null) {
                 text = text.replace("{" + i + "_PLACE}", playerName);
             }
 
             // Replace score placeholders
             Integer playerScore = tournament.getScoreFromPosition(i);
-            String scorePlaceholder = (playerScore != null) ? String.valueOf(playerScore) : "No score";
+            String scorePlaceholder = String.valueOf(playerScore);
             text = text.replace("{" + i + "_SCORE}", scorePlaceholder);
         }
 
         // Make sure that the text is not null before further replacements
-        if (text != null) {
-            text = text.replace("{TOURNAMENT}", tournament.getIdentifier());
-        }
+        text = text.replace("{TOURNAMENT}", tournament.getIdentifier());
 
         return text;
     }
