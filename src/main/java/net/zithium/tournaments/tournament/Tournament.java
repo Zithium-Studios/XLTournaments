@@ -150,14 +150,12 @@ public class Tournament {
     public void stop() {
         if (debug()) plugin.getLogger().log(Level.INFO, "Executing tournament stop.");
         if (status != TournamentStatus.ACTIVE) throw new IllegalStateException("Attempted to stop a Tournament that is not ACTIVE");
-
-        Bukkit.getScheduler().runTask(plugin, () ->
-                Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this, new TournamentData(identifier, gameUniqueId, new LinkedHashMap<>(sortedParticipants))))
-        );
         status = TournamentStatus.ENDED;
         
         if (updateTask != null) updateTask.cancel();
         update();
+
+        Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this, new TournamentData(identifier, gameUniqueId, new LinkedHashMap<>(sortedParticipants))));
 
         if (challenge) return;
 
