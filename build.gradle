@@ -48,7 +48,7 @@ dependencies {
     compileOnly 'com.github.Realizedd.Duels:duels-api:3.5.1'
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
     compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
-    compileOnly 'me.clip:placeholderapi:2.11.5'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
     compileOnly 'com.github.NuVotifier:NuVotifier:2.7.2'
     compileOnly 'io.lumine:Mythic-Dist:5.6.1'
     compileOnly 'net.essentialsx:EssentialsX:2.20.1'
