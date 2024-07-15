@@ -28,7 +28,7 @@ dependencies {
     implementation('com.zaxxer:HikariCP:5.1.0')
     implementation('me.mattstudios.utils:matt-framework:1.4.6')
 
-    implementation('dev.triumphteam:triumph-gui:3.1.7')
+    implementation('dev.triumphteam:triumph-gui:3.1.10')
 
     implementation('org.bstats:bstats-bukkit:3.0.2')
     implementation('com.github.ItzSave:ZithiumLibrary:v2.0.4')
@@ -44,15 +44,15 @@ dependencies {
     compileOnly 'com.mojang:authlib:1.5.21'
 
     // EXTERNAL OBJECTIVES
-    compileOnly 'com.github.electro2560:ClueScrollsAPI:c5f0b7aa3a'
-    compileOnly 'com.github.Realizedd.Duels:duels-api:3.5.1'
-    compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
-    compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
-    compileOnly 'me.clip:placeholderapi:2.11.5'
-    compileOnly 'com.github.NuVotifier:NuVotifier:2.7.2'
-    compileOnly 'io.lumine:Mythic-Dist:5.6.1'
-    compileOnly 'net.essentialsx:EssentialsX:2.20.1'
-    compileOnly fileTree(dir: 'libs', include: '*.jar')
+    compileOnly 'com.github.electro2560:ClueScrollsAPI:c5f0b7aa3a' // ClueScrolls
+    compileOnly 'com.github.Realizedd.Duels:duels-api:3.5.1' // Duels
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1' // Vault
+    compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:23.9.0' // TokenEnchant
+    compileOnly 'me.clip:placeholderapi:2.11.5' // PlaceholderAPI
+    compileOnly 'com.github.NuVotifier:NuVotifier:2.7.2' // nuVotifier
+    compileOnly 'io.lumine:Mythic-Dist:5.6.1' // MythicMobs
+    compileOnly 'net.essentialsx:EssentialsX:2.20.1' // EssentialsX
+    compileOnly fileTree(dir: 'libs', include: '*.jar') // libs folder.
 }
 
 processResources {
