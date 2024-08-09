@@ -50,7 +50,7 @@ dependencies {
     compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:18.37.1'
     compileOnly 'me.clip:placeholderapi:2.11.5'
     compileOnly 'com.github.NuVotifier:NuVotifier:2.7.2'
-    compileOnly 'io.lumine:Mythic-Dist:5.6.1'
+    compileOnly 'io.lumine:Mythic-Dist:5.7.0'
     compileOnly 'net.essentialsx:EssentialsX:2.20.1'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
 }
