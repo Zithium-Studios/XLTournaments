@@ -1,14 +1,8 @@
-/*
- * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
- */
-
 package net.zithium.tournaments.discord;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.events.TournamentEndEvent;
 import net.zithium.tournaments.tournament.Tournament;
-import net.zithium.tournaments.tournament.TournamentData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,51 +25,42 @@ public class WebhookListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onTournamentEnd(TournamentEndEvent event) {
+    public void onTournamentEnd(@NotNull TournamentEndEvent event) {
+
+        Tournament tournament = event.getTournament();
+        plugin.getLogger().log(Level.INFO, "Tournament 1st placement: " + tournament.getPlayerFromPosition(1));
 
         FileConfiguration config = plugin.getConfig();
-
-        TournamentData tournament = event.getTournamentData();
         DiscordWebhook webhook = new DiscordWebhook(config.getString("discord_webhook.url"));
-        //DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
 
+        String content = config.getString("discord_webhook.content", "'discord_webhook.content' not found.");
 
-        webhook.setContent(replacePlaceholders(config.getString("discord_webhook.content", "'discord_webhook.content' not found."), tournament));
+        for (int i = 1; i <= 3; i++) {
+            OfflinePlayer player = tournament.getPlayerFromPosition(i);
+            if (player != null) {
+                String playerName = player.getName();
+                if (playerName != null) {
+                    content = content.replace("{" + i + "_PLACE}", playerName);
+                }
+            } else {
+                content = content.replace("{" + i + "_PLACE}", "Unknown");
+            }
+
+            Integer playerScore = tournament.getScoreFromPosition(i);
+            content = content.replace("{" + i + "_SCORE}", String.valueOf(playerScore));
+        }
+
+        content = content.replace("{TOURNAMENT}", tournament.getIdentifier());
+        webhook.setContent(content);
 
         webhook.setAvatarUrl(config.getString("discord_webhook.avatar_url"));
         try {
             webhook.execute();
         } catch (MalformedURLException ex) {
             plugin.getLogger().severe("Unable to send Discord webhook for tournament '" + tournament.getIdentifier() + "': Invalid URL");
-        } catch (IOException ex) {
-            plugin.getLogger().log(Level.SEVERE, "There was an error attempting to send the webhook!", ex);
+        } catch (IOException | NullPointerException ex) {
+            plugin.getLogger().severe("There was an error attempting to send the webhook! Error: " + ex);
         }
     }
-
-    private String replacePlaceholders(@NotNull String text, TournamentData tournament) {
-        for (int i = 1; i <= 3; i++) {
-            OfflinePlayer player = tournament.getPlayerFromPosition(i);
-
-            if (player == null) return "Unknown"; // Player is not found
-            if (player.getFirstPlayed() == 0) return null; // Player has never joined before
-            String playerName = player.getName();
-
-            // Ensure that both text and playerName are not null before replacement
-            if (playerName != null) {
-                text = text.replace("{" + i + "_PLACE}", playerName);
-            }
-
-            // Replace score placeholders
-            Integer playerScore = tournament.getScoreFromPosition(i);
-            String scorePlaceholder = String.valueOf(playerScore);
-            text = text.replace("{" + i + "_SCORE}", scorePlaceholder);
-        }
-
-        // Make sure that the text is not null before further replacements
-        text = text.replace("{TOURNAMENT}", tournament.getIdentifier());
-
-        return text;
-    }
-
 
 }
