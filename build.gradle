@@ -47,7 +47,7 @@ dependencies {
     compileOnly 'com.github.electro2560:ClueScrollsAPI:c5f0b7aa3a' // ClueScrolls
     compileOnly 'com.github.Realizedd.Duels:duels-api:3.5.1' // Duels
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1' // Vault
-    compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:23.9.0' // TokenEnchant
+    //compileOnly 'com.vk2gpz.tokenenchant:TokenEnchantAPI:23.9.0' // TokenEnchant
     compileOnly 'me.clip:placeholderapi:2.11.5' // PlaceholderAPI
     compileOnly 'com.github.NuVotifier:NuVotifier:2.7.2' // nuVotifier
     compileOnly 'io.lumine:Mythic-Dist:5.6.1' // MythicMobs
