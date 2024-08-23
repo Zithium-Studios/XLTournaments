@@ -8,16 +8,18 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-
 public class PotionBrewObjective extends XLObjective {
 
     private final XLTournamentsPlugin plugin;
+    private boolean applyMetadata;
+
     public PotionBrewObjective(XLTournamentsPlugin plugin) {
         super("POTION_BREW");
 
@@ -26,9 +28,11 @@ public class PotionBrewObjective extends XLObjective {
 
     @Override
     public boolean loadTournament(Tournament tournament, FileConfiguration config) {
+        if (config.contains("apply_potion_metadata")) {
+            applyMetadata = config.getBoolean("apply_potion_metadata");
+        }
         return true;
     }
-
 
     @EventHandler
     public void onBrewPotion(InventoryClickEvent event) {
@@ -48,17 +52,19 @@ public class PotionBrewObjective extends XLObjective {
 
                     if (value == null) {
                         // The potion does not have the PersistentDataType set
-                        // Add a score to the player for the associated tournament
+                        // Add a score to the player for the associated tournament to ensure no duping.
                         for (Tournament tournament : getTournaments()) {
                             if (canExecute(tournament, player)) {
                                 tournament.addScore(player.getUniqueId(), 1);
                             }
                         }
 
-                        // Set the PersistentDataType on the potion
-                        item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 1);
-                        itemMeta.getPersistentDataContainer().set(key, dataType, 0);
-                        item.setItemMeta(itemMeta);
+                        // Only apply the meta data if the configuration option is set to true.
+                        if (applyMetadata) {
+                            item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 1);
+                            itemMeta.getPersistentDataContainer().set(key, dataType, 0);
+                            item.setItemMeta(itemMeta);
+                        }
                     }
                 }
             }
