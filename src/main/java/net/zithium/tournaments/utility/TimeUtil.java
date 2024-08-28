@@ -94,9 +94,9 @@ public class TimeUtil {
         long longVal = seconds.longValue();
         int days = (int) longVal / 86400;
         int remainder = (int) longVal - (days * 86400);
-        int hours = (int) remainder / 3600;
+        int hours = remainder / 3600;
         remainder = remainder - (hours * 3600);
-        int mins = (int) remainder / 60;
+        int mins = remainder / 60;
         remainder = remainder - mins * 60;
         int secs = remainder;
 
@@ -106,33 +106,47 @@ public class TimeUtil {
 
     public static ZonedDateTime getStartTime(Timeline timeline, ZoneId zoneId) {
         ZonedDateTime time = ZonedDateTime.now(zoneId);
-        switch(timeline) {
+        switch (timeline) {
             case WEEKLY:
-                time = ZonedDateTime.of(LocalDateTime.of(time.with(DayOfWeek.MONDAY).toLocalDate(), time.toLocalDate().atStartOfDay().toLocalTime()), zoneId);
+                time = ZonedDateTime.of(LocalDateTime.of(time.with(DayOfWeek.MONDAY).toLocalDate(),
+                        time.toLocalDate().atStartOfDay().toLocalTime()), zoneId);
                 break;
             case MONTHLY:
-                time = ZonedDateTime.of(LocalDateTime.of(time.with(TemporalAdjusters.firstDayOfMonth()).toLocalDate(), time.toLocalDate().atStartOfDay().toLocalTime()), zoneId);
+                time = ZonedDateTime.of(LocalDateTime.of(time.with(TemporalAdjusters.firstDayOfMonth()).toLocalDate(),
+                        time.toLocalDate().atStartOfDay().toLocalTime()), zoneId);
                 break;
             case DAILY:
-                time = ZonedDateTime.of(LocalDateTime.of(time.toLocalDate(), time.toLocalDate().atStartOfDay().toLocalTime()), zoneId);
+                time = ZonedDateTime.of(LocalDateTime.of(time.toLocalDate(),
+                        time.toLocalDate().atStartOfDay().toLocalTime()), zoneId);
+                break;
+            case HOURLY:
+                time = time.withMinute(0).withSecond(0).withNano(0);
+                break;
         }
         return time;
     }
 
     public static ZonedDateTime getEndTime(Timeline timeline, ZoneId zoneId) {
         ZonedDateTime time = ZonedDateTime.now(zoneId);
-        switch(timeline) {
+        switch (timeline) {
             case WEEKLY:
-                time = ZonedDateTime.of(LocalDateTime.of(time.with(DayOfWeek.SUNDAY).toLocalDate(), LocalTime.of(23, 59, 59)), zoneId);
+                time = ZonedDateTime.of(LocalDateTime.of(time.with(DayOfWeek.SUNDAY).toLocalDate(),
+                        LocalTime.of(23, 59, 59)), zoneId);
                 break;
             case MONTHLY:
-                time = ZonedDateTime.of(LocalDateTime.of(time.with(TemporalAdjusters.lastDayOfMonth()).toLocalDate(), LocalTime.of(23, 59, 59)), zoneId);
+                time = ZonedDateTime.of(LocalDateTime.of(time.with(TemporalAdjusters.lastDayOfMonth()).toLocalDate(),
+                        LocalTime.of(23, 59, 59)), zoneId);
                 break;
             case DAILY:
                 time = ZonedDateTime.of(LocalDateTime.of(time.toLocalDate(), LocalTime.of(23, 59, 59)), zoneId);
+                break;
+            case HOURLY:
+                time = time.withMinute(59).withSecond(59).withNano(999999999);
+                break;
         }
         return time;
     }
+
 
     public static String getMonthName(ZonedDateTime date) {
         return date.getMonth().getDisplayName(TextStyle.FULL, Locale.US);
