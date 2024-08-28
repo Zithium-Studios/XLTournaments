@@ -29,6 +29,7 @@ leaderboard_refresh: 60
 
 # Available Timeline Types:
 # - SPECIFIC (see times below)
+# - HOURLY - Starts and stops a tournament on the hour.
 # - DAILY
 # - WEEKLY
 # - MONTHLY
