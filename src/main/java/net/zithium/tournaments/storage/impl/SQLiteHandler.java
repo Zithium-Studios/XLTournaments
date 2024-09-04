@@ -7,6 +7,7 @@ package net.zithium.tournaments.storage.impl;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.storage.StorageHandler;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +56,7 @@ public class SQLiteHandler implements StorageHandler {
                 connection.close();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            Bukkit.getServer().getLogger().log(Level.SEVERE, "There was an error while attempting to shut down the SQLite database.", ex);
         }
     }
 
