@@ -9,6 +9,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.storage.StorageHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.*;
@@ -67,23 +68,62 @@ public class MySQLHandler implements StorageHandler {
 
     @Override
     public void addParticipant(String identifier, UUID uuid) {
-        try (Connection connection = hikari.getConnection();
-             Statement statement = connection.createStatement()) {
-             statement.execute("REPLACE INTO `" + identifier + "` (uuid, score) VALUES ('" + uuid + "',0);");
+        try (Connection connection = hikari.getConnection()) {
+            connection.setAutoCommit(false); // Start transaction
+
+            try (PreparedStatement selectStmt = connection.prepareStatement(
+                    "SELECT * FROM `" + identifier + "` WHERE uuid = ? FOR UPDATE")) {
+                selectStmt.setString(1, uuid.toString());
+                ResultSet rs = selectStmt.executeQuery();
+
+                if (!rs.next()) {
+                    try (PreparedStatement insertStmt = connection.prepareStatement(
+                            "REPLACE INTO `" + identifier + "` (uuid, score) VALUES (?, 0)")) {
+                        insertStmt.setString(1, uuid.toString());
+                        insertStmt.executeUpdate();
+                    }
+                }
+
+                connection.commit(); // Commit transaction
+            } catch (SQLException e) {
+                connection.rollback(); // Rollback on error
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
     @Override
     public void updateParticipant(String identifier, UUID uuid, int score) {
-        try (Connection connection = hikari.getConnection();
-             Statement statement = connection.createStatement()) {
-             statement.execute("UPDATE `" + identifier + "` SET score = " + score + " WHERE uuid='" + uuid.toString() + "';");
+        try (Connection connection = hikari.getConnection()) {
+            connection.setAutoCommit(false); // Start transaction
+
+            try (PreparedStatement selectStmt = connection.prepareStatement(
+                    "SELECT * FROM `" + identifier + "` WHERE uuid = ? FOR UPDATE")) {
+                selectStmt.setString(1, uuid.toString());
+                ResultSet rs = selectStmt.executeQuery();
+
+                if (rs.next()) {
+                    try (PreparedStatement updateStmt = connection.prepareStatement(
+                            "UPDATE `" + identifier + "` SET score = ? WHERE uuid = ?")) {
+                        updateStmt.setInt(1, score);
+                        updateStmt.setString(2, uuid.toString());
+                        updateStmt.executeUpdate();
+                    }
+                }
+
+                connection.commit(); // Commit transaction
+            } catch (SQLException e) {
+                connection.rollback(); // Rollback on error
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void clearParticipants(String identifier) {
@@ -193,12 +233,30 @@ public class MySQLHandler implements StorageHandler {
 
     @Override
     public void setPlayerScore(String identifier, String uuid, int score) {
-        try (Connection connection = hikari.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute("REPLACE INTO `" + identifier + "` (uuid, score) VALUES ('" + uuid + "'," + score + ");");
+        try (Connection connection = hikari.getConnection()) {
+            connection.setAutoCommit(false); // Start transaction
+
+            try (PreparedStatement selectStmt = connection.prepareStatement(
+                    "SELECT * FROM `" + identifier + "` WHERE uuid = ? FOR UPDATE")) {
+                selectStmt.setString(1, uuid);
+                ResultSet rs = selectStmt.executeQuery();
+
+                try (PreparedStatement replaceStmt = connection.prepareStatement(
+                        "REPLACE INTO `" + identifier + "` (uuid, score) VALUES (?, ?)")) {
+                    replaceStmt.setString(1, uuid);
+                    replaceStmt.setInt(2, score);
+                    replaceStmt.executeUpdate();
+                }
+
+                connection.commit(); // Commit transaction
+            } catch (SQLException e) {
+                connection.rollback(); // Rollback on error
+                Bukkit.getServer().getLogger().severe("There was an error while attempting to set the player score. Rolling back.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Bukkit.getServer().getLogger().severe("There was an error while attempting to execute the setPlayerScore SQL statement.");
         }
     }
+
 
 }
