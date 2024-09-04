@@ -100,6 +100,10 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         if (tournamentManager != null) {
             tournamentManager.onDisable(false);
         }
+
+        if (storageManager != null) {
+            storageManager.onDisable();
+        }
     }
 
     public void reload() {
