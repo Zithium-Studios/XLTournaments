@@ -1,8 +1,3 @@
-/*
- * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
- */
-
 package net.zithium.tournaments;
 
 import dev.triumphteam.gui.guis.BaseGui;
