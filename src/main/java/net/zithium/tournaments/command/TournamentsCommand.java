@@ -245,6 +245,11 @@ public class TournamentsCommand extends CommandBase {
             return;
         }
 
+        if (tournament.getParticipants().containsKey(targetPlayer.getUniqueId())) {
+            sender.sendMessage(ColorUtil.color("&cThis player is already in this tournament."));
+            return;
+        }
+
         // Add the player to the tournament
         tournament.addParticipant(targetPlayer.getUniqueId(), 0, true);
         Messages.FORCE_JOIN_PLAYER.send(sender, "{PLAYER}", targetPlayer.getName(), "{TOURNAMENT}", tournament.getIdentifier());
