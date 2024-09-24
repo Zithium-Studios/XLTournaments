@@ -1,8 +1,3 @@
-/*
- * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
- */
-
 package net.zithium.tournaments.command;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
@@ -214,6 +209,47 @@ public class TournamentsCommand extends CommandBase {
             sender.sendMessage(ColorUtil.color("&cCould not find a tournament with that ID."));
         }
     }
+
+
+    @SubCommand("forcejoin")
+    @Permission({"tournaments.admin", "tournaments.command.forcejoin"})
+    @WrongUsage("&c/tournament forcejoin <player/all> <tournament>")
+    @Completion({"#players", "#tournaments"})
+    public void forceJoinCommand(final CommandSender sender, final String targetInput, final String tournamentInput) {
+
+        Optional<Tournament> optionalTournament = plugin.getTournamentManager().getTournament(tournamentInput);
+
+        // Check if the tournament exists
+        if (optionalTournament.isEmpty()) {
+            sender.sendMessage(ColorUtil.color("&cCould not find tournament with that ID"));
+            return;
+        }
+
+        Tournament tournament = optionalTournament.get();
+
+        // Case 1: Force join all players
+        if (targetInput.equalsIgnoreCase("all")) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                tournament.addParticipant(player.getUniqueId(), 0, true);
+                Messages.FORCE_JOIN_PLAYER.send(sender, "{PLAYER}", player.getName(), "{TOURNAMENT}", tournament.getIdentifier());
+            }
+            Messages.FORCE_JOIN_ALL.send(sender, "{TOURNAMENT}", tournament.getIdentifier());
+            return;
+        }
+
+        // Case 2: Force join a specific player
+        Player targetPlayer = Bukkit.getPlayer(targetInput);
+
+        if (targetPlayer == null || !targetPlayer.isOnline()) {
+            sender.sendMessage(ColorUtil.color("&cThe player is invalid or offline."));
+            return;
+        }
+
+        // Add the player to the tournament
+        tournament.addParticipant(targetPlayer.getUniqueId(), 0, true);
+        Messages.FORCE_JOIN_PLAYER.send(sender, "{PLAYER}", targetPlayer.getName(), "{TOURNAMENT}", tournament.getIdentifier());
+    }
+
 
 
 }
