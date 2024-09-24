@@ -36,3 +36,6 @@ tournament:
   started: "{PREFIX} &aYou have started the {TOURNAMENT} tournament."
   already_stopped: "{PREFIX} &cThat tournament is not currently active."
   already_started: "{PREFIX} &fThat tournament is already active."
+
+  force_join_player: "{PREFIX} &fYou have forcefully added {PLAYER} to {TOURNAMENT}"
+  force_join_all: "{PREFIX} &fYou have forcefully added all online players to {TOURNAMENT}"

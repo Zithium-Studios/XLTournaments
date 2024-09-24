@@ -30,7 +30,9 @@ public enum Messages {
     STOPPED_TOURNAMENT("tournament.stopped"),
     STARTED_TOURNAMENT("tournament.started"),
     ALREADY_STOPPED("tournament.already_stopped"),
-    ALREADY_STARTED("tournament.already_started");
+    ALREADY_STARTED("tournament.already_started"),
+    FORCE_JOIN_PLAYER("tournament.force_join_player"),
+    FORCE_JOIN_ALL("tournament.force_join_all");
 
     private static FileConfiguration config;
     private final String path;
