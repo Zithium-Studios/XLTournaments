@@ -3,6 +3,7 @@ package net.zithium.tournaments.objective.internal;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.objective.XLObjective;
 import net.zithium.tournaments.tournament.Tournament;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -13,7 +14,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionType;
 
 public class PotionBrewObjective extends XLObjective {
 
@@ -40,34 +43,42 @@ public class PotionBrewObjective extends XLObjective {
 
         if (event.getAction() == InventoryAction.PICKUP_ALL || event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
             Player player = (Player) event.getWhoClicked();
-
             ItemStack item = event.getCurrentItem();
-            if (item != null) {
+
+            // Ensure the item is a potion and not a water bottle
+            if (item != null && item.getType() == Material.POTION) {
                 ItemMeta itemMeta = item.getItemMeta();
-                if (itemMeta != null) {
-                    // Check if the potion does not have the new PersistentDataType
-                    NamespacedKey key = new NamespacedKey(plugin, "XLPotion");
-                    PersistentDataType<Integer, Integer> dataType = PersistentDataType.INTEGER;
-                    Integer value = itemMeta.getPersistentDataContainer().get(key, dataType);
+                if (itemMeta instanceof PotionMeta) {
+                    PotionMeta potionMeta = (PotionMeta) itemMeta;
 
-                    if (value == null) {
-                        // The potion does not have the PersistentDataType set
-                        // Add a score to the player for the associated tournament to ensure no duping.
-                        for (Tournament tournament : getTournaments()) {
-                            if (canExecute(tournament, player)) {
-                                tournament.addScore(player.getUniqueId(), 1);
+                    // Check that the potion is not a water bottle
+                    if (potionMeta.getBasePotionData().getType() != PotionType.WATER) {
+                        NamespacedKey key = new NamespacedKey(plugin, "XLPotion");
+                        PersistentDataType<Integer, Integer> dataType = PersistentDataType.INTEGER;
+                        Integer value = potionMeta.getPersistentDataContainer().get(key, dataType);
+
+                        // Only award points if the potion has not been scored
+                        if (value == null) {
+                            for (Tournament tournament : getTournaments()) {
+                                if (canExecute(tournament, player)) {
+                                    tournament.addScore(player.getUniqueId(), 1);
+                                }
                             }
-                        }
 
-                        // Only apply the meta data if the configuration option is set to true.
-                        if (applyMetadata) {
-                            item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 1);
-                            itemMeta.getPersistentDataContainer().set(key, dataType, 0);
-                            item.setItemMeta(itemMeta);
+                            // Apply metadata if configuration option is set to true.
+                            if (applyMetadata) {
+                                item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 1);
+                            }
+
+                            // Mark the potion as scored to prevent future scoring
+                            potionMeta.getPersistentDataContainer().set(key, dataType, 1);
+                            item.setItemMeta(potionMeta);
                         }
                     }
                 }
             }
         }
     }
+
+
 }
