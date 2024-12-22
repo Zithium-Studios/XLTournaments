@@ -1,8 +1,3 @@
-/*
- * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
- */
-
 package net.zithium.tournaments.objective.internal;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
@@ -21,12 +16,9 @@ import java.util.Set;
 
 public class CraftTournament extends XLObjective {
 
-    private final XLTournamentsPlugin plugin;
 
-
-    public CraftTournament(XLTournamentsPlugin plugin) {
+    public CraftTournament() {
         super("ITEM_CRAFT");
-        this.plugin = plugin;
     }
 
     @Override
@@ -40,39 +32,50 @@ public class CraftTournament extends XLObjective {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onItemCraft(CraftItemEvent event) {
-        ItemStack craftedItem = event.getCurrentItem();
-        Player player = (Player) event.getWhoClicked();
+        if (!(event.getWhoClicked() instanceof Player)) return;
 
+        Player player = (Player) event.getWhoClicked();
+        ItemStack craftedItem = event.getRecipe().getResult(); // Get the recipe's result.
         if (craftedItem == null) return;
 
         int amount = craftedItem.getAmount();
 
-        // Ensure the inventory is not full before attempting to count items.
+        // Handle shift-click to calculate all items crafted in one go.
         if (event.isShiftClick()) {
-            if (player.getInventory().firstEmpty() == -1) {
-                amount = 1;
-            } else {
-                amount = craftedItem.getAmount();
-            }
+            // Estimate the maximum number of items crafted in one shift-click.
+            int maxPossibleCrafts = calculateMaxCrafts(event);
+            amount *= maxPossibleCrafts;
         }
 
         for (Tournament tournament : getTournaments()) {
-            if (!canExecute(tournament, player)) {
-                return;
-            }
+            if (!canExecute(tournament, player)) continue;
 
-            // Handle optional whitelist settings.
-            if (tournament.hasMeta("ITEM_WHITELIST")) {
-                @SuppressWarnings("unchecked")
-                Set<String> itemWhitelist = (Set<String>) tournament.getMeta("ITEM_WHITELIST");
-                Material craftedMaterial = craftedItem.getType();
+            Set<String> itemWhitelist = getItemWhitelist(tournament);
+            Material craftedMaterial = craftedItem.getType();
 
-                if (itemWhitelist.contains(craftedMaterial.toString())) {
-                    tournament.addScore(player.getUniqueId(), amount);
-                }
-            } else {
+            if (itemWhitelist == null || itemWhitelist.contains(craftedMaterial.toString())) {
                 tournament.addScore(player.getUniqueId(), amount);
             }
         }
+    }
+
+    private Set<String> getItemWhitelist(Tournament tournament) {
+        if (tournament.hasMeta("ITEM_WHITELIST")) {
+            return (Set<String>) tournament.getMeta("ITEM_WHITELIST");
+        }
+        return null;
+    }
+
+    private int calculateMaxCrafts(CraftItemEvent event) {
+        ItemStack[] matrix = event.getInventory().getMatrix();
+        int maxCrafts = Integer.MAX_VALUE;
+
+        for (ItemStack ingredient : matrix) {
+            if (ingredient != null) {
+                maxCrafts = Math.min(maxCrafts, ingredient.getAmount());
+            }
+        }
+
+        return maxCrafts;
     }
 }
