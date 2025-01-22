@@ -4,11 +4,11 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.17.12'
+version = '3.17.11'
 description = 'XLTournaments'
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 repositories {

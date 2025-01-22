@@ -67,7 +67,7 @@ public class PotionBrewObjective extends XLObjective {
 
                             // Apply metadata if configuration option is set to true.
                             if (applyMetadata) {
-                                item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 1);
+                                item.addUnsafeEnchantment(Enchantment.AQUA_AFFINITY, 1);
                             }
 
                             // Mark the potion as scored to prevent future scoring
