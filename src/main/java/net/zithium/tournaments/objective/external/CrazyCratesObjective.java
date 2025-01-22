@@ -5,8 +5,7 @@
 
 package net.zithium.tournaments.objective.external;
 
-import com.badbones69.crazycrates.api.events.CrateOpenEvent;
-import com.badbones69.crazycrates.api.events.PlayerPrizeEvent;
+import com.badbones69.crazycrates.paper.api.events.PlayerPrizeEvent;
 import net.zithium.tournaments.objective.XLObjective;
 import net.zithium.tournaments.tournament.Tournament;
 import org.bukkit.configuration.file.FileConfiguration;

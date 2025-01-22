@@ -120,7 +120,7 @@ public class ItemStackBuilder {
         final ItemMeta meta = ITEM_STACK.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         ITEM_STACK.setItemMeta(meta);
-        ITEM_STACK.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+        ITEM_STACK.addUnsafeEnchantment(Enchantment.AQUA_AFFINITY, 1);
         return this;
     }
 
