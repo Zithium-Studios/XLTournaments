@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.17.11'
+version = '3.17.12'
 description = 'XLTournaments'
 
 java {
@@ -30,10 +30,10 @@ dependencies {
     implementation('com.zaxxer:HikariCP:5.1.0')
     implementation('me.mattstudios.utils:matt-framework:1.4.6')
 
-    implementation('dev.triumphteam:triumph-gui:3.1.10')
+    implementation('dev.triumphteam:triumph-gui:3.1.11')
 
     implementation('org.bstats:bstats-bukkit:3.0.2')
-    implementation('com.github.ItzSave:ZithiumLibrary:v2.1.0')
+    implementation('com.github.ItzSave:ZithiumLibrary:v2.1.1')
 
     // Adventure
     implementation('net.kyori:adventure-text-minimessage:4.17.0')
