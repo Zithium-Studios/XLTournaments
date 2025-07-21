@@ -56,6 +56,7 @@ public class PlaceholderAPIObjective extends XLObjective {
                     try {
                         value = Integer.parseInt(PlaceholderAPI.setPlaceholders((OfflinePlayer) player, "%" + tournament.getMeta("PLACEHOLDER") + "%"));
                     } catch (Exception ex) {
+                        JAVA_PLUGIN.getLogger().warning("Couldn't convert placeholder value to valid number; %"+tournament.getMeta("PLACEHOLDER")+"% returned an invalid number for user "+player.getName());
                         continue;
                     }
 
