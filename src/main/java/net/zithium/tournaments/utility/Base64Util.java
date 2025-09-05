@@ -1,6 +1,6 @@
 package net.zithium.tournaments.utility;
 
-import net.zithium.library.version.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;

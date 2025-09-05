@@ -37,7 +37,7 @@ dependencies {
     //implementation('net.zithium.library:ZithiumLibrary:2.1.12')
 
     // Adventure
-    implementation "net.kyori:adventure-api:4.24.0"
+    implementation "net.kyori:adventure-text-minimessage:4.24.0"
 
     // XSeries
     implementation("com.github.cryptomorin:XSeries:13.3.2")
