@@ -26,11 +26,11 @@ public class PlayerFishObjective extends XLObjective {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerFish(PlayerFishEvent event) {
-        if(event.getState() != PlayerFishEvent.State.CAUGHT_FISH) return;
+        if (event.getState() != PlayerFishEvent.State.CAUGHT_FISH) return;
 
         Player player = event.getPlayer();
-        for(Tournament tournament : getTournaments()) {
-            if(canExecute(tournament, player)) {
+        for (Tournament tournament : getTournaments()) {
+            if (canExecute(tournament, player)) {
                 tournament.addScore(player.getUniqueId(), 1);
             }
         }
