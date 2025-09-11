@@ -14,12 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -73,11 +68,6 @@ public class ItemStackBuilder {
 
         if (section.contains("model_data")) {
             builder.withCustomData(section.getInt("model_data"));
-        }
-
-        if (section.contains("potion_effect")) {
-            @Nullable String potionEffect = section.getString("potion_effect");
-            builder.withPotionEffect(PotionEffectType.getByName(potionEffect));
         }
 
         if (section.contains("item_flags")) {
@@ -183,21 +173,6 @@ public class ItemStackBuilder {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         ITEM_STACK.setItemMeta(meta);
         ITEM_STACK.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 1);
-        return this;
-    }
-
-    public ItemStackBuilder withPotionEffect(PotionEffectType type) {
-        final ItemMeta meta = ITEM_STACK.getItemMeta();
-        if (ITEM_STACK.getType() != Material.TIPPED_ARROW && !ITEM_STACK.getType().name().contains("POTION"))
-            return this;
-        final PotionMeta potionMeta = (PotionMeta) ITEM_STACK.getItemMeta();
-
-        if (ITEM_STACK.getType() == Material.TIPPED_ARROW) {
-            potionMeta.setBasePotionData(new PotionData(PotionType.getByEffect(type)));
-        } else {
-            potionMeta.addCustomEffect(new PotionEffect(type, 1, 1), true);
-        }
-
         return this;
     }
 
