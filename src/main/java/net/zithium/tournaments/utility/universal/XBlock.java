@@ -5,7 +5,7 @@
 
 package net.zithium.tournaments.utility.universal;
 
-import net.zithium.library.version.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.CropState;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;

@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.17.12'
+version = '3.17.13'
 description = 'XLTournaments'
 
 java {
@@ -14,7 +14,7 @@ java {
 repositories {
     mavenCentral()
 
-    maven { url = "https://repo.papermc.io/repository/maven-public/" }
+    maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
     maven { url = uri('https://oss.sonatype.org/content/groups/public') }
     maven { url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/') }
     maven { url = uri('https://jitpack.io') }
@@ -29,15 +29,18 @@ repositories {
 dependencies {
     implementation('com.zaxxer:HikariCP:5.1.0')
     implementation('me.mattstudios.utils:matt-framework:1.4.6')
+    implementation("com.github.cryptomorin:XSeries:v13.3.3")
 
     implementation('dev.triumphteam:triumph-gui:3.1.11')
 
     implementation('org.bstats:bstats-bukkit:3.0.2')
-    implementation('com.github.ItzSave:ZithiumLibrary:v2.1.1')
+    //implementation('net.zithium.library:ZithiumLibrary:2.1.12')
 
     // Adventure
-    implementation('net.kyori:adventure-text-minimessage:4.17.0')
-    implementation('net.kyori:adventure-text-serializer-legacy:4.17.0')
+    implementation "net.kyori:adventure-text-minimessage:4.24.0"
+
+    // XSeries
+    implementation("com.github.cryptomorin:XSeries:13.3.2")
 
     // Apache
     implementation 'org.apache.commons:commons-lang3:3.12.0'
@@ -79,7 +82,9 @@ shadowJar {
     relocate 'org.codemc.worldguardwrapper', 'net.zithium.tournaments.libs.worldguardwrapper' // Worldguard Wrapper
     relocate 'com.zaxxer.hikari', 'net.zithium.tournaments.libs.hikari' // SQLite (HikariCP)
     relocate 'org.bstats', 'net.zithium.tournaments.libs.metrics' // bStats
-    relocate 'net.zithium.library', 'net.zithium.tournaments.libs.library' // ZithiumLibrary
+   // relocate 'net.zithium.library', 'net.zithium.tournaments.libs.library' // ZithiumLibrary
+    relocate 'com.cryptomorin.xseries', 'net.zithium.tournaments.libs.xseries' // XSound, XMaterial (TEMPORARY)
 
     relocate "net.kyori.adventure", "net.zithium.tournaments.libs.adventure"
+
 }

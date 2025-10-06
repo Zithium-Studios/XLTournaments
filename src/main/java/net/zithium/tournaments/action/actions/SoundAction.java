@@ -5,9 +5,9 @@
 
 package net.zithium.tournaments.action.actions;
 
+import com.cryptomorin.xseries.XSound;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.action.Action;
-import net.zithium.library.version.XSound;
 import org.bukkit.entity.Player;
 
 public class SoundAction implements Action {

@@ -1,8 +1,3 @@
-/*
- * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
- */
-
 package net.zithium.tournaments.objective.internal;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
@@ -16,7 +11,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class PlaytimeObjective extends XLObjective {
 
-    private final JavaPlugin JAVA_PLUGIN = JavaPlugin.getProvidingPlugin(XLTournamentsPlugin.class);
+    private final JavaPlugin plugin = JavaPlugin.getProvidingPlugin(XLTournamentsPlugin.class);
     private BukkitTask task;
 
     public PlaytimeObjective() {
@@ -26,10 +21,9 @@ public class PlaytimeObjective extends XLObjective {
     @Override
     public boolean loadTournament(Tournament tournament, FileConfiguration config) {
         if (task == null || task.isCancelled()) {
-            int time = JAVA_PLUGIN.getConfig().getInt("playtime_objective_task_update", 200);
-            task = Bukkit.getScheduler().runTaskTimerAsynchronously(JAVA_PLUGIN, this::updatePlaytime, 20L, time);
+            int intervalTicks = plugin.getConfig().getInt("playtime_objective_task_update", 200);
+            task = Bukkit.getScheduler().runTaskTimer(plugin, this::updatePlaytime, 20L, intervalTicks);
         }
-
         return true;
     }
 
@@ -37,10 +31,12 @@ public class PlaytimeObjective extends XLObjective {
         for (Player player : Bukkit.getOnlinePlayers()) {
             for (Tournament tournament : getTournaments()) {
                 if (canExecute(tournament, player)) {
-                    tournament.addScore(player.getUniqueId(), 10);
+                    int intervalTicks = plugin.getConfig().getInt("playtime_objective_task_update", 200);
+                    int seconds = intervalTicks / 20; // convert ticks → seconds
+
+                    tournament.addScore(player.getUniqueId(), seconds);
                 }
             }
         }
     }
-
 }
