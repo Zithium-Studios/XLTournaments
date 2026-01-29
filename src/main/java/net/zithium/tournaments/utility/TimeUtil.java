@@ -109,15 +109,15 @@ public class TimeUtil {
         switch (timeline) {
             case WEEKLY:
                 time = ZonedDateTime.of(LocalDateTime.of(time.with(DayOfWeek.MONDAY).toLocalDate(),
-                        time.toLocalDate().atStartOfDay().toLocalTime()), zoneId);
+                        time.toLocalDate().atStartOfDay().toLocalTime()), zoneId).plusMinutes(2);
                 break;
             case MONTHLY:
                 time = ZonedDateTime.of(LocalDateTime.of(time.with(TemporalAdjusters.firstDayOfMonth()).toLocalDate(),
-                        time.toLocalDate().atStartOfDay().toLocalTime()), zoneId);
+                        time.toLocalDate().atStartOfDay().toLocalTime()), zoneId).plusMinutes(2);
                 break;
             case DAILY:
                 time = ZonedDateTime.of(LocalDateTime.of(time.toLocalDate(),
-                        time.toLocalDate().atStartOfDay().toLocalTime()), zoneId);
+                        time.toLocalDate().atStartOfDay().toLocalTime()), zoneId).plusMinutes(2);
                 break;
             case HOURLY:
                 time = time.withMinute(0).withSecond(0).withNano(0);
