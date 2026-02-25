@@ -76,24 +76,42 @@ public class TournamentGUI {
                     if (optionalTournament.isEmpty()) continue;
                     Tournament tournament = optionalTournament.get();
 
-                    // Not displaying tournaments in the menu if they are not running.
-                    if (HIDE_COMPLETED_TOURNAMENTS) {
-                        if (tournament.getStatus() == TournamentStatus.ENDED) {
-                            continue;
-                        }
+
+                    if (HIDE_COMPLETED_TOURNAMENTS && tournament.getStatus() == TournamentStatus.ENDED) {
+                        continue;
                     }
+
+                    String basePath = section.getCurrentPath() + "." + entry;
 
                     ItemStackBuilder builder = null;
                     TournamentStatus status = tournament.getStatus();
                     if (status == TournamentStatus.ACTIVE) {
-                        builder = ItemStackBuilder.getItemStack(config.getConfigurationSection(section.getCurrentPath() + "." + entry + ".active"));
-                        builder.withLore(TextUtil.setPlaceholders(config.getStringList(section.getCurrentPath() + "." + entry + ".active.lore"), player.getUniqueId(), tournament));
+                        builder = ItemStackBuilder.getItemStack(
+                                config.getConfigurationSection(basePath + ".active")
+                        );
+                        builder.withLore(TextUtil.setPlaceholders(
+                                config.getStringList(basePath + ".active.lore"),
+                                player.getUniqueId(),
+                                tournament
+                        ));
                     } else if (status == TournamentStatus.WAITING) {
-                        builder = ItemStackBuilder.getItemStack(config.getConfigurationSection(section.getCurrentPath() + "." + entry + ".waiting"));
-                        builder.withLore(TextUtil.setPlaceholders(config.getStringList(section.getCurrentPath() + "." + entry + ".waiting.lore"), player.getUniqueId(), tournament));
+                        builder = ItemStackBuilder.getItemStack(
+                                config.getConfigurationSection(basePath + ".waiting")
+                        );
+                        builder.withLore(TextUtil.setPlaceholders(
+                                config.getStringList(basePath + ".waiting.lore"),
+                                player.getUniqueId(),
+                                tournament
+                        ));
                     } else if (status == TournamentStatus.ENDED) {
-                        builder = ItemStackBuilder.getItemStack(config.getConfigurationSection(section.getCurrentPath() + "." + entry + ".ended"));
-                        builder.withLore(TextUtil.setPlaceholders(config.getStringList(section.getCurrentPath() + "." + entry + ".ended.lore"), player.getUniqueId(), tournament));
+                        builder = ItemStackBuilder.getItemStack(
+                                config.getConfigurationSection(basePath + ".ended")
+                        );
+                        builder.withLore(TextUtil.setPlaceholders(
+                                config.getStringList(basePath + ".ended.lore"),
+                                player.getUniqueId(),
+                                tournament
+                        ));
                     }
 
                     GuiItem guiItem = new GuiItem(builder.build());
@@ -147,12 +165,11 @@ public class TournamentGUI {
 
                     gui.addItem(guiItem);
 
-                    // Adding the next & previous page items.
-                    addPageItems(gui);
-
                 }
             }
         }
+
+        addPageItems(gui);
         gui.open(player);
 
     }
