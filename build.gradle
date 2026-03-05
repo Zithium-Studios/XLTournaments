@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.17.14'
+version = '3.17.15'
 description = 'XLTournaments'
 
 java {
@@ -29,7 +29,7 @@ repositories {
 dependencies {
     implementation('com.zaxxer:HikariCP:5.1.0')
     implementation('me.mattstudios.utils:matt-framework:1.4.6')
-    implementation("com.github.cryptomorin:XSeries:v13.3.3")
+    implementation("com.github.cryptomorin:XSeries:13.6.0")
 
     implementation('dev.triumphteam:triumph-gui:3.1.11')
 
