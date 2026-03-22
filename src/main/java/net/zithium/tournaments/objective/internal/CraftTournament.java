@@ -1,6 +1,5 @@
 package net.zithium.tournaments.objective.internal;
 
-import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.objective.XLObjective;
 import net.zithium.tournaments.tournament.Tournament;
 import org.bukkit.Material;
@@ -35,25 +34,31 @@ public class CraftTournament extends XLObjective {
         if (!(event.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) event.getWhoClicked();
-        ItemStack craftedItem = event.getRecipe().getResult(); // Get the recipe's result.
-        if (craftedItem == null) return;
 
-        int amount = craftedItem.getAmount();
+        // Check if the crafting action was actually successful
+        if (event.getRecipe() == null) return;
 
-        // Handle shift-click to calculate all items crafted in one go.
+        ItemStack craftedItem = event.getRecipe().getResult();
+        if (craftedItem == null || craftedItem.getType() == Material.AIR) return;
+
+        int amount = 0;
+
         if (event.isShiftClick()) {
-            // Estimate the maximum number of items crafted in one shift-click.
-            int maxPossibleCrafts = calculateMaxCrafts(event);
-            amount *= maxPossibleCrafts;
+            amount = calculateMaxCrafts(event) * craftedItem.getAmount();
+        } else {
+            ItemStack cursor = event.getCursor();
+            if (cursor != null && cursor.getType() != Material.AIR && !cursor.isSimilar(craftedItem)) {
+                return;
+            }
+            amount = craftedItem.getAmount();
         }
 
+        // Apply the score to active tournaments
         for (Tournament tournament : getTournaments()) {
             if (!canExecute(tournament, player)) continue;
 
             Set<String> itemWhitelist = getItemWhitelist(tournament);
-            Material craftedMaterial = craftedItem.getType();
-
-            if (itemWhitelist == null || itemWhitelist.contains(craftedMaterial.toString())) {
+            if (itemWhitelist == null || itemWhitelist.contains(craftedItem.getType().toString())) {
                 tournament.addScore(player.getUniqueId(), amount);
             }
         }

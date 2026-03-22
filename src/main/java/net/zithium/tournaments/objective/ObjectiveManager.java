@@ -39,7 +39,6 @@ public class ObjectiveManager {
         // Register External Objectives
         registerObjective(new ChatReactionObjective(), "ChatReaction");
         registerObjective(new EZPrestigeObjective(), "EZPrestige");
-        registerObjective(new CrazyCratesObjective(), "CrazyCrates");
         registerObjective(new CrazyEnvoyObjective(), "CrazyEnvoys");
         registerObjective(new NuVotifierObjective(), "Votifier");
         registerObjective(new CrackShotDamageObjective(), "CrackShot");
