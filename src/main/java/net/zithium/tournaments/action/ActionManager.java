@@ -1,5 +1,6 @@
 package net.zithium.tournaments.action;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.zithium.tournaments.XLTournamentsPlugin;
 import net.zithium.tournaments.action.actions.*;
 import net.zithium.tournaments.tournament.Tournament;
@@ -54,6 +55,7 @@ public class ActionManager {
                     item = item.contains(" ") ? item.split(" ", 2)[1] : "";
                     if (player != null) {
                         item = item.replace("{PLAYER}", player.getName());
+                        item = PlaceholderAPI.setPlaceholders(player, item);
 
                         if(tournament != null) {
                             item = TextUtil.setPlaceholders(item, player.getUniqueId(), tournament);

@@ -145,7 +145,9 @@ public class TournamentManager {
             List<String> actions = new ArrayList<>(handler.getPlayerQueueActions(uuid.toString()));
             if (!actions.isEmpty()) {
                 plugin.getStorageManager().getStorageHandler().removeQueueActions(uuid.toString());
-                Bukkit.getScheduler().runTask(plugin, () -> plugin.getActionManager().executeActions(player, actions));
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    plugin.getActionManager().executeActions(player, actions);
+                }, 60L);
             }
 
             for (Tournament tournament : getTournaments()) {
