@@ -1,8 +1,3 @@
-/*
- * XLTournaments Plugin
- * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
- */
-
 package net.zithium.tournaments.utility;
 
 import java.math.BigDecimal;
@@ -11,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class TimeUtil {
@@ -48,46 +45,32 @@ public class TimeUtil {
         return String.format("%02ds", sec);
     }
 
+    /**
+     * Returns a human-readable string representing the time remaining until the given date.
+     * <p>
+     * The result is formatted as a space-separated string of time components, e.g.
+     * {@code "2d 4h 30m 15s"}, omitting any components with a zero value. Returns
+     * {@code "None"} if the given date is in the past or if no time components are non-zero.
+     *
+     * @param later the future {@link ZonedDateTime} to calculate remaining time until
+     * @return a formatted string of the remaining time, or {@code "None"} if the date has passed
+     */
     public static String getStringBetweenDates(ZonedDateTime later) {
-        String remaining = null;
-        long l = ZonedDateTime.now(later.getZone()).toInstant().toEpochMilli();
-        long l1 = later.toInstant().toEpochMilli();
-        long rem = Math.abs(l1 - l);
+        long now = ZonedDateTime.now(later.getZone()).toInstant().toEpochMilli();
+        long then = later.toInstant().toEpochMilli();
+        long rem = then - now;
 
-        if (rem > 0) {
+        if (rem <= 0) return "None";
 
-            int[] times = splitSeconds(new BigDecimal(rem / 1000));
-            if (times[0] > 0) {
-                remaining = times[0] + "d";
-            }
-            if (times[1] > 0) {
-                if (remaining == null) {
-                    remaining = times[1] + "h";
-                } else {
-                    remaining = remaining + " " + times[1] + "h";
-                }
-            }
-            if (times[2] > 0) {
-                if (remaining == null) {
-                    remaining = times[2] + "m";
-                } else {
-                    remaining = remaining + " " + times[2] + "m";
-                }
-            }
-            if (times[3] > 0) {
-                if (remaining == null) {
-                    remaining = times[3] + "s";
-                } else {
-                    remaining = remaining + " " + times[3] + "s";
-                }
-            }
-        }
+        int[] times = splitSeconds(new BigDecimal(rem / 1000));
 
-        if (remaining == null) {
-            remaining = "None";
-        }
+        List<String> parts = new ArrayList<>();
+        if (times[0] > 0) parts.add(times[0] + "d");
+        if (times[1] > 0) parts.add(times[1] + "h");
+        if (times[2] > 0) parts.add(times[2] + "m");
+        if (times[3] > 0) parts.add(times[3] + "s");
 
-        return remaining;
+        return parts.isEmpty() ? "None" : String.join(" ", parts);
     }
 
     public static int[] splitSeconds(BigDecimal seconds) {
