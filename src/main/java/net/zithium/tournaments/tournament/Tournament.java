@@ -153,7 +153,7 @@ public class Tournament {
         status = TournamentStatus.ENDED;
         
         if (updateTask != null) updateTask.cancel();
-        update();
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, this::update);
 
         Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this, new TournamentData(identifier, gameUniqueId, new LinkedHashMap<>(sortedParticipants))));
 
