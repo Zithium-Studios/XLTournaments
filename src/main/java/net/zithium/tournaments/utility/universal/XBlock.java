@@ -5,7 +5,7 @@
 
 package net.zithium.tournaments.utility.universal;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.reflection.XReflection;
 import org.bukkit.CropState;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -20,7 +20,7 @@ import org.bukkit.material.MaterialData;
 public final class XBlock {
 
     public static boolean isCrop(Block block) {
-        if (XMaterial.supports(13)) {
+        if (XReflection.supports(1, 13)) {
             return block.getBlockData() instanceof org.bukkit.block.data.Ageable;
         }
 
@@ -36,7 +36,7 @@ public final class XBlock {
      * @return {@code true} if the block is a fully grown crop of a recognized type, {@code false} otherwise.
      */
     public static boolean isCropFullyGrown(Block block) {
-        if (XMaterial.supports(13) && block.getBlockData() instanceof org.bukkit.block.data.Ageable) {
+        if (XReflection.supports(1, 13) && block.getBlockData() instanceof org.bukkit.block.data.Ageable) {
             org.bukkit.block.data.Ageable ageable = (org.bukkit.block.data.Ageable) block.getBlockData();
             String blockType = block.getType().toString();
 
@@ -55,49 +55,4 @@ public final class XBlock {
 
         return false; // Block is not an Ageable crop or not fully grown
     }
-
-    /*
-    public static String getCropType(Block block) {
-        XMaterial xMaterial = XMaterial.matchXMaterial(block.getType());
-
-        if (xMaterial != null) {
-            if (xMaterial == XMaterial.WHEAT) {
-                byte data = block.getData(); // Get the block's data (growth stage)
-
-                if (data >= 0 && data <= 7) {
-                    return "WHEAT"; // Wheat has growth stages 0 to 7
-                }
-            } else if (xMaterial == XMaterial.CARROT) {
-                byte data = block.getData(); // Get the block's data (growth stage)
-
-                if (data >= 8 && data <= 15) {
-                    return "CARROT"; // Carrots have growth stages 8 to 15
-                }
-            } else if (xMaterial == XMaterial.POTATO) {
-                byte data = block.getData(); // Get the block's data (growth stage)
-
-                if (data >= 0 && data <= 7) {
-                    return "POTATO"; // Potatoes have growth stages 0 to 7
-                }
-            } else if (xMaterial == XMaterial.NETHER_WART) {
-                byte data = block.getData(); // Get the block's data (growth stage)
-
-                if (data >= 0 && data <= 2) {
-                    return "NETHER_WART"; // Nether Wart has growth stages 0 to 2
-                }
-            } else if (xMaterial == XMaterial.COCOA_BEANS) {
-                byte data = block.getData(); // Get the block's data (age)
-
-                if (data >= 0 && data <= 8) {
-                    return "COCOA"; // Cocoa has three growth stages (0 to 8)
-                }
-            }
-        }
-
-        // If it's none of the recognized crop types, return "UNKNOWN"
-        return "UNKNOWN";
-    }
-
-     */
-
 }
