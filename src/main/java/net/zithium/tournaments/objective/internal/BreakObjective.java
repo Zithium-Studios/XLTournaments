@@ -38,7 +38,6 @@ public class BreakObjective extends XLObjective {
             try {
                 Bukkit.getServer().getPluginManager().registerEvents(new TEBlockExplode(this, excludePlaced), plugin);
             } catch (Exception e) {
-                // Handle the exception
                 plugin.getLogger().warning("Failed to register TokenEnchant event.");
             }
         }
@@ -54,6 +53,10 @@ public class BreakObjective extends XLObjective {
 
         if (config.contains("block_whitelist")) {
             tournament.setMeta("BLOCK_WHITELIST_" + tournament.getIdentifier(), config.getStringList("block_whitelist"));
+        }
+
+        if (config.contains("block_blacklist")) {
+            tournament.setMeta("BLOCK_BLACKLIST_" + tournament.getIdentifier(), config.getStringList("block_blacklist"));
         }
         return true;
     }
@@ -73,21 +76,27 @@ public class BreakObjective extends XLObjective {
             }
 
             String tournamentIdentifier = tournament.getIdentifier();
+            String blockType = block.getType().toString();
 
             if (tournament.hasMeta("BLOCK_WHITELIST_" + tournamentIdentifier)) {
+                // Whitelist takes precedence — only score if block is in the whitelist
                 List<String> whitelist = (List<String>) tournament.getMeta("BLOCK_WHITELIST_" + tournamentIdentifier);
-                String blockType = block.getType().toString();
-
-
                 if (whitelist.contains(blockType)) {
                     tournament.addScore(player.getUniqueId(), 1);
                 }
+
+            } else if (tournament.hasMeta("BLOCK_BLACKLIST_" + tournamentIdentifier)) {
+                // No whitelist — score all blocks except those in the blacklist
+                List<String> blacklist = (List<String>) tournament.getMeta("BLOCK_BLACKLIST_" + tournamentIdentifier);
+                if (!blacklist.contains(blockType)) {
+                    tournament.addScore(player.getUniqueId(), 1);
+                }
+
             } else {
-                // Ignore the whitelist if not present.
+                // No whitelist or blacklist — score everything
                 tournament.addScore(player.getUniqueId(), 1);
             }
         }
-
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
