@@ -35,18 +35,23 @@ public class WebhookListener implements Listener {
 
         String content = config.getString("discord_webhook.content", "'discord_webhook.content' not found.");
 
-        for (int i = 1; i <= 3; i++) {
-            OfflinePlayer player = tournament.getPlayerFromPosition(i);
-            if (player != null) {
-                String playerName = player.getName();
-                if (playerName != null) {
-                    content = content.replace("{" + i + "_PLACE}", playerName);
-                }
-            } else {
-                content = content.replace("{" + i + "_PLACE}", "Unknown");
-            }
+        boolean blockZeroScoreRewards = config.getBoolean("block_zero_score_rewards", false);
 
-            Integer playerScore = tournament.getScoreFromPosition(i);
+        for (int i = 1; i <= 3; i++) {
+            int playerScore = tournament.getScoreFromPosition(i);
+
+            if (blockZeroScoreRewards && playerScore == 0) {
+                content = content.replace("{" + i + "_PLACE}", "No score");
+            } else {
+                OfflinePlayer player = tournament.getPlayerFromPosition(i);
+                if (player != null) {
+                    String playerName = player.getName();
+                        content = content.replace("{" + i + "_PLACE}", playerName != null ? playerName : "Unknown");
+                    } else {
+                        content = content.replace("{" + i + "_PLACE}", "Unknown");
+                    }
+                }
+
             content = content.replace("{" + i + "_SCORE}", String.valueOf(playerScore));
         }
 
