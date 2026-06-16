@@ -159,9 +159,18 @@ public class Tournament {
 
         if (challenge) return;
 
+        boolean blockZeroScoreRewards = plugin.getConfig().getBoolean("block_zero_score_rewards", false);
+
         for (int position : rewards.keySet()) {
             OfflinePlayer player = getPlayerFromPosition(position);
             if (player == null) continue;
+
+            // Skip reward delivery if block_zero_score_rewards is enabled and the player's score is zero
+            if (blockZeroScoreRewards && getScoreFromPosition(position) == 0) {
+                if (debug()) plugin.getLogger().log(Level.INFO, "Skipping reward for position " + position + " — score is zero.");
+                continue;
+            }
+
             if (player.isOnline()) {
                 Bukkit.getScheduler().runTask(plugin, () -> actionManager.executeActions(player.getPlayer(), rewards.get(position)));
                 if (debug()) plugin.getLogger().log(Level.INFO, "Executed end actions for " + player.getName() + "(" + player.getUniqueId() + ")");
