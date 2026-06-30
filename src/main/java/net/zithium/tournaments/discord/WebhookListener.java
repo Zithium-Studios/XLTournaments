@@ -11,10 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.logging.Level;
-
 public class WebhookListener implements Listener {
 
     private final XLTournamentsPlugin plugin;
@@ -53,16 +49,7 @@ public class WebhookListener implements Listener {
         webhook.setContent(content);
         webhook.setAvatarUrl(config.getString("discord_webhook.avatar_url"));
 
-        final String finalContent = content; // effectively final for lambda
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                webhook.execute();
-            } catch (MalformedURLException ex) {
-                plugin.getLogger().severe("Unable to send Discord webhook for tournament '" + tournament.getIdentifier() + "': Invalid URL");
-            } catch (IOException | NullPointerException ex) {
-                plugin.getLogger().severe("There was an error attempting to send the webhook! Error: " + ex);
-            }
-        });
+        plugin.getWebhookQueue().enqueue(webhook, tournament.getIdentifier());
     }
 
 }

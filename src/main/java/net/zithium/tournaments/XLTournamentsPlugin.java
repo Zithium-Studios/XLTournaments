@@ -5,6 +5,7 @@ import net.zithium.tournaments.action.ActionManager;
 import net.zithium.tournaments.command.TournamentsCommand;
 import net.zithium.tournaments.config.ConfigHandler;
 import net.zithium.tournaments.discord.WebhookListener;
+import net.zithium.tournaments.discord.WebhookQueue;
 import net.zithium.tournaments.hook.HookManager;
 import net.zithium.tournaments.hook.hooks.PlaceholderAPIHook;
 import net.zithium.tournaments.menu.MenuManager;
@@ -34,6 +35,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
     private MenuManager menuManager;
     private HookManager hookManager;
     private static boolean debugMode;
+    private WebhookQueue webhookQueue;
 
     private ConfigHandler messagesFile, menuFile;
 
@@ -42,7 +44,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         getLogger().info("");
         getLogger().info("\\/|      XLTournaments v" + getDescription().getVersion());
         getLogger().info("/\\|_     Author: " + getDescription().getAuthors());
-        getLogger().info("         Copyright (c) Zithium Studios 2023. All Rights Reserved.");
+        getLogger().info("         Copyright (c) Zithium Studios 2026. All Rights Reserved.");
         getLogger().info("");
         getLogger().info("Loading plugin..");
 
@@ -75,6 +77,7 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
         getLogger().info("");
 
         if (getConfig().getBoolean("discord_webhook.enable", false)) {
+            webhookQueue = new WebhookQueue(this);
             new WebhookListener(this);
         }
 
@@ -162,6 +165,10 @@ public final class XLTournamentsPlugin extends JavaPlugin implements XLTournamen
 
     public void setDebugMode() {
         debugMode = getConfig().getBoolean("debug", false);
+    }
+
+    public WebhookQueue getWebhookQueue() {
+        return webhookQueue;
     }
 
     @Override
