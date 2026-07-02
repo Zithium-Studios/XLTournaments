@@ -142,18 +142,20 @@ public class MySQLHandler implements StorageHandler {
 
     @Override
     public List<String> getPlayerQueueActions(String uuid) {
+        List<String> actions = new ArrayList<>();
         try (Connection connection = hikari.getConnection();
-             Statement statement = connection.createStatement()) {
-            List<String> actions = new ArrayList<>();
-            ResultSet rs = statement.executeQuery("SELECT action FROM action_queue WHERE uuid='" + uuid + "';");
-            while (rs.next()) {
-                actions.add(rs.getString("action"));
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT action FROM action_queue WHERE uuid = ?")) {
+            statement.setString(1, uuid);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    actions.add(rs.getString("action"));
+                }
             }
-            return actions;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Collections.emptyList();
+        return actions;
     }
 
     @Override
