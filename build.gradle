@@ -34,7 +34,7 @@ dependencies {
 
     implementation('dev.triumphteam:triumph-gui:3.1.13')
 
-    implementation('org.bstats:bstats-bukkit:3.0.2')
+    implementation('org.bstats:bstats-bukkit:3.2.1')
 
     // Adventure
     implementation "net.kyori:adventure-text-minimessage:4.24.0"
