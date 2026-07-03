@@ -11,10 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.logging.Level;
-
 public class WebhookListener implements Listener {
 
     private final XLTournamentsPlugin plugin;
@@ -26,41 +22,34 @@ public class WebhookListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onTournamentEnd(@NotNull TournamentEndEvent event) {
-
         Tournament tournament = event.getTournament();
-        plugin.getLogger().log(Level.INFO, "Tournament 1st placement: " + tournament.getPlayerFromPosition(1));
+        plugin.getLogger().info("Tournament 1st placement: " + tournament.getPlayerFromPosition(1));
 
         FileConfiguration config = plugin.getConfig();
-        DiscordWebhook webhook = new DiscordWebhook(config.getString("discord_webhook.url"));
+        String url = config.getString("discord_webhook.url");
 
+        if (url == null || url.isBlank()) {
+            plugin.getLogger().warning("Discord webhook URL is not configured.");
+            return;
+        }
+
+        DiscordWebhook webhook = new DiscordWebhook(url);
         String content = config.getString("discord_webhook.content", "'discord_webhook.content' not found.");
 
         for (int i = 1; i <= 3; i++) {
             OfflinePlayer player = tournament.getPlayerFromPosition(i);
-            if (player != null) {
-                String playerName = player.getName();
-                if (playerName != null) {
-                    content = content.replace("{" + i + "_PLACE}", playerName);
-                }
-            } else {
-                content = content.replace("{" + i + "_PLACE}", "Unknown");
-            }
+            String playerName = (player != null && player.getName() != null) ? player.getName() : "Unknown";
+            content = content.replace("{" + i + "_PLACE}", playerName);
 
             Integer playerScore = tournament.getScoreFromPosition(i);
-            content = content.replace("{" + i + "_SCORE}", String.valueOf(playerScore));
+            content = content.replace("{" + i + "_SCORE}", playerScore != null ? String.valueOf(playerScore) : "0");
         }
 
         content = content.replace("{TOURNAMENT}", tournament.getIdentifier());
         webhook.setContent(content);
-
         webhook.setAvatarUrl(config.getString("discord_webhook.avatar_url"));
-        try {
-            webhook.execute();
-        } catch (MalformedURLException ex) {
-            plugin.getLogger().severe("Unable to send Discord webhook for tournament '" + tournament.getIdentifier() + "': Invalid URL");
-        } catch (IOException | NullPointerException ex) {
-            plugin.getLogger().severe("There was an error attempting to send the webhook! Error: " + ex);
-        }
+
+        plugin.getWebhookQueue().enqueue(webhook, tournament.getIdentifier());
     }
 
 }

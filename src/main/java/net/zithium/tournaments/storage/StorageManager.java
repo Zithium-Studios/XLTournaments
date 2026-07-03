@@ -21,7 +21,7 @@ public class StorageManager {
     public void onEnable() {
         String storageType = plugin.getConfig().getString("storage.type");
 
-        switch(storageType.toUpperCase()) {
+        switch (storageType.toUpperCase()) {
             case "SQLITE":
                 storageHandler = new SQLiteHandler();
                 break;
@@ -33,7 +33,7 @@ public class StorageManager {
 
         }
 
-        if(!storageHandler.onEnable(plugin)) {
+        if (!storageHandler.onEnable(plugin)) {
             plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
     }
