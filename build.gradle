@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.zithium'
-version = '3.18.0'
+version = '3.18.0-BETA'
 
 description = 'XLTournaments'
 
@@ -30,7 +30,7 @@ repositories {
 dependencies {
     implementation('com.zaxxer:HikariCP:5.1.0')
     implementation('me.mattstudios.utils:matt-framework:1.4.6')
-    implementation("com.github.cryptomorin:XSeries:13.6.0")
+    implementation("com.github.cryptomorin:XSeries:13.7.1")
 
     implementation('dev.triumphteam:triumph-gui:3.1.13')
 
