@@ -106,11 +106,13 @@ public class TournamentBuilder {
 
         withParticipationActions(config.getStringList("participation.join_actions"));
 
-        Map<Integer, List<String>> rewards = new HashMap<>();
-        for (String place : config.getConfigurationSection("rewards").getKeys(false)) {
-            rewards.put(Integer.parseInt(place), config.getStringList("rewards." + place));
+        if (config.contains("rewards") && config.getConfigurationSection("rewards") != null) {
+            Map<Integer, List<String>> rewards = new HashMap<>();
+            for (String place : config.getConfigurationSection("rewards").getKeys(false)) {
+                rewards.put(Integer.parseInt(place), config.getStringList("rewards." + place));
+            }
+            withRewards(rewards);
         }
-        withRewards(rewards);
 
         withStartActions(config.getStringList("start_actions"));
         withEndActions(config.getStringList("end_actions"));
