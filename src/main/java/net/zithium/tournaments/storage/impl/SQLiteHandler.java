@@ -190,7 +190,9 @@ public class SQLiteHandler implements StorageHandler {
         try {
             Connection connection = getConnection();
             Map<UUID, Integer> players = new LinkedHashMap<>();
-            ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM '" + identifier + "' ORDER BY score DESC");
+            ResultSet rs = connection.createStatement().executeQuery(
+                    "SELECT * FROM '" + identifier + "' WHERE score > 0 ORDER BY score DESC"
+            );
             while (rs.next()) {
                 UUID uuid = UUID.fromString(rs.getString("uuid"));
                 int score = rs.getInt("score");

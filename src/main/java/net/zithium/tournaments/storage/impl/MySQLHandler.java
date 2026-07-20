@@ -180,7 +180,9 @@ public class MySQLHandler implements StorageHandler {
         try (Connection connection = hikari.getConnection();
              Statement statement = connection.createStatement()) {
             Map<UUID, Integer> players = new LinkedHashMap<>();
-            ResultSet rs = statement.executeQuery("SELECT * FROM `" + identifier + "` ORDER BY score DESC");
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM `" + identifier + "` WHERE score > 0 ORDER BY score DESC"
+            );
             while (rs.next()) {
                 UUID uuid = UUID.fromString(rs.getString("uuid"));
                 int score = rs.getInt("score");
