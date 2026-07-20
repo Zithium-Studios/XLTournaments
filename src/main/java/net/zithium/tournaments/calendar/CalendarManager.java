@@ -6,6 +6,7 @@
 package net.zithium.tournaments.calendar;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
+import net.zithium.tournaments.config.ConfigHandler;
 import net.zithium.tournaments.storage.StorageHandler;
 import net.zithium.tournaments.tournament.Tournament;
 import net.zithium.tournaments.tournament.TournamentManager;
@@ -27,20 +28,14 @@ public class CalendarManager {
         this.plugin = plugin;
     }
 
-    /**
-     * Loads all calendar configuration files from the /calendars/ folder,
-     * restores persisted index state from the database, and activates the
-     * current tournament in each calendar if it is not already running.
-     *
-     * @param tournamentManager The active TournamentManager instance.
-     */
     public void onEnable(TournamentManager tournamentManager) {
         calendars.clear();
 
         File calendarDir = new File(plugin.getDataFolder(), "calendars");
         if (!calendarDir.exists()) {
             calendarDir.mkdir();
-            plugin.getLogger().info("Created calendars folder. Add calendar .yml files to use the calendar system.");
+            new ConfigHandler(plugin, new File(calendarDir.getAbsolutePath()), "example_calendar").saveDefaultConfig();
+            plugin.getLogger().info("Created calendars folder with example calendar.");
             return;
         }
 
@@ -89,7 +84,6 @@ public class CalendarManager {
             boolean loop = config.getBoolean("loop", true);
             boolean randomize = config.getBoolean("randomize", false);
 
-            // Restore persisted index from DB, defaulting to 0
             int savedIndex = storageHandler.getCalendarIndex(id);
             int startIndex = (savedIndex >= 0 && savedIndex < tournaments.size()) ? savedIndex : 0;
 
@@ -97,7 +91,6 @@ public class CalendarManager {
             calendars.put(id, calendar);
             logger.info("Loaded calendar '" + id + "' with " + tournaments.size() + " tournaments (starting at index " + startIndex + ").");
 
-            // Activate the current tournament if it exists and is not already active
             activateCalendarTournament(calendar, tournamentManager, false);
         }
     }
@@ -141,7 +134,7 @@ public class CalendarManager {
         String tournamentId = calendar.getCurrentTournamentId();
 
         Optional<Tournament> optional = tournamentManager.getTournament(tournamentId);
-        if (!optional.isPresent()) {
+        if (optional.isEmpty()) {
             plugin.getLogger().severe("Calendar '" + calendar.getIdentifier() + "' references unknown tournament '" + tournamentId + "'. Skipping.");
             return;
         }
