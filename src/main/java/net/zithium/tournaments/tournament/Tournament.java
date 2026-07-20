@@ -232,7 +232,7 @@ public class Tournament {
         this.challengeGoal = amount;
     }
 
-    void setTimeline(Timeline timeline) {
+    public void setTimeline(Timeline timeline) {
         this.timeline = timeline;
     }
 

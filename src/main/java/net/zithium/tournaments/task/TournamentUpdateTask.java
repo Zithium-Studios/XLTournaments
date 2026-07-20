@@ -6,6 +6,8 @@
 package net.zithium.tournaments.task;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
+import net.zithium.tournaments.calendar.CalendarManager;
+import net.zithium.tournaments.calendar.TournamentCalendar;
 import net.zithium.tournaments.tournament.Tournament;
 import net.zithium.tournaments.tournament.TournamentManager;
 import net.zithium.tournaments.tournament.TournamentStatus;
@@ -26,7 +28,10 @@ public class TournamentUpdateTask extends BukkitRunnable {
     }
 
     public void run() {
-        Iterator<Tournament> iterator = tournamentManager.getTournaments().stream().filter(tournament -> tournament.getStatus() != TournamentStatus.ENDED).iterator(); // Filters out already ended tournaments.
+        Iterator<Tournament> iterator = tournamentManager.getTournaments().stream()
+                .filter(tournament -> tournament.getStatus() != TournamentStatus.ENDED)
+                .iterator();
+
         while (iterator.hasNext()) {
             Tournament tournament = iterator.next();
 
@@ -40,7 +45,20 @@ public class TournamentUpdateTask extends BukkitRunnable {
             if (tournament.getEndTimeMillis() < System.currentTimeMillis()) {
                 tournament.stop();
 
-                if (tournament.getTimeline() != Timeline.SPECIFIC) {
+                if (tournament.getTimeline() == Timeline.SPECIFIC || tournament.getTimeline() == Timeline.NONE) {
+                    continue;
+                }
+
+                // Check if this tournament is managed by a calendar
+                CalendarManager calendarManager = tournamentManager.getCalendarManager();
+                TournamentCalendar calendar = calendarManager.getCalendarForTournament(tournament.getIdentifier());
+
+                if (calendar != null) {
+                    // Hand off advancement to the CalendarManager
+                    Bukkit.getScheduler().runTaskLater(JAVA_PLUGIN, () ->
+                            calendarManager.advance(calendar, tournamentManager), 100L);
+                } else {
+                    // Standard non-calendar restart
                     Bukkit.getScheduler().runTaskLater(JAVA_PLUGIN, () -> {
                         tournament.updateStatus();
                         tournament.start(true);

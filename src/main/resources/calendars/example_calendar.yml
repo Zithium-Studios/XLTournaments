@@ -1,0 +1,18 @@
+# How long should each tournament in this calendar run?
+# Supported values: HOURLY, DAILY, WEEKLY, MONTHLY
+timeline: WEEKLY
+
+# Should the calendar loop back to the first tournament after the last one ends?
+# If false when the last tournament is run it will stop.
+loop: true
+
+# Should the next tournament be picked randomly from the list?
+# If set to false it runs the list in order.
+randomize: false
+
+# The ordered list of tournaments to cycle through.
+# Each entry must match the filename (without .yml) of a tournament
+tournaments:
+  - block_break_tournament
+  - item_craft_challenge_tournament
+  - player_kills_tournament

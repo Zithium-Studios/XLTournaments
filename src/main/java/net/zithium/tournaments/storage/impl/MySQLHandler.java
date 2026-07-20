@@ -1,3 +1,8 @@
+/*
+ * XLTournaments Plugin
+ * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ */
+
 package net.zithium.tournaments.storage.impl;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -55,7 +60,7 @@ public class MySQLHandler implements StorageHandler {
     public void createTournamentTable(String identifier) {
         try (Connection connection = hikari.getConnection();
              Statement statement = connection.createStatement()) {
-             statement.execute("CREATE TABLE IF NOT EXISTS `" + identifier + "` (uuid varchar(255) NOT NULL PRIMARY KEY, score decimal NOT NULL);");
+            statement.execute("CREATE TABLE IF NOT EXISTS `" + identifier + "` (uuid varchar(255) NOT NULL PRIMARY KEY, score decimal NOT NULL);");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,13 +69,11 @@ public class MySQLHandler implements StorageHandler {
     @Override
     public void addParticipant(String identifier, UUID uuid) {
         try (Connection connection = hikari.getConnection()) {
-            connection.setAutoCommit(false); // Start transaction
-
+            connection.setAutoCommit(false);
             try (PreparedStatement selectStmt = connection.prepareStatement(
                     "SELECT * FROM `" + identifier + "` WHERE uuid = ? FOR UPDATE")) {
                 selectStmt.setString(1, uuid.toString());
                 ResultSet rs = selectStmt.executeQuery();
-
                 if (!rs.next()) {
                     try (PreparedStatement insertStmt = connection.prepareStatement(
                             "REPLACE INTO `" + identifier + "` (uuid, score) VALUES (?, 0)")) {
@@ -78,10 +81,9 @@ public class MySQLHandler implements StorageHandler {
                         insertStmt.executeUpdate();
                     }
                 }
-
-                connection.commit(); // Commit transaction
+                connection.commit();
             } catch (SQLException e) {
-                connection.rollback(); // Rollback on error
+                connection.rollback();
                 e.printStackTrace();
             }
         } catch (SQLException e) {
@@ -89,17 +91,14 @@ public class MySQLHandler implements StorageHandler {
         }
     }
 
-
     @Override
     public void updateParticipant(String identifier, UUID uuid, int score) {
         try (Connection connection = hikari.getConnection()) {
-            connection.setAutoCommit(false); // Start transaction
-
+            connection.setAutoCommit(false);
             try (PreparedStatement selectStmt = connection.prepareStatement(
                     "SELECT * FROM `" + identifier + "` WHERE uuid = ? FOR UPDATE")) {
                 selectStmt.setString(1, uuid.toString());
                 ResultSet rs = selectStmt.executeQuery();
-
                 if (rs.next()) {
                     try (PreparedStatement updateStmt = connection.prepareStatement(
                             "UPDATE `" + identifier + "` SET score = ? WHERE uuid = ?")) {
@@ -108,17 +107,15 @@ public class MySQLHandler implements StorageHandler {
                         updateStmt.executeUpdate();
                     }
                 }
-
-                connection.commit(); // Commit transaction
+                connection.commit();
             } catch (SQLException e) {
-                connection.rollback(); // Rollback on error
+                connection.rollback();
                 e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void clearParticipants(String identifier) {
@@ -231,23 +228,20 @@ public class MySQLHandler implements StorageHandler {
     @Override
     public void setPlayerScore(String identifier, String uuid, int score) {
         try (Connection connection = hikari.getConnection()) {
-            connection.setAutoCommit(false); // Start transaction
-
+            connection.setAutoCommit(false);
             try (PreparedStatement selectStmt = connection.prepareStatement(
                     "SELECT * FROM `" + identifier + "` WHERE uuid = ? FOR UPDATE")) {
                 selectStmt.setString(1, uuid);
-                ResultSet rs = selectStmt.executeQuery();
-
+                selectStmt.executeQuery();
                 try (PreparedStatement replaceStmt = connection.prepareStatement(
                         "REPLACE INTO `" + identifier + "` (uuid, score) VALUES (?, ?)")) {
                     replaceStmt.setString(1, uuid);
                     replaceStmt.setInt(2, score);
                     replaceStmt.executeUpdate();
                 }
-
-                connection.commit(); // Commit transaction
+                connection.commit();
             } catch (SQLException e) {
-                connection.rollback(); // Rollback on error
+                connection.rollback();
                 Bukkit.getServer().getLogger().severe("There was an error while attempting to set the player score. Rolling back.");
             }
         } catch (SQLException e) {
@@ -255,5 +249,44 @@ public class MySQLHandler implements StorageHandler {
         }
     }
 
+    // --- Calendar methods ---
 
+    @Override
+    public void createCalendarTable() {
+        try (Connection connection = hikari.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.execute("CREATE TABLE IF NOT EXISTS `calendar_state` (calendar_id VARCHAR(255) NOT NULL PRIMARY KEY, current_index INT NOT NULL);");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public int getCalendarIndex(String calendarId) {
+        try (Connection connection = hikari.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT current_index FROM `calendar_state` WHERE calendar_id = ?")) {
+            statement.setString(1, calendarId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("current_index");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    @Override
+    public void setCalendarIndex(String calendarId, int currentIndex) {
+        try (Connection connection = hikari.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "REPLACE INTO `calendar_state` (calendar_id, current_index) VALUES (?, ?)")) {
+            statement.setString(1, calendarId);
+            statement.setInt(2, currentIndex);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

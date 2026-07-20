@@ -127,4 +127,27 @@ public interface StorageHandler {
      */
     void setPlayerScore(String identifier, String uuid, int score);
 
+    // --- Calendar methods ---
+
+    /**
+     * Creates the calendar_state table if it does not already exist.
+     * Schema: (calendar_id VARCHAR PRIMARY KEY, current_index INT)
+     */
+    void createCalendarTable();
+
+    /**
+     * Gets the persisted current index for a calendar.
+     *
+     * @param calendarId The calendar identifier (filename without .yml)
+     * @return The saved index, or -1 if no entry exists yet
+     */
+    int getCalendarIndex(String calendarId);
+
+    /**
+     * Persists the current index for a calendar (upsert).
+     *
+     * @param calendarId   The calendar identifier
+     * @param currentIndex The index to save
+     */
+    void setCalendarIndex(String calendarId, int currentIndex);
 }

@@ -1,3 +1,8 @@
+/*
+ * XLTournaments Plugin
+ * Copyright (c) 2020 - 2022 Lewis D (ItsLewizzz). All rights reserved.
+ */
+
 package net.zithium.tournaments.storage.impl;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
@@ -42,7 +47,6 @@ public class SQLiteHandler implements StorageHandler {
         return true;
     }
 
-
     @Override
     public void onDisable() {
         try {
@@ -56,7 +60,7 @@ public class SQLiteHandler implements StorageHandler {
 
     public Connection getConnection() {
         try {
-            if(connection != null && !connection.isClosed()) {
+            if (connection != null && !connection.isClosed()) {
                 return connection;
             } else {
                 Class.forName("org.sqlite.JDBC");
@@ -187,7 +191,7 @@ public class SQLiteHandler implements StorageHandler {
             Connection connection = getConnection();
             Map<UUID, Integer> players = new LinkedHashMap<>();
             ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM '" + identifier + "' ORDER BY score DESC");
-            while(rs.next()) {
+            while (rs.next()) {
                 UUID uuid = UUID.fromString(rs.getString("uuid"));
                 int score = rs.getInt("score");
                 players.put(uuid, score);
@@ -205,7 +209,7 @@ public class SQLiteHandler implements StorageHandler {
             Connection connection = getConnection();
             Map<UUID, Integer> players = new LinkedHashMap<>();
             ResultSet rs = connection.createStatement().executeQuery("SELECT uuid,score FROM '" + identifier + "' WHERE score>=" + score + ";");
-            while(rs.next()) {
+            while (rs.next()) {
                 UUID uuid = UUID.fromString(rs.getString("uuid"));
                 int s = rs.getInt("score");
                 players.put(uuid, s);
@@ -222,10 +226,9 @@ public class SQLiteHandler implements StorageHandler {
         try {
             Connection connection = getConnection();
             ResultSet rs = connection.createStatement().executeQuery("SELECT score FROM '" + identifier + "' WHERE uuid='" + uuid + "';");
-            if(rs.next()) {
+            if (rs.next()) {
                 return rs.getInt("score");
             }
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -242,4 +245,44 @@ public class SQLiteHandler implements StorageHandler {
         }
     }
 
+    // --- Calendar methods ---
+
+    @Override
+    public void createCalendarTable() {
+        try {
+            Connection connection = getConnection();
+            String sql = "CREATE TABLE IF NOT EXISTS 'calendar_state' (calendar_id VARCHAR(255) NOT NULL PRIMARY KEY, current_index INT NOT NULL);";
+            connection.createStatement().execute(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public int getCalendarIndex(String calendarId) {
+        try {
+            Connection connection = getConnection();
+            ResultSet rs = connection.createStatement().executeQuery(
+                    "SELECT current_index FROM 'calendar_state' WHERE calendar_id='" + calendarId + "';"
+            );
+            if (rs.next()) {
+                return rs.getInt("current_index");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+    }
+
+    @Override
+    public void setCalendarIndex(String calendarId, int currentIndex) {
+        try {
+            Connection connection = getConnection();
+            connection.createStatement().execute(
+                    "REPLACE INTO 'calendar_state' (calendar_id, current_index) VALUES ('" + calendarId + "'," + currentIndex + ");"
+            );
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

@@ -6,10 +6,12 @@
 package net.zithium.tournaments.tournament;
 
 import net.zithium.tournaments.XLTournamentsPlugin;
+import net.zithium.tournaments.calendar.CalendarManager;
 import net.zithium.tournaments.config.ConfigHandler;
 import net.zithium.tournaments.objective.XLObjective;
 import net.zithium.tournaments.storage.StorageHandler;
 import net.zithium.tournaments.task.TournamentUpdateTask;
+import net.zithium.tournaments.utility.Timeline;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -33,6 +35,7 @@ public class TournamentManager {
 
     private final XLTournamentsPlugin plugin;
     private Map<String, Tournament> tournaments;
+    private CalendarManager calendarManager;
     private boolean listenersRegistered;
 
     private BukkitTask timerTask;
@@ -40,6 +43,7 @@ public class TournamentManager {
     public TournamentManager(XLTournamentsPlugin plugin) {
         this.plugin = plugin;
         tournaments = new HashMap<>();
+        calendarManager = new CalendarManager(plugin);
     }
 
     public void onEnable() {
@@ -95,6 +99,9 @@ public class TournamentManager {
             loadPlayerCache(player);
         }
 
+        // Load calendars after tournaments so getTournament() lookups work
+        calendarManager.onEnable(this);
+
         timerTask = new TournamentUpdateTask(this).runTaskTimer(plugin, 100L, 20L);
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> tournaments.values().forEach(Tournament::update));
@@ -127,6 +134,8 @@ public class TournamentManager {
                 tournament.removeParticipant(uuid);
             }
         }
+
+        calendarManager.onDisable();
 
         if (!reload) {
             plugin.getStorageManager().getStorageHandler().onDisable();
@@ -194,14 +203,18 @@ public class TournamentManager {
         Logger logger = plugin.getLogger();
 
         if (!objective.loadTournament(tournament, config)) {
-            logger.severe("The objective (\" + obj + \") in file \" + identifier + \" did not load correctly. Skipping..");
+            logger.severe("The objective in file " + identifier + " did not load correctly. Skipping..");
             return;
         }
 
         objective.addTournament(tournament);
-        tournament.updateStatus();
-        if (tournament.getStatus() == TournamentStatus.ACTIVE) {
-            tournament.start(false);
+
+        // Calendar-managed tournaments skip auto-start; CalendarManager handles activation
+        if (tournament.getTimeline() != Timeline.CALENDAR) {
+            tournament.updateStatus();
+            if (tournament.getStatus() == TournamentStatus.ACTIVE) {
+                tournament.start(false);
+            }
         }
 
         plugin.getStorageManager().getStorageHandler().createTournamentTable(identifier);
@@ -216,5 +229,9 @@ public class TournamentManager {
 
     public List<Tournament> getTournaments() {
         return new ArrayList<>(tournaments.values());
+    }
+
+    public CalendarManager getCalendarManager() {
+        return calendarManager;
     }
 }
