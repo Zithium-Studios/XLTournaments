@@ -174,4 +174,11 @@ public class CalendarManager {
     public Map<String, TournamentCalendar> getCalendars() {
         return calendars;
     }
+
+    public TournamentCalendar getCalendar(String identifier) {
+        return calendars.values().stream()
+                .filter(calendar -> calendar.getIdentifier().equals(identifier))
+                .findFirst()
+                .orElse(null);
+    }
 }
