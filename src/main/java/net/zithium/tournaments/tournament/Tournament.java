@@ -33,6 +33,8 @@ public class Tournament {
     private final ActionManager actionManager;
     private final StorageHandler storageHandler;
     private final String identifier;
+    private String displayName;
+
 
     private UUID gameUniqueId;
     private BukkitTask updateTask;
@@ -289,6 +291,9 @@ public class Tournament {
         this.zoneId = zoneId;
     }
 
+    void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
     // End of TournamentFactory methods //
 
     public String getTimeRemaining() {
@@ -549,5 +554,9 @@ public class Tournament {
 
     public boolean debug() {
         return XLTournamentsPlugin.isDebugMode();
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }

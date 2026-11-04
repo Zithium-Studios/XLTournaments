@@ -83,11 +83,12 @@ public class CalendarManager {
 
             boolean loop = config.getBoolean("loop", true);
             boolean randomize = config.getBoolean("randomize", false);
+            String displayName = config.getString("display-name", id);
 
             int savedIndex = storageHandler.getCalendarIndex(id);
             int startIndex = (savedIndex >= 0 && savedIndex < tournaments.size()) ? savedIndex : 0;
 
-            TournamentCalendar calendar = new TournamentCalendar(id, timeline, tournaments, loop, randomize, startIndex);
+            TournamentCalendar calendar = new TournamentCalendar(id, displayName, timeline, tournaments, loop, randomize, startIndex);
             calendars.put(id, calendar);
             logger.info("Loaded calendar '" + id + "' with " + tournaments.size() + " tournaments (starting at index " + startIndex + ").");
 
@@ -177,7 +178,7 @@ public class CalendarManager {
 
     public TournamentCalendar getCalendar(String identifier) {
         return calendars.values().stream()
-                .filter(calendar -> calendar.getIdentifier().equals(identifier))
+                .filter(calendar -> calendar.getIdentifier().equalsIgnoreCase(identifier))
                 .findFirst()
                 .orElse(null);
     }

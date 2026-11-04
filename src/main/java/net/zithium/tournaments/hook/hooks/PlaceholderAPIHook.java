@@ -41,6 +41,8 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
     private static final Pattern CALENDAR_TOURNAMENT_NAME_PATTERN = Pattern.compile("CALENDAR_(\\w+)_CURRENT_TOURNAMENT");
     private static final Pattern CALENDAR_PLAYER_SCORE_PATTERN = Pattern.compile("CALENDAR_(\\w+)_CURRENT_SCORE");
     private static final Pattern CALENDAR_PLAYER_POSITION_PATTERN = Pattern.compile("CALENDAR_(\\w+)_CURRENT_POSITION");
+    private static final Pattern CALENDAR_DISPLAY_NAME_PATTERN = Pattern.compile("CALENDAR_(\\w+)_DISPLAY_NAME");
+    private static final Pattern CALENDAR_CURRENT_DISPLAY_NAME_PATTERN = Pattern.compile("CALENDAR_(\\w+)_CURRENT_DISPLAY_NAME");
 
     private final XLTournamentsPlugin plugin;
     private final TournamentManager tournamentManager;
@@ -282,6 +284,28 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
                 } else {
                     return "N/A";
                 }
+            }
+        } catch (Exception ignored) {
+        }
+
+        try {
+            final Matcher matcher = CALENDAR_DISPLAY_NAME_PATTERN.matcher(identifier.toUpperCase());
+            if (matcher.find()) {
+                TournamentCalendar calendar = tournamentManager.getCalendarManager().getCalendar(matcher.group(1));
+                if (calendar == null) return "Invalid Calendar ID";
+                return calendar.getDisplayName();
+            }
+        } catch (Exception ignored) {
+        }
+
+        try {
+            final Matcher matcher = CALENDAR_CURRENT_DISPLAY_NAME_PATTERN.matcher(identifier.toUpperCase());
+            if (matcher.find()) {
+                TournamentCalendar calendar = tournamentManager.getCalendarManager().getCalendar(matcher.group(1));
+                if (calendar == null) return "Invalid Calendar ID";
+                Optional<Tournament> optional = tournamentManager.getTournament(calendar.getCurrentTournamentId());
+                if (optional.isEmpty()) return "N/A";
+                return optional.get().getDisplayName();
             }
         } catch (Exception ignored) {
         }

@@ -16,16 +16,18 @@ public class TournamentCalendar {
     private final List<String> tournaments;
     private final boolean loop;
     private final boolean randomize;
+    private final String displayName;
 
     private int currentIndex;
 
-    public TournamentCalendar(String identifier, Timeline timeline, List<String> tournaments, boolean loop, boolean randomize, int currentIndex) {
+    public TournamentCalendar(String identifier, String displayName, Timeline timeline, List<String> tournaments, boolean loop, boolean randomize, int currentIndex) {
         this.identifier = identifier;
         this.timeline = timeline;
         this.tournaments = tournaments;
         this.loop = loop;
         this.randomize = randomize;
         this.currentIndex = currentIndex;
+        this.displayName = displayName;
     }
 
     /**
@@ -94,5 +96,9 @@ public class TournamentCalendar {
 
     public void setCurrentIndex(int currentIndex) {
         this.currentIndex = currentIndex;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }

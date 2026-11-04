@@ -209,8 +209,10 @@ public class TournamentManager {
 
         objective.addTournament(tournament);
 
-        // Calendar-managed tournaments skip auto-start; CalendarManager handles activation
-        if (tournament.getTimeline() != Timeline.CALENDAR) {
+        // Calendar-managed tournaments are marked ENDED until CalendarManager activates them
+        if (tournament.getTimeline() == Timeline.CALENDAR) {
+            tournament.setStatus(TournamentStatus.ENDED);
+        } else {
             tournament.updateStatus();
             if (tournament.getStatus() == TournamentStatus.ACTIVE) {
                 tournament.start(false);
@@ -218,7 +220,6 @@ public class TournamentManager {
         }
 
         plugin.getStorageManager().getStorageHandler().createTournamentTable(identifier);
-
         tournaments.put(identifier, tournament);
         logger.info("Loaded '" + identifier + "' tournament.");
     }

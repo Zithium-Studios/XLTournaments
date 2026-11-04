@@ -1,3 +1,7 @@
+
+# The name to display in certain placeholders.
+display-name: "Example Calendar"
+
 # How long should each tournament in this calendar run?
 # Supported values: HOURLY, DAILY, WEEKLY, MONTHLY
 timeline: WEEKLY

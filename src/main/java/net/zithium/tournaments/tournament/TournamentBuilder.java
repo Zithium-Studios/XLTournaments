@@ -38,6 +38,8 @@ public class TournamentBuilder {
             withChallengeGoal(config.getInt("challenge.goal"));
         }
 
+        withDisplayName(config.getString("display-name"));
+
         // Disabled worlds
         withDisabledWorlds(config.getStringList("disabled_worlds"));
 
@@ -202,6 +204,11 @@ public class TournamentBuilder {
 
     public TournamentBuilder withZoneId(ZoneId zoneId) {
         tournament.setZoneId(zoneId);
+        return this;
+    }
+
+    public TournamentBuilder withDisplayName(String displayName) {
+        tournament.setDisplayName(displayName);
         return this;
     }
 
