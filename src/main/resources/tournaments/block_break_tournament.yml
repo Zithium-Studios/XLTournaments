@@ -38,6 +38,7 @@ leaderboard_refresh: 60
 # - DAILY
 # - WEEKLY
 # - MONTHLY
+# - CALENDAR (Only use if tournament is in a calendar)
 # If SPECIFIC is selected, configure the times below
 timeline: WEEKLY
 
