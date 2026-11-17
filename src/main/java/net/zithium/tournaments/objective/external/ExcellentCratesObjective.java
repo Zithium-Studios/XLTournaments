@@ -16,7 +16,7 @@ public class ExcellentCratesObjective extends XLObjective {
     public boolean loadTournament(Tournament tournament, FileConfiguration config) {
         return true;
     }
-
+/*
     @EventHandler
     public void onCrateOpen(RewardGrantedEvent event) {
         Player player = event.getPlayer();
@@ -26,5 +26,7 @@ public class ExcellentCratesObjective extends XLObjective {
             }
         }
     }
+
+ */
 
 }
