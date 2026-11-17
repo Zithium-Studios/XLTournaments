@@ -35,14 +35,13 @@ public class Tournament {
     private final String identifier;
     private String displayName;
 
-
     private UUID gameUniqueId;
     private BukkitTask updateTask;
     private TournamentStatus status;
     private ZonedDateTime startDate, endDate;
     private long startTimeMillis, endTimeMillis;
     private ZoneId zoneId;
-    private boolean updating;
+    private volatile boolean updating;
     private XLObjective objective;
     private Timeline timeline;
     private int leaderboardRefresh;
@@ -58,17 +57,25 @@ public class Tournament {
     private double participationCost;
     private List<String> participationActions;
     private final Map<UUID, Integer> participants;
-    private Map<UUID, Integer> sortedParticipants;
+
+    // Leaderboard snapshots. These are rebuilt in update() and swapped in as a whole,
+    // so readers on other threads never see a half-built or empty leaderboard.
+    private volatile Map<UUID, Integer> sortedParticipants;
+    private volatile List<UUID> rankedPlayers;
+    private volatile Map<UUID, Integer> positions;
 
     private final Map<String, Object> meta;
 
     Tournament(XLTournamentsPlugin plugin, String identifier) {
         this.plugin = plugin;
         this.identifier = identifier;
+        this.displayName = identifier; // Fallback until the builder sets a display name
         this.actionManager = plugin.getActionManager();
         this.storageHandler = plugin.getStorageManager().getStorageHandler();
         this.participants = new ConcurrentHashMap<>();
         this.sortedParticipants = new LinkedHashMap<>();
+        this.rankedPlayers = Collections.emptyList();
+        this.positions = Collections.emptyMap();
         this.challenge = false;
         this.challengeGoal = -1;
         this.leaderboardRefresh = 60;
@@ -153,9 +160,11 @@ public class Tournament {
         if (debug()) plugin.getLogger().log(Level.INFO, "Executing tournament stop.");
         if (status != TournamentStatus.ACTIVE) throw new IllegalStateException("Attempted to stop a Tournament that is not ACTIVE");
         status = TournamentStatus.ENDED;
-        
+
         if (updateTask != null) updateTask.cancel();
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, this::update);
+
+        // Run the final update synchronously so the winners below are calculated from final scores.
+        update();
 
         Bukkit.getPluginManager().callEvent(new TournamentEndEvent(this, new TournamentData(identifier, gameUniqueId, new LinkedHashMap<>(sortedParticipants))));
 
@@ -189,35 +198,49 @@ public class Tournament {
 
     /**
      * Updates the tournament's participant information, including their scores or rankings,
-     * and refreshes the list of sorted participants based on the updated data.
-     * This method sets a flag to prevent concurrent updates while it's running.
-     * It should be called periodically to ensure accurate participant data.
+     * and rebuilds the leaderboard snapshots used for position lookups.
+     * The snapshots are built off to the side and swapped in once complete, so readers
+     * never see a partially built or empty leaderboard.
      */
     public void update() {
         updating = true;
+        try {
+            for (Map.Entry<UUID, Integer> entry : participants.entrySet()) {
+                storageHandler.updateParticipant(getIdentifier(), entry.getKey(), entry.getValue());
+            }
 
-        sortedParticipants.clear();
-        for (Map.Entry<UUID, Integer> entry : participants.entrySet()) {
-            storageHandler.updateParticipant(getIdentifier(), entry.getKey(), entry.getValue());
+            Map<UUID, Integer> top = storageHandler.getTopPlayers(identifier);
+            if (top == null) return; // getTopPlayers returns null on SQL errors; keep the previous snapshot
+
+            List<UUID> ranked = new ArrayList<>(top.keySet());
+            Map<UUID, Integer> pos = new HashMap<>(ranked.size() * 2);
+            for (int i = 0; i < ranked.size(); i++) {
+                pos.put(ranked.get(i), i + 1);
+            }
+
+            this.sortedParticipants = top;
+            this.rankedPlayers = ranked;
+            this.positions = pos;
+        } finally {
+            updating = false;
         }
-
-        sortedParticipants = storageHandler.getTopPlayers(identifier);
-        updating = false;
     }
 
     /**
      * Clears all participants from the target tournament.
      */
     public void clearParticipants() {
-        if (debug()) plugin.getLogger().log(Level.INFO, "Clearing participants for", identifier);
+        if (debug()) plugin.getLogger().log(Level.INFO, "Clearing participants for " + identifier);
         participants.clear();
-        sortedParticipants.clear();
+        sortedParticipants = new LinkedHashMap<>();
+        rankedPlayers = Collections.emptyList();
+        positions = Collections.emptyMap();
         storageHandler.clearParticipants(identifier);
     }
 
     public void clearParticipant(UUID uuid) {
         participants.remove(uuid);
-        sortedParticipants.remove(uuid);
+        // Snapshots are immutable-by-convention; they refresh on the next update().
         storageHandler.clearParticipant(identifier, uuid);
     }
 
@@ -294,6 +317,7 @@ public class Tournament {
     void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
+
     // End of TournamentFactory methods //
 
     public String getTimeRemaining() {
@@ -306,10 +330,7 @@ public class Tournament {
     }
 
     public int getPosition(UUID uuid) {
-        if (sortedParticipants.containsKey(uuid)) {
-            return (new ArrayList<>(sortedParticipants.keySet())).indexOf(uuid) + 1;
-        }
-        return 0;
+        return positions.getOrDefault(uuid, 0);
     }
 
     public int getScore(UUID uuid) {
@@ -323,15 +344,9 @@ public class Tournament {
      * @return The OfflinePlayer associated with the given position or null if not found.
      */
     public OfflinePlayer getPlayerFromPosition(int position) {
-        if (position < 1 || position > sortedParticipants.size()) return null;
-        int count = 1;
-        for (UUID uuid : sortedParticipants.keySet()) {
-            if (count == position) {
-                return Bukkit.getOfflinePlayer(uuid);
-            }
-            count++;
-        }
-        return null;
+        List<UUID> ranked = rankedPlayers;
+        if (position < 1 || position > ranked.size()) return null;
+        return Bukkit.getOfflinePlayer(ranked.get(position - 1));
     }
 
     /**
@@ -342,19 +357,11 @@ public class Tournament {
      * @return The score of the participant at the given position, or 0 if the position is invalid or the score is non-positive.
      */
     public int getScoreFromPosition(int position) {
-        // Check if the specified position is out of bounds or non-positive.
-        if (position < 1 || position > sortedParticipants.size()) {
-            return 0;
-        }
+        List<UUID> ranked = rankedPlayers;
+        if (position < 1 || position > ranked.size()) return 0;
 
-        // Get the UUID of the participant at the specified position.
-        UUID uuid = (UUID) sortedParticipants.keySet().toArray()[position - 1];
-
-        // Get the score of the participant at the specified position.
-        int score = sortedParticipants.get(uuid);
-
-        // Return the score (positive or 0).
-        return Math.max(0, score);
+        Integer score = sortedParticipants.get(ranked.get(position - 1));
+        return score == null ? 0 : Math.max(0, score);
     }
 
     /**
@@ -472,6 +479,10 @@ public class Tournament {
         return identifier;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
     public boolean isChallenge() {
         return challenge;
     }
@@ -554,9 +565,5 @@ public class Tournament {
 
     public boolean debug() {
         return XLTournamentsPlugin.isDebugMode();
-    }
-
-    public String getDisplayName() {
-        return displayName;
     }
 }
